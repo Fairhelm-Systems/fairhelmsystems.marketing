@@ -1,0 +1,111 @@
+# Fairhelm Systems static AWS deployment
+
+This site exports to static files and is served from a private Amazon S3 bucket through Amazon CloudFront. S3 public access remains blocked. CloudFront uses Origin Access Control (OAC) to sign origin requests, while Route 53 sends all four public hostnames to one distribution.
+
+## Request flow
+
+1. Route 53 resolves `fairhelmsystems.com`, `www.fairhelmsystems.com`, `fairhelmsystems.in`, and `www.fairhelmsystems.in` to CloudFront.
+2. The viewer-request CloudFront Function redirects the three non-canonical hosts to `https://fairhelmsystems.com` with a `301`, preserving the path and query string.
+3. Requests on the canonical host are mapped to static-export files. `/about` and `/about/` become `/about/index.html`; extension-bearing assets remain unchanged.
+4. CloudFront fetches objects from private S3 using OAC. The bucket policy permits reads only from the Fairhelm distribution.
+
+The edge code lives in [`infrastructure/cloudfront/viewer-request.js`](../infrastructure/cloudfront/viewer-request.js). The idempotent deployment entry point is [`scripts/deploy-aws-static.sh`](../scripts/deploy-aws-static.sh).
+
+## Managed resources
+
+The script creates or reuses resources dedicated to this site:
+
+- A private, versioned, AES-256 encrypted S3 bucket in `ap-south-1` by default.
+- An ACM certificate in `us-east-1` covering the apex and `www` names for both domains.
+- DNS validation CNAMEs in the two Fairhelm Route 53 hosted zones.
+- One CloudFront OAC.
+- One published CloudFront Function for host redirects and clean-route rewrites.
+- One IPv6-enabled CloudFront distribution with HTTPS redirect, compression, HTTP/2 and HTTP/3, managed security headers, and a custom 404 response.
+- Route 53 `A` and `AAAA` aliases for all four public hostnames.
+
+The current hosted zones are:
+
+- `fairhelmsystems.com`: `Z0755819RNVKUIYP2L8N`
+- `fairhelmsystems.in`: `Z02147622QLOL5GAI5EU9`
+
+Production inventory created on 2026-07-15:
+
+- S3 bucket: `fairhelmsystems-marketing-prod-943986266836`
+- ACM certificate: `arn:aws:acm:us-east-1:943986266836:certificate/023982c6-d7e8-4d03-8b50-b05a10c79c38`
+- CloudFront OAC: `fairhelm-marketing-oac` (`E2WYIQF6K7PDVV`)
+- CloudFront Function: `fairhelm-marketing-router`
+- CloudFront distribution: `E3C85FBFGD0L3E`
+- CloudFront domain: `d2mbuii4ieraws.cloudfront.net`
+
+The deployment script does not delete buckets, distributions, certificates, functions, OACs, hosted zones, or unrelated DNS records. It only uses `UPSERT` for the four site aliases and ACM validation records. It refuses to adopt an existing untagged bucket unless `ADOPT_EXISTING_BUCKET=1` is explicitly supplied.
+
+## Deploy
+
+Prerequisites are an authenticated AWS CLI, `jq`, `curl`, and the repository package manager. From the repository root:
+
+```bash
+bun run deploy:aws-static
+```
+
+Supported configuration variables:
+
+```bash
+CANONICAL_DOMAIN=fairhelmsystems.com
+REDIRECT_DOMAIN_IN=fairhelmsystems.in
+AWS_REGION=ap-south-1
+ACM_REGION=us-east-1
+SITE_BUCKET_NAME=fairhelmsystems-marketing-prod-ACCOUNT_ID
+CLOUDFRONT_DISTRIBUTION_ID=
+ACM_CERTIFICATE_ARN=
+HOSTED_ZONE_ID_COM=Z0755819RNVKUIYP2L8N
+HOSTED_ZONE_ID_IN=Z02147622QLOL5GAI5EU9
+```
+
+The optional identifiers are discovered automatically when omitted. Use `SKIP_BUILD=1` only when `out/` was just produced by a successful local build. If ACM validation is not complete within the bounded wait, the script prints validation details and exits safely; rerun it after DNS has propagated.
+
+## Cache policy
+
+HTML, XML, text, and unhashed assets are uploaded with `public,max-age=0,must-revalidate`. Next.js fingerprinted files under `/_next/` receive `public,max-age=31536000,immutable`. Every deployment creates a `/*` invalidation so changed documents become visible without waiting for the existing edge cache to expire.
+
+## Verification
+
+Expected behavior:
+
+```text
+https://fairhelmsystems.com/                         200
+https://www.fairhelmsystems.com/                     301 -> https://fairhelmsystems.com/
+https://fairhelmsystems.in/                          301 -> https://fairhelmsystems.com/
+https://www.fairhelmsystems.in/                      301 -> https://fairhelmsystems.com/
+https://fairhelmsystems.in/squarecampus?x=1          301 -> https://fairhelmsystems.com/squarecampus?x=1
+https://fairhelmsystems.com/robots.txt               200
+https://fairhelmsystems.com/sitemap.xml              200
+https://fairhelmsystems.com/llms.txt                 200
+https://fairhelmsystems.com/llms-full.txt            200
+```
+
+Run:
+
+```bash
+curl -I https://fairhelmsystems.com
+curl -I https://www.fairhelmsystems.com
+curl -I https://fairhelmsystems.in
+curl -I https://www.fairhelmsystems.in
+curl -I 'https://fairhelmsystems.in/squarecampus?x=1'
+curl -I https://fairhelmsystems.com/robots.txt
+curl -I https://fairhelmsystems.com/sitemap.xml
+curl -I https://fairhelmsystems.com/llms.txt
+curl -I https://fairhelmsystems.com/llms-full.txt
+```
+
+## Rollback
+
+S3 versioning is enabled. To restore a prior release, copy the required prior object versions back to their current keys, then invalidate `/*`. For a fast content rollback from a known local build, redeploy that build with the same script and distribution.
+
+DNS rollback is separate: restore the prior records only if they existed and were captured before the change. Do not delete the hosted zone or CloudFront distribution as a rollback mechanism. A CloudFront configuration rollback should be made by applying a known-good distribution config with the current ETag.
+
+## Operational notes
+
+- Certificate issuance and CloudFront deployment are globally propagated operations and can take several minutes.
+- Route 53 nameservers already match the registered domains; no registrar change is expected for the current zones.
+- The contact address is centralized in `src/lib/site-config.ts`. Confirm that `hello@fairhelmsystems.com` can receive mail before public outreach.
+- Fairhelm Systems (OPC) Pvt Ltd is described as incorporation in progress. Add the corporate identification number, registered-office details, and GSTIN only after they are formally issued and verified.
