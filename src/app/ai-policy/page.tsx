@@ -1,0 +1,41 @@
+import { Hero } from "@/components/site/hero";
+import { JsonLd } from "@/components/site/json-ld";
+import { LegalDocument } from "@/components/site/legal-document";
+import { aiPolicySections, legalUpdated } from "@/content/legal";
+import { createPageMetadata } from "@/lib/seo";
+import { siteConfig } from "@/lib/site-config";
+import { breadcrumbSchema } from "@/lib/structured-data";
+
+export const metadata = createPageMetadata({
+  title: "AI and Governed Intelligence Policy",
+  description:
+    "Fairhelm Systems' interim AI policy covers AEGIS, human oversight, customer-data training boundaries, responsible design, and public AI agents.",
+  path: "/ai-policy/",
+});
+
+export default function AiPolicyPage() {
+  return (
+    <>
+      <JsonLd
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "Legal", path: "/legal/" },
+          { name: "AI policy", path: "/ai-policy/" },
+        ])}
+      />
+      <Hero
+        eyebrow="Legal · Governed intelligence"
+        title="AI policy"
+        description="A public statement of Fairhelm's AI boundaries: bounded assistance, visible authority, customer control, reviewable evidence, and human accountability."
+        compact
+      />
+      <LegalDocument
+        current="/ai-policy/"
+        statusTitle="Interim policy status"
+        statusDescription={`${siteConfig.legalName} is currently in the incorporation process. This posture describes product direction and design constraints; contract-specific AI terms must match the system actually delivered.`}
+        sections={aiPolicySections}
+        lastUpdated={legalUpdated}
+      />
+    </>
+  );
+}
