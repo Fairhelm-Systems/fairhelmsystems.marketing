@@ -1,65 +1,487 @@
-import Image from "next/image";
+import {
+  BarChart3,
+  Blocks,
+  Building2,
+  Check,
+  CloudCog,
+  DatabaseZap,
+  Eye,
+  Gauge,
+  GraduationCap,
+  IndianRupee,
+  LockKeyhole,
+  Network,
+  Scale,
+  ShieldCheck,
+  Sparkles,
+  Workflow,
+} from "lucide-react";
+import Link from "next/link";
+import { Container } from "@/components/site/container";
+import { CtaBand } from "@/components/site/cta-band";
+import { FeatureCard } from "@/components/site/feature-card";
+import { Hero } from "@/components/site/hero";
+import { MobileBrief } from "@/components/site/mobile-brief";
+import { SectionHeading } from "@/components/site/section-heading";
+import { SystemPanel } from "@/components/site/system-panel";
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import { createPageMetadata } from "@/lib/seo";
+import { cn } from "@/lib/utils";
 
-export default function Home() {
+export const metadata = createPageMetadata({
+  title: "Fairhelm Systems — Governed software systems",
+  description:
+    "Fairhelm Systems builds SquareCampus School OS, trustworthy ETL and ELT pipelines, and operational intelligence dashboards for Indian institutions.",
+  path: "/",
+  keywords: [
+    "School OS India",
+    "ETL services India",
+    "custom dashboards",
+    "operational intelligence dashboards",
+    "governed intelligence platform",
+  ],
+});
+
+const credibility = [
+  "School OS",
+  "ETL / ELT",
+  "Dashboards",
+  "Governed Intelligence",
+  "Cloud Systems",
+  "Auditability",
+];
+
+const cycles = [
+  "Academic year",
+  "Attendance",
+  "Fees",
+  "Exams",
+  "Reporting",
+  "Parent communication",
+  "Trust governance",
+];
+
+const reasons = [
+  {
+    icon: ShieldCheck,
+    title: "Governance-first",
+    description:
+      "Access, change, and intelligence are designed around authority—not bolted on later.",
+  },
+  {
+    icon: Network,
+    title: "Systems thinking",
+    description:
+      "We design around operating cycles, dependencies, failure modes, and the humans accountable for outcomes.",
+  },
+  {
+    icon: IndianRupee,
+    title: "Cost-aware cloud execution",
+    description:
+      "Architecture earns its spend. Capacity, observability, and refresh cadence match operational value.",
+  },
+  {
+    icon: LockKeyhole,
+    title: "Privacy-conscious architecture",
+    description:
+      "Least privilege, tenant separation, and explicit data boundaries are product decisions.",
+  },
+  {
+    icon: Building2,
+    title: "Indian institutional realities",
+    description:
+      "Built with trusts, multi-entity operations, uneven source systems, and real administrative pressure in mind.",
+  },
+  {
+    icon: Sparkles,
+    title: "AI without theatre",
+    description:
+      "Intelligence stays explainable, role-aware, audit-backed, and inside customer governance.",
+  },
+];
+
+const mobileBriefs = [
+  {
+    label: "Flagship product",
+    title: "SquareCampus",
+    description:
+      "A sovereign, cycle-native School OS direction for Indian schools, groups, and educational trusts.",
+    bullets: [
+      "Academic and attendance cycles",
+      "Fees, exams, reporting, and trust governance",
+    ],
+    href: "/squarecampus/",
+    linkLabel: "Explore SquareCampus",
+  },
+  {
+    label: "Data foundations",
+    title: "ETL / ELT and data engineering",
+    description:
+      "Production pipelines that make fragmented operational data accurate, reconciled, observable, and usable.",
+    bullets: [
+      "APIs, databases, spreadsheets, and legacy systems",
+      "Quality, lineage, refresh, and cloud cost control",
+    ],
+    href: "/services/data-engineering/",
+    linkLabel: "Explore data engineering",
+  },
+  {
+    label: "Decision infrastructure",
+    title: "Operational dashboards",
+    description:
+      "Command surfaces built around governed KPIs, trusted data, exceptions, owners, and action.",
+    bullets: [
+      "Executive and operational views",
+      "Drilldowns, alerts, and exception tracking",
+    ],
+    href: "/services/dashboards/",
+    linkLabel: "Explore dashboards",
+  },
+  {
+    label: "Governed intelligence",
+    title: "AEGIS",
+    description:
+      "Adaptive Enterprise Governance & Intelligence System is the controlled intelligence direction within SquareCampus.",
+    bullets: [
+      "Read-only first and RBAC-aware",
+      "Audit-backed with no autonomous writes in v1",
+    ],
+    href: "/security/",
+    linkLabel: "Review the governance posture",
+  },
+  {
+    label: "Operating standard",
+    title: "Why Fairhelm",
+    description:
+      "Governance-first systems thinking, privacy-conscious architecture, and cost-aware cloud execution.",
+    bullets: [
+      "Built for Indian institutional realities",
+      "AI where it is governed, not theatrical",
+    ],
+    href: "/about/",
+    linkLabel: "About Fairhelm Systems",
+  },
+] as const;
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <>
+      <Hero
+        eyebrow="Enterprise software · Data systems · Operational intelligence"
+        title="Governed software systems for institutions that cannot afford chaos."
+        description="Fairhelm Systems builds sovereign School OS platforms, production-grade data pipelines, and decision dashboards for organizations that need reliability, governance, and operational clarity."
+        primary={{ label: "Explore SquareCampus", href: "/squarecampus/" }}
+        secondary={{ label: "Discuss Data & Dashboards", href: "/contact/" }}
+      >
+        <SystemPanel />
+      </Hero>
+
+      <section
+        aria-label="Core capabilities"
+        className="border-b border-border bg-card/20"
+      >
+        <Container className="no-scrollbar flex flex-nowrap justify-start gap-2 overflow-x-auto py-4 md:flex-wrap md:justify-center md:py-5 lg:justify-between">
+          {credibility.map((item) => (
+            <Badge
+              key={item}
+              variant="secondary"
+              className="shrink-0 rounded-full px-3 py-1.5"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+              {item}
+            </Badge>
+          ))}
+        </Container>
+      </section>
+
+      <MobileBrief
+        eyebrow="Choose a lane"
+        title="What do you need to understand?"
+        description="Five focused briefs. Open one, then follow the detail only if it matters."
+        items={mobileBriefs}
+      />
+
+      <section className="hidden py-20 md:block sm:py-28">
+        <Container>
+          <SectionHeading
+            eyebrow="What we build"
+            title="Three lines of work. One operating standard."
+            description="Products and systems that turn fragmented operations into governed, observable, decision-ready infrastructure."
+          />
+          <div className="mt-10 grid gap-4 md:grid-cols-3">
+            <FeatureCard
+              icon={GraduationCap}
+              title="SquareCampus"
+              description="A sovereign, cycle-native School OS for Indian schools, multi-school groups, and educational trusts."
+              href="/squarecampus/"
+              meta="Flagship product"
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <FeatureCard
+              icon={DatabaseZap}
+              title="Data Engineering"
+              description="Production ETL and ELT pipelines with reconciliation, lineage, observability, and cloud cost discipline."
+              href="/services/data-engineering/"
+              meta="Data foundations"
+            />
+            <FeatureCard
+              icon={BarChart3}
+              title="Operational Dashboards"
+              description="Executive and operational command surfaces built around trusted KPIs, exceptions, and accountable action."
+              href="/services/dashboards/"
+              meta="Decision infrastructure"
+            />
+          </div>
+        </Container>
+      </section>
+
+      <section className="hidden border-y border-border bg-card/30 py-20 md:block sm:py-28">
+        <Container className="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+          <div>
+            <SectionHeading
+              eyebrow="SquareCampus"
+              title="Schools do not run linearly. They run in cycles."
+              description="A school ERP alternative should understand recurring operating pressure—not force every institution into a generic workflow model. SquareCampus is being shaped around the cycles schools actually govern."
+            />
+            <Link
+              href="/squarecampus/"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "mt-7 rounded-full",
+              )}
+            >
+              See the SquareCampus direction
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {cycles.map((cycle, index) => (
+              <div
+                key={cycle}
+                className="rounded-2xl border border-border bg-background/60 p-4 sm:p-5"
+              >
+                <span className="font-mono text-xs text-primary">
+                  0{index + 1}
+                </span>
+                <p className="mt-5 text-sm font-medium text-foreground">
+                  {cycle}
+                </p>
+              </div>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <section className="hidden py-20 md:block sm:py-28">
+        <Container className="grid items-start gap-10 lg:grid-cols-[1fr_1.05fr]">
+          <div className="max-w-2xl">
+            <p className="eyebrow">AEGIS · Governed intelligence</p>
+            <h2 className="mt-4 text-balance text-4xl font-semibold tracking-[-0.045em] sm:text-5xl">
+              Ask AEGIS. Don&apos;t chase reports.
+            </h2>
+            <p className="mt-5 text-base leading-7 text-muted-foreground sm:text-lg">
+              Adaptive Enterprise Governance &amp; Intelligence System is the
+              governed intelligence layer within the SquareCampus product
+              direction. It is designed to surface answers without bypassing
+              institutional authority.
+            </p>
+          </div>
+          <div className="rounded-3xl border border-border bg-card p-6 sm:p-8">
+            <div className="flex items-center justify-between border-b border-border pb-5">
+              <div>
+                <p className="text-xs font-semibold tracking-[0.18em] text-primary uppercase">
+                  AEGIS posture
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Intelligence under control
+                </p>
+              </div>
+              <Eye aria-hidden="true" className="size-5 text-primary" />
+            </div>
+            <div className="grid gap-4 pt-5 sm:grid-cols-2">
+              {[
+                "Read-only first",
+                "RBAC-aware",
+                "Audit-backed",
+                "No autonomous writes in v1",
+              ].map((item) => (
+                <div
+                  key={item}
+                  className="flex items-center gap-3 text-sm text-foreground"
+                >
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-primary/12 text-primary">
+                    <Check aria-hidden="true" className="size-3.5" />
+                  </span>
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="hidden border-y border-border bg-card/30 py-20 md:block sm:py-28">
+        <Container>
+          <SectionHeading
+            eyebrow="Data engineering"
+            title="Data pipelines leadership can trust."
+            description="From messy operational sources to reconciled, observable models: we engineer the movement, validation, and refresh discipline between raw data and serious decisions."
+          />
+          <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              [
+                Blocks,
+                "Ingest",
+                "APIs, databases, spreadsheets, and legacy systems",
+              ],
+              [
+                Workflow,
+                "Transform",
+                "Validated business logic and durable models",
+              ],
+              [
+                Scale,
+                "Reconcile",
+                "Control totals, exceptions, and source alignment",
+              ],
+              [
+                CloudCog,
+                "Operate",
+                "Refresh, lineage, observability, and cost control",
+              ],
+            ].map(([Icon, title, description]) => {
+              const TypedIcon = Icon as typeof Blocks;
+              return (
+                <div
+                  key={String(title)}
+                  className="rounded-2xl border border-border bg-background/55 p-5"
+                >
+                  <TypedIcon
+                    aria-hidden="true"
+                    className="size-5 text-primary"
+                  />
+                  <h3 className="mt-6 font-semibold text-foreground">
+                    {String(title)}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {String(description)}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+          <Link
+            href="/services/data-engineering/"
+            className={cn(
+              buttonVariants({ variant: "outline" }),
+              "mt-8 rounded-full",
+            )}
           >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+            Explore data engineering
+          </Link>
+        </Container>
+      </section>
+
+      <section className="hidden py-20 md:block sm:py-28">
+        <Container className="grid items-center gap-12 lg:grid-cols-[0.88fr_1.12fr]">
+          <div className="rounded-3xl border border-border bg-card p-5 sm:p-7">
+            <div className="flex items-center justify-between border-b border-border pb-5">
+              <div>
+                <p className="text-xs text-muted-foreground">
+                  Operational command surface
+                </p>
+                <p className="mt-1 font-semibold text-foreground">
+                  Decision state
+                </p>
+              </div>
+              <Gauge aria-hidden="true" className="size-5 text-primary" />
+            </div>
+            <div className="mt-5 grid gap-3 sm:grid-cols-3">
+              {[
+                ["Exceptions", "12", "Needs ownership"],
+                ["Data trust", "98.4%", "Reconciled"],
+                ["Cycle state", "On track", "Current window"],
+              ].map(([label, value, meta]) => (
+                <div
+                  key={label}
+                  className="rounded-xl border border-border bg-background/60 p-4"
+                >
+                  <p className="text-xs text-muted-foreground">{label}</p>
+                  <p className="mt-3 text-xl font-semibold text-foreground">
+                    {value}
+                  </p>
+                  <p className="mt-1 text-[0.65rem] text-primary">{meta}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 rounded-xl border border-border bg-background/60 p-4">
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-xs font-medium text-foreground">
+                  Operational signal
+                </p>
+                <span className="text-[0.65rem] text-muted-foreground">
+                  Last 8 periods
+                </span>
+              </div>
+              <div className="mt-5 flex h-24 items-end gap-2">
+                {[
+                  { period: "p1", height: 36 },
+                  { period: "p2", height: 52 },
+                  { period: "p3", height: 44 },
+                  { period: "p4", height: 66 },
+                  { period: "p5", height: 59 },
+                  { period: "p6", height: 78 },
+                  { period: "p7", height: 72 },
+                  { period: "p8", height: 91 },
+                ].map(({ period, height }, index) => (
+                  <div
+                    key={period}
+                    className="flex-1 rounded-t-sm bg-primary/70"
+                    style={{
+                      height: `${height}%`,
+                      opacity: 0.45 + index * 0.06,
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+          <div>
+            <SectionHeading
+              eyebrow="Operational dashboards"
+              title="Not decoration. Command surfaces."
+              description="Executive and operating teams need more than charts. They need KPI definitions, drilldowns, alerts, exception ownership, and a clear route from signal to action."
+            />
+            <p className="mt-6 text-sm font-semibold text-foreground">
+              If the data cannot be trusted, the dashboard is theatre.
+            </p>
+            <Link
+              href="/services/dashboards/"
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "mt-7 rounded-full",
+              )}
+            >
+              Explore dashboards
+            </Link>
+          </div>
+        </Container>
+      </section>
+
+      <section className="hidden border-t border-border bg-card/30 py-20 md:block sm:py-28">
+        <Container>
+          <SectionHeading
+            eyebrow="Why Fairhelm"
+            title="Discipline is a product feature."
+            description="We bring product judgment, systems engineering, and operating realism to environments where weak controls become expensive quickly."
+          />
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {reasons.map((reason) => (
+              <FeatureCard key={reason.title} {...reason} />
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      <CtaBand />
+    </>
   );
 }
