@@ -281,6 +281,100 @@
     animation: svg-orbit 18s linear infinite;
   }
 
+  /* Second, slower ring turning the opposite way for a layered orbit. */
+  .svg-orbit-reverse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: svg-orbit 24s linear infinite reverse;
+  }
+
+  /* A rotating radar cone anchored at the governance emblem's center. */
+  .svg-radar {
+    transform-box: view-box;
+    transform-origin: 280px 110px;
+    animation: svg-orbit 7s linear infinite;
+  }
+
+  /* Faint counter-flowing companion ring (paired with .svg-flow-dash). */
+  .svg-flow-reverse {
+    animation-direction: reverse;
+    animation-duration: 14s;
+  }
+
+  /* Connector spokes from a hub to its satellites, breathing in sequence. */
+  .svg-spoke {
+    animation: svg-spoke-glow 3.2s ease-in-out infinite;
+  }
+
+  /* Soft breathing halo behind a core node. */
+  .svg-core-glow {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: svg-glow 4.4s ease-in-out infinite;
+  }
+
+  /* Expanding sonar ping, e.g. an active validation stage. */
+  .svg-ping {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: svg-ping 3s ease-out infinite;
+  }
+
+  /* A dot riding an SVG path via offset-path. Duration/delay come inline. */
+  .svg-traveler {
+    animation-name: svg-travel;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    animation-duration: 7s;
+  }
+
+  @keyframes svg-glow {
+    0%,
+    100% {
+      opacity: 0.2;
+      transform: scale(0.86);
+    }
+
+    50% {
+      opacity: 0.55;
+      transform: scale(1.12);
+    }
+  }
+
+  @keyframes svg-spoke-glow {
+    0%,
+    100% {
+      opacity: 0.06;
+    }
+
+    50% {
+      opacity: 0.32;
+    }
+  }
+
+  @keyframes svg-ping {
+    0% {
+      opacity: 0.5;
+      transform: scale(0.55);
+    }
+
+    70%,
+    100% {
+      opacity: 0;
+      transform: scale(1.7);
+    }
+  }
+
+  @keyframes svg-travel {
+    from {
+      offset-distance: 0%;
+    }
+
+    to {
+      offset-distance: 100%;
+    }
+  }
+
   @keyframes nav-progress {
     to {
       transform: scaleX(1);
