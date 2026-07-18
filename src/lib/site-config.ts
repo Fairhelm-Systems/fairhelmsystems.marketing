@@ -9,8 +9,9 @@ export const siteConfig = {
     "Fairhelm Systems builds governed software systems, data pipelines, and operational intelligence for institutions where reliability is non-negotiable.",
   contactEmail: "hello@fairhelmsystems.com",
   contactEmailIsPlaceholder: false,
-  // Contact-handling endpoint (Lambda Function URL / API Gateway). While empty,
-  // the inquiry form falls back to opening the visitor's mail client via mailto.
+  // Contact-handling endpoint (API Gateway → Lambda → SquareCampus CRM). Empty
+  // until the CRM proxy is deployed with platform credentials; while empty, the
+  // inquiry form falls back to opening the visitor's mail client via mailto.
   contactEndpoint: "",
   location: "India",
   product: {

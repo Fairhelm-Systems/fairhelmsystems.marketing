@@ -21,6 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Field,
   FieldDescription,
@@ -62,11 +63,28 @@ export function ContactInquiry() {
   const [status, setStatus] = useState<
     "idle" | "submitting" | "success" | "error"
   >("idle");
+  const [consentMarketing, setConsentMarketing] = useState(false);
   const honeypotRef = useRef<HTMLInputElement>(null);
-  const loadedAtRef = useRef(0);
+  const idempotencyKeyRef = useRef("");
+  const attributionRef = useRef({
+    campaignSource: "",
+    campaignMedium: "",
+    campaignName: "",
+    referrer: "",
+    landingPage: "",
+  });
 
   useEffect(() => {
-    loadedAtRef.current = Date.now();
+    // Stable per-submission key so retries never create duplicate CRM leads.
+    idempotencyKeyRef.current = crypto.randomUUID();
+    const params = new URLSearchParams(window.location.search);
+    attributionRef.current = {
+      campaignSource: params.get("utm_source") ?? "",
+      campaignMedium: params.get("utm_medium") ?? "",
+      campaignName: params.get("utm_campaign") ?? "",
+      referrer: document.referrer,
+      landingPage: window.location.href,
+    };
   }, []);
 
   const endpoint = siteConfig.contactEndpoint as string;
@@ -125,18 +143,30 @@ export function ContactInquiry() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          workType,
-          workTypeLabel: workTypeLabel(workType),
-          problem: problem.trim(),
-          name: name.trim(),
-          organization: organization.trim(),
-          email: email.trim(),
-          source: "fairhelmsystems.com/contact",
-          // Abuse signals: honeypot must stay empty; elapsed catches instant bots.
-          company_website: honeypotRef.current?.value ?? "",
-          elapsedMs: loadedAtRef.current
-            ? Date.now() - loadedAtRef.current
-            : null,
+          idempotencyKey: idempotencyKeyRef.current,
+          contactName: name.trim(),
+          contactEmail: email.trim(),
+          contactPhone: "",
+          contactRole: "",
+          schoolName: organization.trim(),
+          schoolWebsite: "",
+          city: "",
+          state: "",
+          country: "India",
+          boardAffiliation: "",
+          studentCountRange: "",
+          message: `${problem.trim()}\n\nArea of interest: ${workTypeLabel(
+            workType,
+          )}`,
+          consentContact: true,
+          consentMarketing,
+          campaignSource: attributionRef.current.campaignSource,
+          campaignMedium: attributionRef.current.campaignMedium,
+          campaignName: attributionRef.current.campaignName,
+          referrer: attributionRef.current.referrer,
+          landingPage: attributionRef.current.landingPage,
+          // Anti-bot honeypot; must remain empty for real submissions.
+          honeypotField: honeypotRef.current?.value ?? "",
         }),
       });
       if (!response.ok) {
@@ -286,7 +316,7 @@ export function ContactInquiry() {
                           key={option.value}
                           type="button"
                           value={option.value}
-                          className="h-9 flex-auto rounded-full border-border bg-background/45 px-3 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground data-[state=on]:border-primary data-[state=on]:bg-primary/20 data-[state=on]:font-semibold data-[state=on]:text-foreground data-[state=on]:ring-1 data-[state=on]:ring-primary/50 sm:flex-none sm:px-4 sm:text-sm"
+                          className="h-9 flex-auto rounded-full border-border bg-background/45 px-3 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:font-semibold data-[state=on]:text-primary-foreground sm:flex-none sm:px-4 sm:text-sm"
                         >
                           {option.label}
                         </ToggleGroupItem>
@@ -377,6 +407,27 @@ export function ContactInquiry() {
                           required
                         />
                       </Field>
+                      <div className="flex items-start gap-3">
+                        <Checkbox
+                          id="consent-marketing"
+                          className="mt-0.5"
+                          checked={consentMarketing}
+                          onCheckedChange={(checked) =>
+                            setConsentMarketing(checked === true)
+                          }
+                        />
+                        <FieldLabel
+                          htmlFor="consent-marketing"
+                          className="font-normal leading-6 text-muted-foreground"
+                        >
+                          Send me occasional Fairhelm updates. Optional—we never
+                          share your details.
+                        </FieldLabel>
+                      </div>
+                      <p className="text-xs leading-5 text-muted-foreground">
+                        By submitting, you agree that Fairhelm Systems may
+                        contact you about this inquiry.
+                      </p>
                       {endpoint ? (
                         <Alert className="border-primary/20 bg-primary/5">
                           <LockKeyhole aria-hidden="true" />
