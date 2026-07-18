@@ -14,13 +14,13 @@ import {
   UserRoundPlus,
   UsersRound,
 } from "lucide-react";
+import { AegisConsoleVisual } from "@/components/site/aegis-console-visual";
 import { Container } from "@/components/site/container";
 import { CtaBand } from "@/components/site/cta-band";
 import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
 import { MobileBrief } from "@/components/site/mobile-brief";
-import { SchoolOsVisual } from "@/components/site/school-os-visual";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { createPageMetadata } from "@/lib/seo";
@@ -190,7 +190,7 @@ export default function SquareCampusPage() {
         secondary={{ label: "Review security posture", href: "/security/" }}
       >
         <div className="rounded-3xl border border-border bg-card/75 p-6 shadow-2xl backdrop-blur sm:p-8">
-          <SchoolOsVisual className="mb-6" />
+          <AegisConsoleVisual className="mb-6" />
           <div className="flex items-center justify-between gap-4 border-b border-border pb-5">
             <div>
               <p className="text-xs font-semibold tracking-[0.18em] text-primary uppercase">
