@@ -31,20 +31,29 @@ browser ──POST /inquiries──▶ API Gateway (throttled) ──▶ Lambda 
    duplicate-detection details are discarded. Logs carry only `requestId` + status —
    never email, phone, message, tokens, or the upstream body.
 
-## Integration seam (required before this can go live)
+## Auth: Cognito M2M (required before this can go live)
 
-The token provider in [`src/lib/platform-client.js`](src/lib/platform-client.js)
-(`createClientCredentialsTokenProvider`) is a **placeholder** for the existing
-platform server-to-server auth client. Wire the real one in
-[`src/index.js`](src/index.js). Provide via stack parameters / environment:
+The Lambda is a **platform-plane machine identity** — a separate actor type from
+tenant-user auth and human Platform Admin auth. It uses **AWS Cognito M2M
+client-credentials** with one custom scope, which the core API maps to the
+internal `platform_crm:intake` permission (the core API validates token issuer,
+audience, expiry, and scope itself).
 
-- `PlatformBaseUrl` — the platform API base URL
-- `PlatformTokenUrl`, `PlatformClientId`, `PlatformClientSecret`, `PlatformScope`
-  — or replace these entirely with the shared auth client
+Configure via stack parameters (leave everything unset until the pieces exist):
 
-**Never** put the client secret in a plain parameter for production — use a
-Secrets Manager dynamic reference:
-`{{resolve:secretsmanager:NAME:SecretString:clientSecret}}`.
+- `PlatformBaseUrl` — the platform gRPC-relay base URL. **Leave unset until the
+  production relay is deployed.**
+- `PlatformTokenUrl` — Cognito `/oauth2/token` endpoint (a stack output).
+- `PlatformClientId` — Cognito app-client ID (a stack output).
+- `PlatformClientSecretArn` — Secrets Manager ARN of the app-client secret.
+- `PlatformScope` — `squarecampus-platform/crm.intake` (default).
+
+The client secret is **fetched at runtime** from Secrets Manager via the Lambda
+execution role, which is granted `secretsmanager:GetSecretValue` on **only that
+ARN**. The secret is never stored in source, a plaintext CloudFormation
+parameter, or ordinary Lambda config. The Lambda **fails closed** if the relay
+or auth is unavailable — it never falls back to a local store; the site's
+`mailto:` path is the availability fallback.
 
 ## Tests
 
@@ -66,10 +75,10 @@ cd infrastructure/contact-api
 sam build
 sam deploy --guided \
   --parameter-overrides \
-    PlatformBaseUrl=https://platform.example \
-    PlatformTokenUrl=https://platform.example/oauth/token \
-    PlatformClientId=... \
-    PlatformClientSecret=...        # prefer a Secrets Manager reference
+    PlatformBaseUrl=https://relay.example \
+    PlatformTokenUrl=https://<domain>.auth.<region>.amazoncognito.com/oauth2/token \
+    PlatformClientId=<cognito-app-client-id> \
+    PlatformClientSecretArn=arn:aws:secretsmanager:...:secret:...
 ```
 
 No SAM CLI? Use the AWS CLI equivalent (the SAM transform runs server-side):
@@ -79,8 +88,11 @@ aws cloudformation package --template-file template.yaml \
   --s3-bucket <artifacts-bucket> --output-template-file packaged.yaml --region ap-south-1
 aws cloudformation deploy --template-file packaged.yaml --stack-name fairhelm-contact-api \
   --region ap-south-1 --capabilities CAPABILITY_IAM CAPABILITY_AUTO_EXPAND \
-  --parameter-overrides PlatformBaseUrl=... PlatformTokenUrl=... PlatformClientId=... PlatformClientSecret=...
+  --parameter-overrides PlatformBaseUrl=... PlatformTokenUrl=... PlatformClientId=... PlatformClientSecretArn=...
 ```
+
+Do **not** deploy or set `contactEndpoint` until the M2M auth, the production
+relay, and an end-to-end smoke test are all green.
 
 ## Custom domain
 
