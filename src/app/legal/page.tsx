@@ -8,8 +8,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { AnimatedSystemIllustration } from "@/components/site/animated-system-illustration";
 import { Container } from "@/components/site/container";
+import { GovernanceVisual } from "@/components/site/governance-visual";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
 import { LegalNavBand } from "@/components/site/legal-document";
@@ -94,7 +94,15 @@ export default function LegalPage() {
         secondary={{ label: "Review security posture", href: "/security/" }}
       >
         <div className="rounded-3xl border border-border bg-card/75 p-5 shadow-2xl backdrop-blur sm:p-7">
-          <AnimatedSystemIllustration variant="governance" />
+          <GovernanceVisual
+            nodes={[
+              [170, 110, "PRIVACY"],
+              [390, 110, "TERMS"],
+              [280, 20, "AUP"],
+              [280, 200, "DPA"],
+            ]}
+            chips={["Indexed", "Public posture", "Versioned"]}
+          />
           <div className="mt-5 flex items-center justify-between gap-4">
             <div>
               <p className="eyebrow">Public posture</p>
@@ -143,11 +151,11 @@ export default function LegalPage() {
           <div className="mt-10 rounded-2xl border border-border bg-card/55 p-5 text-sm leading-6 text-muted-foreground sm:p-6">
             <p className="font-semibold text-foreground">Interim status</p>
             <p className="mt-2">
-              {siteConfig.legalName} is the intended legal entity and its
-              incorporation is in progress. These public documents are written
-              to state responsible boundaries now; they require formal legal
-              review before material collection, production processing, or
-              customer contracting.
+              {siteConfig.legalName} is the legal entity operating as Fairhelm
+              Systems, incorporated in India as a One Person Company. These
+              public documents are written to state responsible boundaries now;
+              they require formal legal review before material collection,
+              production processing, or customer contracting.
             </p>
           </div>
         </Container>

@@ -1,0 +1,266 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  Fairhelm contact-inquiry API. A credential-isolating proxy: the public form
+  posts here and this Lambda forwards to the SquareCampus platform CRM
+  (/api/platform/v1/crm/marketing-intake) via a server-side auth client, so the
+  browser never sees platform credentials. Layered free-tier abuse protection
+  (honeypot, strict schema, per-IP throttle, origin allowlist); DynamoDB holds
+  only rate-limit counters. Optional AWS WAF in front, off by default.
+
+Parameters:
+  AllowedOrigins:
+    Type: String
+    Default: "https://fairhelmsystems.com,https://www.fairhelmsystems.com"
+    Description: Comma-separated origins allowed to submit the form (CORS + guard).
+  StageName:
+    Type: String
+    Default: prod
+  RateLimitPerHour:
+    Type: Number
+    Default: 5
+    Description: Max accepted submissions per client IP per hour (Lambda-enforced).
+  PlatformBaseUrl:
+    Type: String
+    Default: ""
+    Description: Base URL of the SquareCampus platform API.
+  PlatformTokenUrl:
+    Type: String
+    Default: ""
+    Description: OAuth2 token endpoint for the server-to-server auth client.
+  PlatformClientId:
+    Type: String
+    Default: ""
+    Description: Client ID for the platform auth client (permission platform_crm:intake).
+  PlatformClientSecretArn:
+    Type: String
+    Default: ""
+    Description: >-
+      Secrets Manager ARN holding the Cognito M2M app-client secret. The Lambda
+      reads it at runtime via its execution role; the secret is never a plaintext
+      parameter, env var, or committed to source.
+  PlatformScope:
+    Type: String
+    Default: "squarecampus-platform/crm.intake"
+    Description: Cognito custom scope; the core API maps it to platform_crm:intake.
+  MaxConcurrency:
+    Type: Number
+    Default: 5
+    Description: Reserved Lambda concurrency — a hard cap on blast radius and cost.
+  ApiThrottleRate:
+    Type: Number
+    Default: 5
+    Description: API Gateway steady-state requests/sec ceiling.
+  ApiThrottleBurst:
+    Type: Number
+    Default: 10
+    Description: API Gateway burst ceiling.
+  EnableWaf:
+    Type: String
+    Default: "false"
+    AllowedValues: ["true", "false"]
+    Description: >-
+      Attach an AWS WAF WebACL (edge rate-limiting + AWS managed reputation /
+      common / known-bad-input rules). Adds ~US$8-10/month FIXED cost. Leave
+      "false" to rely on the free-tier Lambda-layer defenses + API throttling;
+      set "true" for the strongest edge protection.
+  WafRateLimit:
+    Type: Number
+    Default: 300
+    Description: WAF rate-based limit — requests per 5 minutes per IP (min 100).
+  ApiDomainName:
+    Type: String
+    Default: "api.fairhelmsystems.com"
+    Description: Custom domain for the API, served via Route53.
+  HostedZoneId:
+    Type: String
+    Default: "Z0755819RNVKUIYP2L8N"
+    Description: Route53 hosted zone ID for the API domain's parent zone.
+
+Conditions:
+  UseWaf: !Equals [!Ref EnableWaf, "true"]
+  HasPlatformSecret: !Not [!Equals [!Ref PlatformClientSecretArn, ""]]
+
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 256
+    Runtime: nodejs20.x
+
+Resources:
+  InquiriesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "${AWS::StackName}-inquiries"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: expireAt
+        Enabled: true
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+
+  InquiryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-inquiry"
+      CodeUri: src/
+      Handler: index.handler
+      ReservedConcurrentExecutions: !Ref MaxConcurrency
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref InquiriesTable
+          ALLOWED_ORIGINS: !Ref AllowedOrigins
+          RATE_LIMIT_PER_HOUR: !Ref RateLimitPerHour
+          # Per-stack constant used only to hash IPs (privacy), not a secret.
+          RATE_SALT: !Select [2, !Split ["/", !Ref AWS::StackId]]
+          PLATFORM_BASE_URL: !Ref PlatformBaseUrl
+          PLATFORM_TOKEN_URL: !Ref PlatformTokenUrl
+          PLATFORM_CLIENT_ID: !Ref PlatformClientId
+          PLATFORM_CLIENT_SECRET_ARN: !Ref PlatformClientSecretArn
+          PLATFORM_SCOPE: !Ref PlatformScope
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref InquiriesTable
+        - !If
+          - HasPlatformSecret
+          - Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref PlatformClientSecretArn
+          - !Ref AWS::NoValue
+      Events:
+        Post:
+          Type: Api
+          Properties:
+            RestApiId: !Ref InquiryApi
+            Path: /inquiries
+            Method: post
+        Options:
+          Type: Api
+          Properties:
+            RestApiId: !Ref InquiryApi
+            Path: /inquiries
+            Method: options
+
+  # Route53-validated ACM cert for the custom domain. Must live in the API's
+  # region (regional custom domains require a same-region certificate).
+  ApiCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref ApiDomainName
+      ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: !Ref ApiDomainName
+          HostedZoneId: !Ref HostedZoneId
+
+  InquiryApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "${AWS::StackName}-api"
+      StageName: !Ref StageName
+      EndpointConfiguration:
+        Type: REGIONAL
+      # CORS is handled in the Lambda (origin allowlist) for precise control.
+      Domain:
+        DomainName: !Ref ApiDomainName
+        CertificateArn: !Ref ApiCertificate
+        EndpointConfiguration: REGIONAL
+        SecurityPolicy: TLS_1_2
+        Route53:
+          HostedZoneId: !Ref HostedZoneId
+      MethodSettings:
+        - ResourcePath: "/*"
+          HttpMethod: "*"
+          ThrottlingRateLimit: !Ref ApiThrottleRate
+          ThrottlingBurstLimit: !Ref ApiThrottleBurst
+
+  # --- Optional edge protection (only created when EnableWaf=true) ---
+  WafWebAcl:
+    Type: AWS::WAFv2::WebACL
+    Condition: UseWaf
+    Properties:
+      Name: !Sub "${AWS::StackName}-waf"
+      Scope: REGIONAL
+      DefaultAction:
+        Allow: {}
+      VisibilityConfig:
+        SampledRequestsEnabled: true
+        CloudWatchMetricsEnabled: true
+        MetricName: !Sub "${AWS::StackName}-waf"
+      Rules:
+        - Name: RateLimit
+          Priority: 0
+          Action:
+            Block: {}
+          Statement:
+            RateBasedStatement:
+              Limit: !Ref WafRateLimit
+              AggregateKeyType: IP
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: RateLimit
+        - Name: IpReputation
+          Priority: 1
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesAmazonIpReputationList
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: IpReputation
+        - Name: CommonRuleSet
+          Priority: 2
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesCommonRuleSet
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: CommonRuleSet
+        - Name: KnownBadInputs
+          Priority: 3
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesKnownBadInputsRuleSet
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: KnownBadInputs
+
+  WafAssociation:
+    Type: AWS::WAFv2::WebACLAssociation
+    Condition: UseWaf
+    Properties:
+      # The stage already exists from the initial (WAF-off) deploy, so enabling
+      # WAF on a later deploy associates cleanly.
+      ResourceArn: !Sub "arn:${AWS::Partition}:apigateway:${AWS::Region}::/restapis/${InquiryApi}/stages/${StageName}"
+      WebACLArn: !GetAtt WafWebAcl.Arn
+
+Outputs:
+  InquiryEndpoint:
+    Description: Custom-domain endpoint — set as siteConfig.contactEndpoint.
+    Value: !Sub "https://${ApiDomainName}/inquiries"
+  InquiryEndpointDirect:
+    Description: Direct execute-api endpoint (bypasses the custom domain).
+    Value: !Sub "https://${InquiryApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/inquiries"
+  InquiriesTableName:
+    Description: DynamoDB table holding inquiries.
+    Value: !Ref InquiriesTable

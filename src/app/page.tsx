@@ -106,7 +106,7 @@ const mobileBriefs = [
     label: "Flagship product",
     title: "SquareCampus",
     description:
-      "A sovereign, cycle-native School OS direction for Indian schools, groups, and educational trusts.",
+      "A sovereign, cycle-native School OS for Indian schools, groups, and educational trusts.",
     bullets: [
       "Academic and attendance cycles",
       "Fees, exams, reporting, and trust governance",
@@ -142,7 +142,7 @@ const mobileBriefs = [
     label: "Governed intelligence",
     title: "AEGIS",
     description:
-      "Adaptive Enterprise Governance & Intelligence System is the controlled intelligence direction within SquareCampus.",
+      "Adaptive Enterprise Governance & Intelligence System: governed intelligence inside SquareCampus that surfaces answers without bypassing institutional authority.",
     bullets: [
       "Read-only first and RBAC-aware",
       "Audit-backed with no autonomous writes in v1",
@@ -169,7 +169,7 @@ export default function HomePage() {
     <>
       <Hero
         eyebrow="Enterprise software · Data systems · Operational intelligence"
-        title="Governed software systems for institutions that cannot afford chaos."
+        title="Governed software systems for institutions where reliability is non-negotiable."
         description="Fairhelm Systems builds sovereign School OS platforms, production-grade data pipelines, and decision dashboards for organizations that need reliability, governance, and operational clarity."
         primary={{ label: "Explore SquareCampus", href: "/squarecampus/" }}
         secondary={{ label: "Discuss Data & Dashboards", href: "/contact/" }}
@@ -181,7 +181,7 @@ export default function HomePage() {
         aria-label="Core capabilities"
         className="border-b border-border bg-card/20"
       >
-        <Container className="no-scrollbar flex flex-nowrap justify-start gap-2 overflow-x-auto py-4 md:flex-wrap md:justify-center md:py-5 lg:justify-between">
+        <Container className="no-scrollbar flex flex-nowrap justify-start gap-2 overflow-x-auto py-4 max-md:scroll-fade-x max-md:scroll-fade-s-[0px] md:flex-wrap md:justify-center md:py-5 lg:justify-between">
           {credibility.map((item) => (
             <Badge
               key={item}
@@ -196,7 +196,7 @@ export default function HomePage() {
 
       <MobileBrief
         eyebrow="Choose a lane"
-        title="What do you need to understand?"
+        title="What do you need to solve?"
         description="Five focused briefs. Open one, then follow the detail only if it matters."
         items={mobileBriefs}
       />
@@ -240,7 +240,7 @@ export default function HomePage() {
             <SectionHeading
               eyebrow="SquareCampus"
               title="Schools do not run linearly. They run in cycles."
-              description="A school ERP alternative should understand recurring operating pressure—not force every institution into a generic workflow model. SquareCampus is being shaped around the cycles schools actually govern."
+              description="A school ERP alternative should understand recurring operating pressure—not force every institution into a generic workflow model. SquareCampus is built around the cycles schools actually govern."
             />
             <Link
               href="/squarecampus/"
@@ -249,7 +249,7 @@ export default function HomePage() {
                 "mt-7 rounded-full",
               )}
             >
-              See the SquareCampus direction
+              See how SquareCampus works
             </Link>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -279,9 +279,8 @@ export default function HomePage() {
             </h2>
             <p className="mt-5 text-base leading-7 text-muted-foreground sm:text-lg">
               Adaptive Enterprise Governance &amp; Intelligence System is the
-              governed intelligence layer within the SquareCampus product
-              direction. It is designed to surface answers without bypassing
-              institutional authority.
+              governed intelligence layer inside SquareCampus. It surfaces
+              answers without bypassing institutional authority.
             </p>
           </div>
           <div className="rounded-3xl border border-border bg-card p-6 sm:p-8">

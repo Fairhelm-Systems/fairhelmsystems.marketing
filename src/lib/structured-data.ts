@@ -9,6 +9,15 @@ export const organizationSchema = {
   url: siteConfig.url,
   logo: absoluteUrl("/brand/fairhelm-logo.svg"),
   description: siteConfig.description,
+  email: siteConfig.contactEmail,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: siteConfig.address.street,
+    addressLocality: siteConfig.address.locality,
+    addressRegion: siteConfig.address.region,
+    postalCode: siteConfig.address.postalCode,
+    addressCountry: siteConfig.address.country,
+  },
   areaServed: {
     "@type": "Country",
     name: "India",
@@ -42,7 +51,7 @@ export const squareCampusSchema = {
   operatingSystem: "Web",
   url: absoluteUrl("/squarecampus/"),
   description:
-    "SquareCampus is Fairhelm Systems' product direction for a sovereign, cycle-native School OS for Indian schools, multi-school groups, and educational trusts.",
+    "SquareCampus is Fairhelm Systems' sovereign, cycle-native School OS for Indian schools, multi-school groups, and educational trusts.",
   creator: { "@id": `${siteConfig.url}/#organization` },
   featureList: [
     "Cycle-native school operations",

@@ -14,13 +14,13 @@ import {
   UserRoundPlus,
   UsersRound,
 } from "lucide-react";
-import { AnimatedSystemIllustration } from "@/components/site/animated-system-illustration";
 import { Container } from "@/components/site/container";
 import { CtaBand } from "@/components/site/cta-band";
 import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
 import { MobileBrief } from "@/components/site/mobile-brief";
+import { SchoolOsVisual } from "@/components/site/school-os-visual";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { createPageMetadata } from "@/lib/seo";
@@ -29,7 +29,7 @@ import { breadcrumbSchema, squareCampusSchema } from "@/lib/structured-data";
 export const metadata = createPageMetadata({
   title: "SquareCampus — Sovereign School OS for India",
   description:
-    "Explore SquareCampus, Fairhelm Systems' cycle-native School OS product direction for Indian schools, multi-school groups, and educational trusts.",
+    "Explore SquareCampus, Fairhelm Systems' cycle-native School OS for Indian schools, multi-school groups, and educational trusts.",
   path: "/squarecampus/",
   keywords: [
     "School OS India",
@@ -136,7 +136,7 @@ const mobileBriefs = [
     label: "Governed intelligence",
     title: "Ask AEGIS",
     description:
-      "AEGIS is intended to answer authorized questions without bypassing institutional governance.",
+      "AEGIS answers authorized questions without bypassing institutional governance.",
     bullets: [
       "Read-only first, RBAC-aware, and audit-backed",
       "No autonomous writes in v1",
@@ -148,7 +148,7 @@ const mobileBriefs = [
     label: "Data posture",
     title: "Privacy and auditability",
     description:
-      "Customer ownership, tenant separation, least privilege, and intelligible records shape the product direction.",
+      "Customer ownership, tenant separation, least privilege, and intelligible records are built into the product.",
     bullets: [
       "No selling student or parent data",
       "No AI training on customer data unless explicitly governed",
@@ -185,12 +185,12 @@ export default function SquareCampusPage() {
       <Hero
         eyebrow="SquareCampus · Fairhelm Systems flagship product"
         title="A sovereign School OS for Indian institutions."
-        description="SquareCampus is Fairhelm Systems' product direction for schools, multi-school groups, educational trusts, and private institutions that need cycle-native operations, trust-aware governance, and decision-ready intelligence."
+        description="SquareCampus is Fairhelm Systems' sovereign School OS for schools, multi-school groups, educational trusts, and private institutions that need cycle-native operations, trust-aware governance, and decision-ready intelligence."
         primary={{ label: "Discuss a pilot", href: "/contact/" }}
         secondary={{ label: "Review security posture", href: "/security/" }}
       >
         <div className="rounded-3xl border border-border bg-card/75 p-6 shadow-2xl backdrop-blur sm:p-8">
-          <AnimatedSystemIllustration variant="cycles" className="mb-6" />
+          <SchoolOsVisual className="mb-6" />
           <div className="flex items-center justify-between gap-4 border-b border-border pb-5">
             <div>
               <p className="text-xs font-semibold tracking-[0.18em] text-primary uppercase">
@@ -226,7 +226,7 @@ export default function SquareCampusPage() {
       <MobileBrief
         eyebrow="SquareCampus in brief"
         title="Pick the part you care about."
-        description="The product direction, compressed for a phone. Open a topic for the operating detail."
+        description="SquareCampus, compressed for a phone. Open a topic for the operating detail."
         items={mobileBriefs}
       />
 
@@ -235,7 +235,7 @@ export default function SquareCampusPage() {
           <SectionHeading
             eyebrow="The problem with generic ERPs"
             title="A module list is not an operating model."
-            description="Schools do not simply collect records. They execute recurring cycles under policy, deadlines, role boundaries, parent expectations, and trust oversight. SquareCampus is being designed around that reality."
+            description="Schools do not simply collect records. They execute recurring cycles under policy, deadlines, role boundaries, parent expectations, and trust oversight. SquareCampus is designed around that reality."
           />
           <div className="grid gap-4 sm:grid-cols-2">
             {[
@@ -280,7 +280,7 @@ export default function SquareCampusPage() {
           <SectionHeading
             eyebrow="Cycle-native architecture"
             title="Built around the work schools repeat—and the pressure points they cannot ignore."
-            description="The platform direction connects each operating cycle to its owners, evidence, exceptions, and governance context."
+            description="SquareCampus connects each operating cycle to its owners, evidence, exceptions, and governance context."
           />
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {operatingCycles.map((cycle) => (
@@ -298,8 +298,8 @@ export default function SquareCampusPage() {
               One governed view across the institution portfolio.
             </h2>
             <p className="mt-5 text-base leading-7 text-muted-foreground sm:text-lg">
-              The Trust Command Center direction is built for oversight without
-              blunt centralization: shared definitions, exception visibility,
+              The Trust Command Center is built for oversight without blunt
+              centralization: shared definitions, exception visibility,
               institutional context, and accountable drilldowns across schools.
             </p>
           </div>
@@ -351,7 +351,7 @@ export default function SquareCampusPage() {
             <SectionHeading
               eyebrow="AEGIS"
               title="Governed intelligence, not an unsupervised actor."
-              description="Adaptive Enterprise Governance & Intelligence System is intended to help authorized users ask better questions across governed institutional data. The v1 posture is deliberately constrained."
+              description="Adaptive Enterprise Governance & Intelligence System helps authorized users ask better questions across governed institutional data. The v1 posture is deliberately constrained."
             />
             <p className="mt-6 text-xl font-semibold text-foreground">
               Ask AEGIS. Don&apos;t chase reports.
@@ -408,7 +408,7 @@ export default function SquareCampusPage() {
           <SectionHeading
             eyebrow="Privacy and auditability"
             title="Institutional data deserves institutional-grade boundaries."
-            description="SquareCampus is being shaped with explicit ownership, privacy-conscious handling, and clear records of material action. This is a product posture, not a claim of certification."
+            description="SquareCampus is built with explicit ownership, privacy-conscious handling, and clear records of material action. This is a product posture, not a claim of certification."
           />
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {posture.map((item) => (

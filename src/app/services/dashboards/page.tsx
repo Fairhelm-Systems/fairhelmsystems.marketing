@@ -8,7 +8,7 @@ import {
   ShieldCheck,
   Siren,
 } from "lucide-react";
-import { AnimatedSystemIllustration } from "@/components/site/animated-system-illustration";
+import { CommandSurfaceVisual } from "@/components/site/command-surface-visual";
 import { Container } from "@/components/site/container";
 import { CtaBand } from "@/components/site/cta-band";
 import { FeatureCard } from "@/components/site/feature-card";
@@ -158,39 +158,7 @@ export default function DashboardsPage() {
           href: "/services/data-engineering/",
         }}
       >
-        <div className="rounded-3xl border border-border bg-card/75 p-5 shadow-2xl backdrop-blur sm:p-7">
-          <AnimatedSystemIllustration variant="signals" className="mb-5" />
-          <div className="flex items-center justify-between border-b border-border pb-5">
-            <div>
-              <p className="text-xs text-muted-foreground">Leadership view</p>
-              <p className="mt-1 font-semibold text-foreground">
-                Operating posture
-              </p>
-            </div>
-            <span className="rounded-full bg-primary/12 px-3 py-1 text-xs font-medium text-primary">
-              Reconciled
-            </span>
-          </div>
-          <div className="mt-5 grid grid-cols-2 gap-3">
-            {[
-              ["Revenue plan", "92.8%", "+3.4% vs prior"],
-              ["Exceptions", "17", "6 need action"],
-              ["Refresh", "06:00", "Within SLA"],
-              ["Confidence", "High", "Controls passed"],
-            ].map(([label, value, detail]) => (
-              <div
-                key={label}
-                className="rounded-xl border border-border bg-background/55 p-4"
-              >
-                <p className="text-[0.68rem] text-muted-foreground">{label}</p>
-                <p className="mt-3 text-xl font-semibold text-foreground">
-                  {value}
-                </p>
-                <p className="mt-1 text-[0.65rem] text-primary">{detail}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <CommandSurfaceVisual className="shadow-2xl" />
       </Hero>
 
       <MobileBrief
