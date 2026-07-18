@@ -32,7 +32,7 @@ export default function AiPolicyPage() {
       <LegalDocument
         current="/ai-policy/"
         statusTitle="Interim policy status"
-        statusDescription={`${siteConfig.legalName} is currently in the incorporation process. This posture describes product direction and design constraints; contract-specific AI terms must match the system actually delivered.`}
+        statusDescription={`${siteConfig.legalName} is incorporated in India as a One Person Company. This posture describes product direction and design constraints; contract-specific AI terms must match the system actually delivered.`}
         sections={aiPolicySections}
         lastUpdated={legalUpdated}
       />

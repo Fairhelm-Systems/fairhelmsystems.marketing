@@ -1,0 +1,9 @@
+{
+  "name": "fairhelm-contact-api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Credential-isolating proxy from the marketing form to the SquareCampus platform CRM.",
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}

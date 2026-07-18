@@ -29,7 +29,7 @@ const goodFit = [
 
 function FitList() {
   return (
-    <ul className="flex flex-col">
+    <ul className="flex flex-col mt-3">
       {goodFit.map((item) => (
         <li
           key={item}
@@ -118,9 +118,8 @@ export default function ContactPage() {
       <section className="border-b border-border bg-card/25 py-8 sm:py-12">
         <Container className="grid gap-3 text-sm leading-6 text-muted-foreground sm:grid-cols-[1fr_auto] sm:items-center">
           <p>
-            {siteConfig.legalName} · {siteConfig.incorporationStatus}. GSTIN
-            details will be published after incorporation and applicable
-            registration.
+            {siteConfig.legalName} · {siteConfig.incorporationStatus}.
+            Registered office: {siteConfig.address.full}.
           </p>
           <p className="font-mono text-xs text-muted-foreground/80">
             No hidden submission · no data capture

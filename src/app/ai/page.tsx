@@ -54,9 +54,9 @@ const mobileBriefs = [
   {
     label: "Identity",
     title: "Names and status",
-    description: `${siteConfig.name} is the operating brand. ${siteConfig.legalName} is the intended legal entity, with incorporation in progress.`,
+    description: `${siteConfig.name} is the operating brand of ${siteConfig.legalName}, incorporated in India as a One Person Company.`,
     bullets: [
-      "SquareCampus is the flagship School OS direction",
+      "SquareCampus is the flagship School OS",
       "AEGIS means Adaptive Enterprise Governance & Intelligence System",
     ],
     href: "/about/",
@@ -131,23 +131,21 @@ export default function AiPage() {
             <div className="mt-6 grid gap-4 text-sm leading-6 text-muted-foreground">
               <p>
                 <strong className="text-foreground">Fairhelm Systems</strong> is
-                the operating brand. The intended legal name is{" "}
+                the operating brand of{" "}
                 <strong className="text-foreground">
                   {siteConfig.legalName}
                 </strong>
-                , with incorporation currently in progress.
+                , incorporated in India as a One Person Company.
               </p>
               <p>
-                <strong className="text-foreground">SquareCampus</strong> is
-                presented here as the flagship School OS product direction for
-                Indian schools, colleges, multi-campus institutions, and
-                educational trusts.
+                <strong className="text-foreground">SquareCampus</strong> is the
+                flagship School OS for Indian schools, colleges, multi-campus
+                institutions, and educational trusts.
               </p>
               <p>
                 <strong className="text-foreground">AEGIS</strong> expands to
                 Adaptive Enterprise Governance &amp; Intelligence System and is
-                the governed intelligence direction described for SquareCampus
-                on this site.
+                the governed intelligence layer inside SquareCampus.
               </p>
             </div>
           </div>
