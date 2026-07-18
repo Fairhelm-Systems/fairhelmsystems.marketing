@@ -4,7 +4,12 @@
 // bearer token live ONLY here (server-side) and are never returned or logged.
 // Fails CLOSED: if the relay isn't configured, it throws rather than falling
 // back to any local store.
-function createPlatformClient({ baseUrl, getToken, fetchImpl, timeoutMs = 5000 }) {
+function createPlatformClient({
+  baseUrl,
+  getToken,
+  fetchImpl,
+  timeoutMs = 5000,
+}) {
   const doFetch = fetchImpl || fetch;
   return {
     async submitMarketingIntake(payload) {

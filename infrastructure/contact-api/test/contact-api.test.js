@@ -192,7 +192,10 @@ test("handler: upstream non-2xx -> 502 with no upstream detail", async () => {
   const platform = fakePlatform({ ok: false, status: 409 });
   const res = await build(platform)(makeEvent(validBody()));
   assert.equal(res.statusCode, 502);
-  assert.deepEqual(JSON.parse(res.body), { ok: false, error: "upstream_error" });
+  assert.deepEqual(JSON.parse(res.body), {
+    ok: false,
+    error: "upstream_error",
+  });
 });
 
 test("handler: upstream throw -> 502, no secret leaks into response", async () => {
