@@ -207,7 +207,7 @@ export default function SecurityPage() {
             <SectionHeading
               eyebrow="AEGIS controls"
               title="Governed intelligence begins with deliberate limits."
-              description="The AEGIS product direction is read-only first, RBAC-aware, audit-backed, and explainable. Autonomous writes are outside the v1 posture."
+              description="AEGIS is read-only first, RBAC-aware, audit-backed, and explainable. Autonomous writes are outside the v1 posture."
             />
           </div>
           <Alert>

@@ -13,7 +13,14 @@ import { cn } from "@/lib/utils";
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const shellRef = useRef<HTMLDivElement>(null);
+  const mobileNavRef = useRef<HTMLDetailsElement>(null);
   const hasMounted = useRef(false);
+
+  const closeMobileNav = () => {
+    if (mobileNavRef.current) {
+      mobileNavRef.current.open = false;
+    }
+  };
 
   useEffect(() => {
     const updateScrolled = () => setIsScrolled(window.scrollY > 48);
@@ -92,7 +99,7 @@ export function Header() {
           Start a conversation
           <ArrowUpRight data-icon="inline-end" />
         </Link>
-        <details className="group relative lg:hidden">
+        <details ref={mobileNavRef} className="group relative lg:hidden">
           <summary className="flex size-10 list-none items-center justify-center rounded-full border border-border bg-secondary text-foreground [&::-webkit-details-marker]:hidden">
             <Menu aria-hidden="true" className="size-4" />
             <span className="sr-only">Open navigation</span>
@@ -103,6 +110,7 @@ export function Header() {
                 <Link
                   key={item.href}
                   href={item.href}
+                  onClick={closeMobileNav}
                   className="rounded-lg px-3 py-3 text-sm font-medium text-popover-foreground hover:bg-accent"
                 >
                   {item.label}
@@ -110,6 +118,7 @@ export function Header() {
               ))}
               <Link
                 href="/contact/"
+                onClick={closeMobileNav}
                 className={cn(buttonVariants(), "mt-2 w-full rounded-full")}
               >
                 Start a conversation

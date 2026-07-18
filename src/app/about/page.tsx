@@ -31,7 +31,7 @@ const capabilities = [
     icon: GraduationCap,
     title: "Product engineering",
     description:
-      "SquareCampus is the flagship product direction: a sovereign, cycle-native School OS for India.",
+      "SquareCampus is our flagship product: a sovereign, cycle-native School OS for India.",
   },
   {
     icon: DatabaseZap,
