@@ -8,9 +8,9 @@ import {
   RefreshCw,
   Route,
 } from "lucide-react";
-import { AnimatedSystemIllustration } from "@/components/site/animated-system-illustration";
 import { Container } from "@/components/site/container";
 import { CtaBand } from "@/components/site/cta-band";
+import { DataPipelineVisual } from "@/components/site/data-pipeline-visual";
 import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
@@ -160,7 +160,7 @@ export default function DataEngineeringPage() {
         }}
       >
         <div className="rounded-3xl border border-border bg-card/75 p-6 shadow-2xl backdrop-blur sm:p-8">
-          <AnimatedSystemIllustration variant="pipeline" className="mb-6" />
+          <DataPipelineVisual className="mb-6" />
           <p className="eyebrow">Pipeline contract</p>
           <div className="mt-6 grid gap-3">
             {[

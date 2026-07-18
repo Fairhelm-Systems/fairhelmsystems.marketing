@@ -1,8 +1,8 @@
 export const siteConfig = {
   name: "Fairhelm Systems",
-  legalName: "Fairhelm Systems (OPC) Pvt Ltd",
-  incorporationStatus: "Incorporation in progress",
-  gstinStatus: "Pending incorporation and registration",
+  legalName: "Fairhelm Systems (OPC) Private Limited",
+  incorporationStatus: "Incorporated in India · One Person Company",
+  gstinStatus: "Statutory registration particulars available on request",
   shortName: "Fairhelm",
   url: "https://fairhelmsystems.com",
   description:
@@ -14,6 +14,17 @@ export const siteConfig = {
   // inquiry form falls back to opening the visitor's mail client via mailto.
   contactEndpoint: "",
   location: "India",
+  // Registered office (MCA). Display uses `full`; the structured fields feed the
+  // PostalAddress in the Organization JSON-LD and any future contact markup.
+  address: {
+    full: "No. 33, 4th Floor, 1st Main, Ganganagar Gramatana, HMT Layout, CBI Road, Bengaluru – 560032",
+    street:
+      "No. 33, 4th Floor, 1st Main, Ganganagar Gramatana, HMT Layout, CBI Road",
+    locality: "Bengaluru",
+    region: "Karnataka",
+    postalCode: "560032",
+    country: "IN",
+  },
   product: {
     name: "SquareCampus",
     url: "/squarecampus/",

@@ -32,7 +32,7 @@ export default function AcceptableUsePage() {
       <LegalDocument
         current="/acceptable-use/"
         statusTitle="Interim policy status"
-        statusDescription={`${siteConfig.legalName} is currently in the incorporation process. This policy establishes a responsible public baseline and will be formally reviewed as services become available.`}
+        statusDescription={`${siteConfig.legalName} is incorporated in India as a One Person Company. This policy establishes a responsible public baseline and will be formally reviewed as services become available.`}
         sections={acceptableUseSections}
         lastUpdated={legalUpdated}
       />

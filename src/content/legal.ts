@@ -8,7 +8,7 @@ export const privacySections = [
     id: "company-and-scope",
     title: "Company and scope",
     paragraphs: [
-      `This notice covers the public Fairhelm Systems marketing website. ${siteConfig.legalName} is the intended legal entity and its incorporation is in progress. Statutory particulars, including the corporate identity number and GSTIN, will be added after they are issued.`,
+      `This notice covers the public Fairhelm Systems marketing website. ${siteConfig.legalName} is the legal entity operating as Fairhelm Systems, incorporated in India as a One Person Company. Statutory particulars, including the corporate identity number and GSTIN, are available on request and will be added here once issued.`,
       "Product deployments, pilots, and contracted services require scope-specific privacy, security, and data-processing terms. Those signed terms take precedence for the relevant engagement.",
     ],
   },
@@ -60,7 +60,7 @@ export const privacySections = [
     title: "Requests and questions",
     paragraphs: [
       `Privacy questions and requests concerning this public website may be sent to ${siteConfig.contactEmail}. Fairhelm may need to verify identity, authority, and the relevant context before acting on a request.`,
-      "This interim notice will be formally reviewed after incorporation and before the website begins material personal-data collection or a production service is offered under general public terms.",
+      "This interim notice will be formally reviewed before the website begins material personal-data collection or a production service is offered under general public terms.",
     ],
   },
 ] satisfies readonly LegalSection[];
@@ -70,7 +70,7 @@ export const termsSections = [
     id: "status-and-scope",
     title: "Status and scope",
     paragraphs: [
-      `These interim terms govern ordinary access to the public Fairhelm Systems website. ${siteConfig.legalName} is the intended legal entity and its incorporation is in progress. Final statutory particulars and formally reviewed terms will be published when available.`,
+      `These interim terms govern ordinary access to the public Fairhelm Systems website. ${siteConfig.legalName} is the legal entity operating as Fairhelm Systems, incorporated in India as a One Person Company. Final statutory particulars and formally reviewed terms will be published when available.`,
       "Using this website does not create a customer, partner, employment, fiduciary, or advisory relationship with Fairhelm.",
     ],
   },
@@ -186,7 +186,7 @@ export const acceptableUseSections = [
     title: "Response and changes",
     paragraphs: [
       "Fairhelm may investigate suspected misuse, restrict access within its authority, preserve relevant evidence, or cooperate with the customer and lawful authorities where appropriate. Contract-specific suspension and termination rights are governed by the signed agreement.",
-      "This policy will be formally reviewed after incorporation and as Fairhelm services mature.",
+      "This policy will be formally reviewed as Fairhelm services mature.",
     ],
   },
 ] satisfies readonly LegalSection[];

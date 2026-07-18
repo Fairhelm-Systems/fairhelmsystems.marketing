@@ -8,10 +8,10 @@ import {
   ScanEye,
   ShieldCheck,
 } from "lucide-react";
-import { AnimatedSystemIllustration } from "@/components/site/animated-system-illustration";
 import { Container } from "@/components/site/container";
 import { CtaBand } from "@/components/site/cta-band";
 import { FeatureCard } from "@/components/site/feature-card";
+import { GovernanceVisual } from "@/components/site/governance-visual";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
 import { LegalNavBand } from "@/components/site/legal-document";
@@ -119,7 +119,16 @@ export default function SecurityPage() {
         secondary={{ label: "Read privacy posture", href: "/privacy/" }}
       >
         <div className="rounded-3xl border border-border bg-card/75 p-6 shadow-2xl backdrop-blur sm:p-8">
-          <AnimatedSystemIllustration variant="governance" className="mb-6" />
+          <GovernanceVisual
+            nodes={[
+              [170, 110, "RBAC"],
+              [390, 110, "AUDIT"],
+              [280, 20, "BOUNDARIES"],
+              [280, 200, "LEAST-PRIV"],
+            ]}
+            chips={["Scoped", "Auditable", "Least privilege"]}
+            className="mb-6"
+          />
           <BadgeCheck aria-hidden="true" className="size-8 text-primary" />
           <p className="mt-7 text-xl font-semibold text-foreground">
             Posture over performance
