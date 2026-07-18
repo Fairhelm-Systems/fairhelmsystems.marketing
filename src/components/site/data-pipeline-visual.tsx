@@ -21,28 +21,31 @@ import { cn } from "@/lib/utils";
  * decision-ready models. Motion is all CSS/SMIL — connectors draw in, packets
  * travel the paths, cards rise. See the `.viz-reveal` rules in globals.css.
  * Tool names are illustrative of common integration sources, not endorsements.
+ *
+ * Source pills hug their label (w-fit, no truncation) so real tool names stay
+ * legible; the hub sits right of center to leave the sources room to breathe.
  */
 
 const sources = [
-  { label: "Tally", icon: Calculator, top: "2%" },
-  { label: "Zoho", icon: LayoutGrid, top: "18.4%" },
-  { label: "Razorpay", icon: CreditCard, top: "34.8%" },
-  { label: "Salesforce", icon: Cloud, top: "51.2%" },
-  { label: "Google Sheets", icon: Sheet, top: "67.6%" },
-  { label: "PostgreSQL", icon: Database, top: "84%" },
+  { label: "Tally", icon: Calculator, top: "1%" },
+  { label: "Zoho", icon: LayoutGrid, top: "18.2%" },
+  { label: "Razorpay", icon: CreditCard, top: "35.4%" },
+  { label: "Salesforce", icon: Cloud, top: "52.6%" },
+  { label: "Google Sheets", icon: Sheet, top: "69.8%" },
+  { label: "PostgreSQL", icon: Database, top: "87%" },
 ] as const;
 
-// Paths from each source (x=178) into the hub (x=400, y=225), viewBox 800x450.
+// Paths from each source into the hub (x=470, y=225), viewBox 800x450.
 const inPaths = [
-  "M178 32 C280 32 320 225 398 225",
-  "M178 106 C280 106 320 225 398 225",
-  "M178 180 C280 180 330 225 398 225",
-  "M178 254 C280 254 330 225 398 225",
-  "M178 328 C280 328 320 225 398 225",
-  "M178 402 C280 402 320 225 398 225",
+  "M150 30 C300 30 380 225 470 225",
+  "M150 108 C300 108 390 225 470 225",
+  "M150 186 C300 186 400 225 470 225",
+  "M150 264 C300 264 400 225 470 225",
+  "M150 342 C300 342 390 225 470 225",
+  "M150 420 C300 420 380 225 470 225",
 ] as const;
 
-const outPath = "M472 225 C540 225 560 225 620 225";
+const outPath = "M548 225 C580 225 588 225 612 225";
 
 export function DataPipelineVisual({ className }: { className?: string }) {
   const ref = useReveal(0.2);
@@ -68,7 +71,7 @@ export function DataPipelineVisual({ className }: { className?: string }) {
                   fill="none"
                   stroke="var(--primary)"
                   strokeWidth="1.4"
-                  strokeOpacity="0.6"
+                  strokeOpacity="0.55"
                   strokeLinecap="round"
                 />
                 {[0, 1.4].map((delay) => (
@@ -121,10 +124,10 @@ export function DataPipelineVisual({ className }: { className?: string }) {
                   top: source.top,
                 } as CSSProperties
               }
-              className="absolute left-0 flex w-[24%] items-center gap-1.5 rounded-full border border-border bg-background/70 px-2 py-1.5 shadow-lg backdrop-blur-md sm:gap-2 sm:px-3 sm:py-2"
+              className="absolute left-0 flex w-fit max-w-[48%] items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-background/80 px-2.5 py-1.5 shadow-lg backdrop-blur-md sm:gap-2 sm:px-3 sm:py-2"
             >
               <source.icon className="size-3 shrink-0 text-primary sm:size-4" />
-              <span className="truncate text-[0.55rem] font-medium text-foreground sm:text-[0.72rem]">
+              <span className="text-[0.58rem] font-medium text-foreground sm:text-[0.72rem]">
                 {source.label}
               </span>
             </div>
@@ -133,28 +136,28 @@ export function DataPipelineVisual({ className }: { className?: string }) {
           <div
             data-rise
             style={{ "--d": "80ms" } as CSSProperties}
-            className="absolute left-1/2 top-1/2 z-10 flex w-[20%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 rounded-2xl border border-primary/40 bg-card px-2 py-2.5 text-center shadow-2xl backdrop-blur-xl sm:gap-1.5 sm:py-4"
+            className="absolute left-[59%] top-1/2 z-10 flex w-[19%] -translate-x-1/2 -translate-y-1/2 flex-col items-center gap-1 rounded-2xl border border-primary/40 bg-card px-2 py-2.5 text-center shadow-2xl backdrop-blur-xl sm:gap-1.5 sm:py-4"
           >
             <span className="viz-pulse flex size-6 items-center justify-center rounded-full bg-primary/15 sm:size-9">
               <Workflow className="size-3 text-primary sm:size-4.5" />
             </span>
-            <span className="font-mono text-[0.44rem] tracking-[0.16em] text-muted-foreground uppercase sm:text-[0.56rem]">
-              ETL / ELT engine
+            <span className="font-mono text-[0.5rem] tracking-[0.14em] text-foreground uppercase sm:text-[0.6rem]">
+              ETL · ELT
             </span>
-            <span className="hidden text-[0.62rem] leading-4 text-muted-foreground sm:block">
-              Validate · reconcile · model
+            <span className="hidden text-[0.6rem] leading-4 text-muted-foreground sm:block">
+              Validate · reconcile
             </span>
           </div>
 
           <div
             data-rise
             style={{ "--d": "600ms" } as CSSProperties}
-            className="absolute right-0 top-1/2 z-10 w-[25%] -translate-y-1/2 rounded-2xl border border-primary/40 bg-card p-2 shadow-2xl backdrop-blur-xl sm:p-3.5"
+            className="absolute right-0 top-1/2 z-10 w-[24%] -translate-y-1/2 rounded-2xl border border-primary/40 bg-card p-2 shadow-2xl backdrop-blur-xl sm:p-3.5"
           >
             <div className="flex items-center gap-1.5">
               <Layers className="size-3 shrink-0 text-chart-4 sm:size-4" />
-              <span className="truncate font-mono text-[0.44rem] tracking-[0.14em] text-muted-foreground uppercase sm:text-[0.56rem]">
-                Governed models
+              <span className="font-mono text-[0.44rem] tracking-[0.12em] text-muted-foreground uppercase sm:text-[0.56rem]">
+                Governed
               </span>
             </div>
             <div className="mt-1.5 flex items-end gap-1 sm:mt-2.5 sm:gap-1.5">
@@ -173,26 +176,18 @@ export function DataPipelineVisual({ className }: { className?: string }) {
               ))}
             </div>
             <div className="mt-1.5 grid gap-1 sm:mt-2.5">
-              {["Reconciled", "Observable refresh"].map((label) => (
+              {["Reconciled", "Observable"].map((label) => (
                 <div
                   key={label}
                   className="flex items-center justify-between gap-1 rounded-md bg-secondary/50 px-1.5 py-0.5 sm:px-2 sm:py-1"
                 >
-                  <span className="truncate text-[0.5rem] text-muted-foreground sm:text-[0.62rem]">
+                  <span className="text-[0.5rem] text-muted-foreground sm:text-[0.62rem]">
                     {label}
                   </span>
                   <span className="size-1 rounded-full bg-chart-4 sm:size-1.5" />
                 </div>
               ))}
             </div>
-          </div>
-
-          <div
-            data-rise
-            style={{ "--d": "1100ms" } as CSSProperties}
-            className="absolute bottom-0 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full border border-border bg-background/70 px-2.5 py-1 font-mono text-[0.42rem] tracking-[0.16em] text-muted-foreground uppercase sm:px-4 sm:py-2 sm:text-[0.56rem]"
-          >
-            Known sources · explicit boundaries · decision-ready output
           </div>
         </div>
       </div>
