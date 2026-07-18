@@ -42,7 +42,7 @@ export const squareCampusSchema = {
   operatingSystem: "Web",
   url: absoluteUrl("/squarecampus/"),
   description:
-    "SquareCampus is Fairhelm Systems' product direction for a sovereign, cycle-native School OS for Indian schools, multi-school groups, and educational trusts.",
+    "SquareCampus is Fairhelm Systems' sovereign, cycle-native School OS for Indian schools, multi-school groups, and educational trusts.",
   creator: { "@id": `${siteConfig.url}/#organization` },
   featureList: [
     "Cycle-native school operations",

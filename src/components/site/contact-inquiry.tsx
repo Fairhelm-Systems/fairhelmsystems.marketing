@@ -9,7 +9,7 @@ import {
   Mail,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -59,26 +59,24 @@ export function ContactInquiry() {
   const [name, setName] = useState("");
   const [organization, setOrganization] = useState("");
   const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<
+    "idle" | "submitting" | "success" | "error"
+  >("idle");
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const loadedAtRef = useRef(0);
+
+  useEffect(() => {
+    loadedAtRef.current = Date.now();
+  }, []);
+
+  const endpoint = siteConfig.contactEndpoint as string;
 
   const canContinue = Boolean(workType && problem.trim().length >= 20);
   const canCompose = Boolean(
     name.trim() && organization.trim() && emailPattern.test(email.trim()),
   );
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (step === 1) {
-      if (canContinue) {
-        setStep(2);
-      }
-      return;
-    }
-
-    if (!canCompose) {
-      return;
-    }
-
+  function composeMailtoHref() {
     const subject = `Fairhelm inquiry — ${workTypeLabel(workType)}`;
     const body = [
       "Hello Fairhelm Systems,",
@@ -96,244 +94,373 @@ export function ContactInquiry() {
       name.trim(),
     ].join("\n");
 
-    window.location.assign(
-      `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`,
-    );
+    return `mailto:${siteConfig.contactEmail}?subject=${encodeURIComponent(
+      subject,
+    )}&body=${encodeURIComponent(body)}`;
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (step === 1) {
+      if (canContinue) {
+        setStep(2);
+      }
+      return;
+    }
+
+    if (!canCompose || status === "submitting") {
+      return;
+    }
+
+    // Without a configured endpoint, fall back to the visitor's mail client.
+    if (!endpoint) {
+      window.location.assign(composeMailtoHref());
+      return;
+    }
+
+    setStatus("submitting");
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          workType,
+          workTypeLabel: workTypeLabel(workType),
+          problem: problem.trim(),
+          name: name.trim(),
+          organization: organization.trim(),
+          email: email.trim(),
+          source: "fairhelmsystems.com/contact",
+          // Abuse signals: honeypot must stay empty; elapsed catches instant bots.
+          company_website: honeypotRef.current?.value ?? "",
+          elapsedMs: loadedAtRef.current
+            ? Date.now() - loadedAtRef.current
+            : null,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`Inquiry failed with status ${response.status}`);
+      }
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
   }
 
   return (
     <div className="flex min-w-0 flex-col gap-5">
       <Card className="system-panel overflow-visible border border-border bg-card/90 shadow-2xl shadow-black/20 backdrop-blur-xl">
-        <CardHeader className="border-b border-border pb-5">
-          <div className="mb-2 flex items-center justify-between gap-4">
-            <p className="eyebrow">Inquiry</p>
-            <Badge variant="outline" className="font-mono text-[0.65rem]">
-              Step {step} of 2
-            </Badge>
+        {status === "success" ? (
+          <div className="flex flex-col gap-4 p-6 sm:p-8">
+            <span className="flex size-12 items-center justify-center rounded-full bg-primary/12 text-primary">
+              <Check aria-hidden="true" className="size-6" />
+            </span>
+            <div>
+              <h2 className="text-2xl font-semibold tracking-tight text-foreground">
+                Inquiry received.
+              </h2>
+              <p className="mt-3 max-w-md text-sm leading-6 text-muted-foreground">
+                Thanks{name.trim() ? `, ${name.trim().split(" ")[0]}` : ""}.
+                Your inquiry is logged and we&apos;ll reply from{" "}
+                {siteConfig.contactEmail}, usually within a couple of working
+                days (IST).
+              </p>
+            </div>
           </div>
-          <CardTitle className="text-2xl tracking-tight sm:text-3xl">
-            {step === 1
-              ? "Tell us what needs attention."
-              : "Where should the conversation start?"}
-          </CardTitle>
-          <CardDescription className="max-w-2xl leading-6">
-            {step === 1
-              ? "Start with the operational reality. We will get to solutions after the problem is clear."
-              : "Add enough context for a useful reply. Your mail client will open before anything is sent."}
-          </CardDescription>
+        ) : (
+          <>
+            <CardHeader className="border-b border-border pb-5">
+              <div className="mb-2 flex items-center justify-between gap-4">
+                <p className="eyebrow">Inquiry</p>
+                <Badge variant="outline" className="font-mono text-[0.65rem]">
+                  Step {step} of 2
+                </Badge>
+              </div>
+              <CardTitle className="text-2xl tracking-tight sm:text-3xl">
+                {step === 1
+                  ? "Tell us what needs attention."
+                  : "Where should the conversation start?"}
+              </CardTitle>
+              <CardDescription className="max-w-2xl leading-6">
+                {step === 1
+                  ? "Start with the operational reality. We will get to solutions after the problem is clear."
+                  : "Add enough context for a useful reply."}
+              </CardDescription>
 
-          <ol
-            aria-label="Inquiry progress"
-            className="mt-5 grid grid-cols-[auto_1fr_auto] items-center gap-3 text-xs text-muted-foreground"
-          >
-            <li
-              aria-current={step === 1 ? "step" : undefined}
-              className={cn(
-                "flex items-center gap-2",
-                step === 1 && "text-foreground",
-              )}
-            >
-              <span
-                className={cn(
-                  "grid size-7 place-items-center rounded-full border border-border font-mono",
-                  step === 1 &&
-                    "border-primary bg-primary text-primary-foreground",
-                  step === 2 && "border-primary/40 bg-primary/10 text-primary",
-                )}
+              <ol
+                aria-label="Inquiry progress"
+                className="mt-5 grid grid-cols-[auto_1fr_auto] items-center gap-3 text-xs text-muted-foreground"
               >
-                {step === 2 ? (
-                  <Check aria-hidden="true" className="size-3.5" />
-                ) : (
-                  "1"
-                )}
-              </span>
-              <span className="hidden sm:inline">The problem</span>
-            </li>
-            <li aria-hidden="true" className="h-px bg-border">
-              <span
-                className={cn(
-                  "block h-px origin-left bg-primary transition-transform duration-500",
-                  step === 1 ? "scale-x-0" : "scale-x-100",
-                )}
-              />
-            </li>
-            <li
-              aria-current={step === 2 ? "step" : undefined}
-              className={cn(
-                "flex items-center gap-2",
-                step === 2 && "text-foreground",
-              )}
-            >
-              <span
-                className={cn(
-                  "grid size-7 place-items-center rounded-full border border-border font-mono",
-                  step === 2 &&
-                    "border-primary bg-primary text-primary-foreground",
-                )}
-              >
-                2
-              </span>
-              <span className="hidden sm:inline">Your details</span>
-            </li>
-          </ol>
-        </CardHeader>
-
-        <form onSubmit={handleSubmit}>
-          <CardContent className="py-6">
-            {step === 1 ? (
-              <FieldSet>
-                <FieldLegend>What kind of work?</FieldLegend>
-                <FieldDescription>
-                  Choose the closest fit. Precision can come in the
-                  conversation.
-                </FieldDescription>
-                <ToggleGroup
-                  aria-label="Area of work"
-                  className="mt-1 flex w-full flex-wrap items-stretch gap-2"
-                  value={workType ? [workType] : []}
-                  onValueChange={(values) =>
-                    setWorkType((values[0] as WorkType | undefined) ?? "")
-                  }
-                  variant="outline"
-                  spacing={2}
+                <li
+                  aria-current={step === 1 ? "step" : undefined}
+                  className={cn(
+                    "flex items-center gap-2",
+                    step === 1 && "text-foreground",
+                  )}
                 >
-                  {workTypes.map((option) => (
-                    <ToggleGroupItem
-                      key={option.value}
-                      type="button"
-                      value={option.value}
-                      className="h-9 flex-auto rounded-full border-border bg-background/45 px-3 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground data-[state=on]:border-primary/50 data-[state=on]:bg-primary/12 data-[state=on]:text-foreground sm:flex-none sm:px-4 sm:text-sm"
-                    >
-                      {option.label}
-                    </ToggleGroupItem>
-                  ))}
-                </ToggleGroup>
+                  <span
+                    className={cn(
+                      "grid size-7 place-items-center rounded-full border border-border font-mono",
+                      step === 1 &&
+                        "border-primary bg-primary text-primary-foreground",
+                      step === 2 &&
+                        "border-primary/40 bg-primary/10 text-primary",
+                    )}
+                  >
+                    {step === 2 ? (
+                      <Check aria-hidden="true" className="size-3.5" />
+                    ) : (
+                      "1"
+                    )}
+                  </span>
+                  <span className="hidden sm:inline">The problem</span>
+                </li>
+                <li aria-hidden="true" className="h-px bg-border">
+                  <span
+                    className={cn(
+                      "block h-px origin-left bg-primary transition-transform duration-500",
+                      step === 1 ? "scale-x-0" : "scale-x-100",
+                    )}
+                  />
+                </li>
+                <li
+                  aria-current={step === 2 ? "step" : undefined}
+                  className={cn(
+                    "flex items-center gap-2",
+                    step === 2 && "text-foreground",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "grid size-7 place-items-center rounded-full border border-border font-mono",
+                      step === 2 &&
+                        "border-primary bg-primary text-primary-foreground",
+                    )}
+                  >
+                    2
+                  </span>
+                  <span className="hidden sm:inline">Your details</span>
+                </li>
+              </ol>
+            </CardHeader>
 
-                <FieldGroup className="mt-1">
-                  <Field>
-                    <div className="flex items-end justify-between gap-4">
-                      <FieldLabel htmlFor="contact-problem">
-                        What needs to work better?
-                      </FieldLabel>
-                      <span className="font-mono text-[0.65rem] text-muted-foreground">
-                        {problem.length}/1200
-                      </span>
-                    </div>
-                    <Textarea
-                      id="contact-problem"
-                      value={problem}
-                      onChange={(event) => setProblem(event.target.value)}
-                      maxLength={1200}
-                      rows={7}
-                      className="min-h-40 resize-y bg-background/45 p-4 leading-6"
-                      placeholder="Describe the product, workflow, or system problem. What is breaking down, who is affected, and what outcome matters?"
-                    />
+            <form onSubmit={handleSubmit}>
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute left-[-9999px] h-0 w-0 overflow-hidden"
+              >
+                <label htmlFor="contact-company-website">
+                  Company website (leave blank)
+                </label>
+                <input
+                  id="contact-company-website"
+                  ref={honeypotRef}
+                  type="text"
+                  name="company_website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  defaultValue=""
+                />
+              </div>
+              <CardContent className="py-6">
+                {step === 1 ? (
+                  <FieldSet>
+                    <FieldLegend>What kind of work?</FieldLegend>
                     <FieldDescription>
-                      At least 20 characters. Do not include credentials or
-                      sensitive records.
+                      Choose the closest fit. Precision can come in the
+                      conversation.
                     </FieldDescription>
-                  </Field>
-                </FieldGroup>
-              </FieldSet>
-            ) : (
-              <FieldSet>
-                <FieldLegend>Your details</FieldLegend>
-                <FieldDescription>
-                  These details are used only to prepare the email on your
-                  device.
-                </FieldDescription>
-                <FieldGroup>
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    <Field>
-                      <FieldLabel htmlFor="contact-name">Your name</FieldLabel>
-                      <Input
-                        id="contact-name"
-                        name="name"
-                        value={name}
-                        onChange={(event) => setName(event.target.value)}
-                        autoComplete="name"
-                        className="h-11 bg-background/45 px-4"
-                        placeholder="Name"
-                        required
-                      />
-                    </Field>
-                    <Field>
-                      <FieldLabel htmlFor="contact-organization">
-                        Organization
-                      </FieldLabel>
-                      <Input
-                        id="contact-organization"
-                        name="organization"
-                        value={organization}
-                        onChange={(event) =>
-                          setOrganization(event.target.value)
-                        }
-                        autoComplete="organization"
-                        className="h-11 bg-background/45 px-4"
-                        placeholder="School, trust, or company"
-                        required
-                      />
-                    </Field>
-                  </div>
-                  <Field>
-                    <FieldLabel htmlFor="contact-email">Work email</FieldLabel>
-                    <Input
-                      id="contact-email"
-                      name="email"
-                      type="email"
-                      value={email}
-                      onChange={(event) => setEmail(event.target.value)}
-                      autoComplete="email"
-                      className="h-11 bg-background/45 px-4"
-                      placeholder="you@organization.com"
-                      required
-                    />
-                  </Field>
-                  <Alert className="border-primary/20 bg-primary/5">
-                    <LockKeyhole aria-hidden="true" />
-                    <AlertTitle>Local by design</AlertTitle>
+                    <ToggleGroup
+                      aria-label="Area of work"
+                      className="mt-1 flex w-full flex-wrap items-stretch gap-2"
+                      value={workType ? [workType] : []}
+                      onValueChange={(values) =>
+                        setWorkType((values[0] as WorkType | undefined) ?? "")
+                      }
+                      variant="outline"
+                      spacing={2}
+                    >
+                      {workTypes.map((option) => (
+                        <ToggleGroupItem
+                          key={option.value}
+                          type="button"
+                          value={option.value}
+                          className="h-9 flex-auto rounded-full border-border bg-background/45 px-3 text-xs font-medium text-muted-foreground hover:bg-muted hover:text-foreground data-[state=on]:border-primary data-[state=on]:bg-primary/20 data-[state=on]:font-semibold data-[state=on]:text-foreground data-[state=on]:ring-1 data-[state=on]:ring-primary/50 sm:flex-none sm:px-4 sm:text-sm"
+                        >
+                          {option.label}
+                        </ToggleGroupItem>
+                      ))}
+                    </ToggleGroup>
+
+                    <FieldGroup className="mt-1">
+                      <Field>
+                        <div className="flex items-end justify-between gap-4">
+                          <FieldLabel htmlFor="contact-problem">
+                            What needs to work better?
+                          </FieldLabel>
+                          <span className="font-mono text-[0.65rem] text-muted-foreground">
+                            {problem.length}/1200
+                          </span>
+                        </div>
+                        <Textarea
+                          id="contact-problem"
+                          value={problem}
+                          onChange={(event) => setProblem(event.target.value)}
+                          maxLength={1200}
+                          rows={7}
+                          className="min-h-40 resize-y bg-background/45 p-4 leading-6"
+                          placeholder="Describe the product, workflow, or system problem. What is breaking down, who is affected, and what outcome matters?"
+                        />
+                        <FieldDescription>
+                          At least 20 characters. Do not include credentials or
+                          sensitive records.
+                        </FieldDescription>
+                      </Field>
+                    </FieldGroup>
+                  </FieldSet>
+                ) : (
+                  <FieldSet>
+                    <FieldLegend>Your details</FieldLegend>
+                    <FieldDescription>
+                      We use these details only to route and reply to your
+                      inquiry.
+                    </FieldDescription>
+                    <FieldGroup>
+                      <div className="grid gap-5 sm:grid-cols-2">
+                        <Field>
+                          <FieldLabel htmlFor="contact-name">
+                            Your name
+                          </FieldLabel>
+                          <Input
+                            id="contact-name"
+                            name="name"
+                            value={name}
+                            onChange={(event) => setName(event.target.value)}
+                            autoComplete="name"
+                            className="h-11 bg-background/45 px-4"
+                            placeholder="Name"
+                            required
+                          />
+                        </Field>
+                        <Field>
+                          <FieldLabel htmlFor="contact-organization">
+                            Organization
+                          </FieldLabel>
+                          <Input
+                            id="contact-organization"
+                            name="organization"
+                            value={organization}
+                            onChange={(event) =>
+                              setOrganization(event.target.value)
+                            }
+                            autoComplete="organization"
+                            className="h-11 bg-background/45 px-4"
+                            placeholder="School, trust, or company"
+                            required
+                          />
+                        </Field>
+                      </div>
+                      <Field>
+                        <FieldLabel htmlFor="contact-email">
+                          Work email
+                        </FieldLabel>
+                        <Input
+                          id="contact-email"
+                          name="email"
+                          type="email"
+                          value={email}
+                          onChange={(event) => setEmail(event.target.value)}
+                          autoComplete="email"
+                          className="h-11 bg-background/45 px-4"
+                          placeholder="you@organization.com"
+                          required
+                        />
+                      </Field>
+                      {endpoint ? (
+                        <Alert className="border-primary/20 bg-primary/5">
+                          <LockKeyhole aria-hidden="true" />
+                          <AlertTitle>Direct and private</AlertTitle>
+                          <AlertDescription>
+                            Your inquiry goes straight to our team. Please
+                            don&apos;t include credentials or sensitive records.
+                          </AlertDescription>
+                        </Alert>
+                      ) : (
+                        <Alert className="border-primary/20 bg-primary/5">
+                          <LockKeyhole aria-hidden="true" />
+                          <AlertTitle>Local by design</AlertTitle>
+                          <AlertDescription>
+                            Nothing is uploaded or stored. The final action
+                            opens a prepared draft in your mail client.
+                          </AlertDescription>
+                        </Alert>
+                      )}
+                    </FieldGroup>
+                  </FieldSet>
+                )}
+
+                {status === "error" ? (
+                  <Alert className="mt-5 border-destructive/30 bg-destructive/5">
+                    <Mail aria-hidden="true" />
+                    <AlertTitle>That didn&apos;t send.</AlertTitle>
                     <AlertDescription>
-                      Nothing is uploaded or stored. The final action opens a
-                      prepared draft in your mail client.
+                      Something went wrong on our end. Please try again, or{" "}
+                      <a
+                        href={composeMailtoHref()}
+                        className="font-medium underline underline-offset-2"
+                      >
+                        email us directly
+                      </a>
+                      .
                     </AlertDescription>
                   </Alert>
-                </FieldGroup>
-              </FieldSet>
-            )}
-          </CardContent>
+                ) : null}
+              </CardContent>
 
-          <CardFooter className="justify-between gap-3 border-t border-border pt-5">
-            {step === 2 ? (
-              <Button
-                type="button"
-                variant="ghost"
-                size="lg"
-                className="rounded-full"
-                onClick={() => setStep(1)}
-              >
-                <ArrowLeft data-icon="inline-start" />
-                Back
-              </Button>
-            ) : (
-              <p className="hidden text-xs text-muted-foreground sm:block">
-                Be concrete. Skip the pitch deck.
-              </p>
-            )}
-            <Button
-              type="submit"
-              size="lg"
-              className="ml-auto min-w-36 rounded-full"
-              disabled={step === 1 ? !canContinue : !canCompose}
-            >
-              {step === 1 ? "Continue" : "Prepare email"}
-              {step === 1 ? (
-                <ArrowRight data-icon="inline-end" />
-              ) : (
-                <Mail data-icon="inline-end" />
-              )}
-            </Button>
-          </CardFooter>
-        </form>
+              <CardFooter className="justify-between gap-3 border-t border-border pt-5">
+                {step === 2 ? (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="lg"
+                    className="rounded-full"
+                    onClick={() => setStep(1)}
+                  >
+                    <ArrowLeft data-icon="inline-start" />
+                    Back
+                  </Button>
+                ) : (
+                  <p className="hidden text-xs text-muted-foreground sm:block">
+                    Be concrete. Skip the pitch deck.
+                  </p>
+                )}
+                <Button
+                  type="submit"
+                  size="lg"
+                  className="ml-auto min-w-36 rounded-full"
+                  disabled={
+                    status === "submitting" ||
+                    (step === 1 ? !canContinue : !canCompose)
+                  }
+                >
+                  {step === 1
+                    ? "Continue"
+                    : status === "submitting"
+                      ? "Sending…"
+                      : endpoint
+                        ? "Send inquiry"
+                        : "Prepare email"}
+                  {step === 1 ? (
+                    <ArrowRight data-icon="inline-end" />
+                  ) : (
+                    <Mail data-icon="inline-end" />
+                  )}
+                </Button>
+              </CardFooter>
+            </form>
+          </>
+        )}
       </Card>
 
       <div className="grid gap-4 sm:grid-cols-2">

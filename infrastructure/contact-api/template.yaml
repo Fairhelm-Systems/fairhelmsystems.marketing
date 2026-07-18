@@ -1,0 +1,205 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >-
+  Fairhelm contact-inquiry API. Persists inquiries to DynamoDB with layered,
+  free-tier abuse protection (honeypot, submit-timing, strict schema, per-IP
+  throttle, origin allowlist). An optional AWS WAF layer sits in front and is
+  disabled by default to keep the baseline cost at ~US$0.
+
+Parameters:
+  AllowedOrigins:
+    Type: String
+    Default: "https://fairhelmsystems.com,https://www.fairhelmsystems.com"
+    Description: Comma-separated origins allowed to submit the form (CORS + guard).
+  StageName:
+    Type: String
+    Default: prod
+  RateLimitPerHour:
+    Type: Number
+    Default: 5
+    Description: Max accepted submissions per client IP per hour (Lambda-enforced).
+  MinSubmitMs:
+    Type: Number
+    Default: 3000
+    Description: Minimum ms between form render and submit; faster is treated as a bot.
+  MaxConcurrency:
+    Type: Number
+    Default: 5
+    Description: Reserved Lambda concurrency — a hard cap on blast radius and cost.
+  ApiThrottleRate:
+    Type: Number
+    Default: 5
+    Description: API Gateway steady-state requests/sec ceiling.
+  ApiThrottleBurst:
+    Type: Number
+    Default: 10
+    Description: API Gateway burst ceiling.
+  EnableWaf:
+    Type: String
+    Default: "false"
+    AllowedValues: ["true", "false"]
+    Description: >-
+      Attach an AWS WAF WebACL (edge rate-limiting + AWS managed reputation /
+      common / known-bad-input rules). Adds ~US$8-10/month FIXED cost. Leave
+      "false" to rely on the free-tier Lambda-layer defenses + API throttling;
+      set "true" for the strongest edge protection.
+  WafRateLimit:
+    Type: Number
+    Default: 300
+    Description: WAF rate-based limit — requests per 5 minutes per IP (min 100).
+
+Conditions:
+  UseWaf: !Equals [!Ref EnableWaf, "true"]
+
+Globals:
+  Function:
+    Timeout: 10
+    MemorySize: 256
+    Runtime: nodejs20.x
+
+Resources:
+  InquiriesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: !Sub "${AWS::StackName}-inquiries"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: expireAt
+        Enabled: true
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+
+  InquiryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-inquiry"
+      CodeUri: src/
+      Handler: index.handler
+      ReservedConcurrentExecutions: !Ref MaxConcurrency
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref InquiriesTable
+          ALLOWED_ORIGINS: !Ref AllowedOrigins
+          RATE_LIMIT_PER_HOUR: !Ref RateLimitPerHour
+          MIN_SUBMIT_MS: !Ref MinSubmitMs
+          MAX_BODY_BYTES: "8192"
+          # Per-stack constant used only to hash IPs (privacy), not a secret.
+          RATE_SALT: !Select [2, !Split ["/", !Ref AWS::StackId]]
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref InquiriesTable
+      Events:
+        Post:
+          Type: Api
+          Properties:
+            RestApiId: !Ref InquiryApi
+            Path: /inquiries
+            Method: post
+        Options:
+          Type: Api
+          Properties:
+            RestApiId: !Ref InquiryApi
+            Path: /inquiries
+            Method: options
+
+  InquiryApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: !Sub "${AWS::StackName}-api"
+      StageName: !Ref StageName
+      EndpointConfiguration:
+        Type: REGIONAL
+      # CORS is handled in the Lambda (origin allowlist) for precise control.
+      MethodSettings:
+        - ResourcePath: "/*"
+          HttpMethod: "*"
+          ThrottlingRateLimit: !Ref ApiThrottleRate
+          ThrottlingBurstLimit: !Ref ApiThrottleBurst
+
+  # --- Optional edge protection (only created when EnableWaf=true) ---
+  WafWebAcl:
+    Type: AWS::WAFv2::WebACL
+    Condition: UseWaf
+    Properties:
+      Name: !Sub "${AWS::StackName}-waf"
+      Scope: REGIONAL
+      DefaultAction:
+        Allow: {}
+      VisibilityConfig:
+        SampledRequestsEnabled: true
+        CloudWatchMetricsEnabled: true
+        MetricName: !Sub "${AWS::StackName}-waf"
+      Rules:
+        - Name: RateLimit
+          Priority: 0
+          Action:
+            Block: {}
+          Statement:
+            RateBasedStatement:
+              Limit: !Ref WafRateLimit
+              AggregateKeyType: IP
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: RateLimit
+        - Name: IpReputation
+          Priority: 1
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesAmazonIpReputationList
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: IpReputation
+        - Name: CommonRuleSet
+          Priority: 2
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesCommonRuleSet
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: CommonRuleSet
+        - Name: KnownBadInputs
+          Priority: 3
+          OverrideAction:
+            None: {}
+          Statement:
+            ManagedRuleGroupStatement:
+              VendorName: AWS
+              Name: AWSManagedRulesKnownBadInputsRuleSet
+          VisibilityConfig:
+            SampledRequestsEnabled: true
+            CloudWatchMetricsEnabled: true
+            MetricName: KnownBadInputs
+
+  WafAssociation:
+    Type: AWS::WAFv2::WebACLAssociation
+    Condition: UseWaf
+    Properties:
+      # The stage already exists from the initial (WAF-off) deploy, so enabling
+      # WAF on a later deploy associates cleanly.
+      ResourceArn: !Sub "arn:${AWS::Partition}:apigateway:${AWS::Region}::/restapis/${InquiryApi}/stages/${StageName}"
+      WebACLArn: !GetAtt WafWebAcl.Arn
+
+Outputs:
+  InquiryEndpoint:
+    Description: Set this as siteConfig.contactEndpoint in the marketing site.
+    Value: !Sub "https://${InquiryApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/inquiries"
+  InquiriesTableName:
+    Description: DynamoDB table holding inquiries.
+    Value: !Ref InquiriesTable
