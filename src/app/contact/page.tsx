@@ -29,7 +29,7 @@ const goodFit = [
 
 function FitList() {
   return (
-    <ul className="flex flex-col">
+    <ul className="flex flex-col mt-3">
       {goodFit.map((item) => (
         <li
           key={item}

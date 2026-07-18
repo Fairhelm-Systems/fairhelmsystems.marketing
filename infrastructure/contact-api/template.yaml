@@ -1,10 +1,12 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
 Description: >-
-  Fairhelm contact-inquiry API. Persists inquiries to DynamoDB with layered,
-  free-tier abuse protection (honeypot, submit-timing, strict schema, per-IP
-  throttle, origin allowlist). An optional AWS WAF layer sits in front and is
-  disabled by default to keep the baseline cost at ~US$0.
+  Fairhelm contact-inquiry API. A credential-isolating proxy: the public form
+  posts here and this Lambda forwards to the SquareCampus platform CRM
+  (/api/platform/v1/crm/marketing-intake) via a server-side auth client, so the
+  browser never sees platform credentials. Layered free-tier abuse protection
+  (honeypot, strict schema, per-IP throttle, origin allowlist); DynamoDB holds
+  only rate-limit counters. Optional AWS WAF in front, off by default.
 
 Parameters:
   AllowedOrigins:
@@ -18,10 +20,29 @@ Parameters:
     Type: Number
     Default: 5
     Description: Max accepted submissions per client IP per hour (Lambda-enforced).
-  MinSubmitMs:
-    Type: Number
-    Default: 3000
-    Description: Minimum ms between form render and submit; faster is treated as a bot.
+  PlatformBaseUrl:
+    Type: String
+    Default: ""
+    Description: Base URL of the SquareCampus platform API.
+  PlatformTokenUrl:
+    Type: String
+    Default: ""
+    Description: OAuth2 token endpoint for the server-to-server auth client.
+  PlatformClientId:
+    Type: String
+    Default: ""
+    Description: Client ID for the platform auth client (permission platform_crm:intake).
+  PlatformClientSecretArn:
+    Type: String
+    Default: ""
+    Description: >-
+      Secrets Manager ARN holding the Cognito M2M app-client secret. The Lambda
+      reads it at runtime via its execution role; the secret is never a plaintext
+      parameter, env var, or committed to source.
+  PlatformScope:
+    Type: String
+    Default: "squarecampus-platform/crm.intake"
+    Description: Cognito custom scope; the core API maps it to platform_crm:intake.
   MaxConcurrency:
     Type: Number
     Default: 5
@@ -47,9 +68,18 @@ Parameters:
     Type: Number
     Default: 300
     Description: WAF rate-based limit — requests per 5 minutes per IP (min 100).
+  ApiDomainName:
+    Type: String
+    Default: "api.fairhelmsystems.com"
+    Description: Custom domain for the API, served via Route53.
+  HostedZoneId:
+    Type: String
+    Default: "Z0755819RNVKUIYP2L8N"
+    Description: Route53 hosted zone ID for the API domain's parent zone.
 
 Conditions:
   UseWaf: !Equals [!Ref EnableWaf, "true"]
+  HasPlatformSecret: !Not [!Equals [!Ref PlatformClientSecretArn, ""]]
 
 Globals:
   Function:
@@ -89,13 +119,23 @@ Resources:
           TABLE_NAME: !Ref InquiriesTable
           ALLOWED_ORIGINS: !Ref AllowedOrigins
           RATE_LIMIT_PER_HOUR: !Ref RateLimitPerHour
-          MIN_SUBMIT_MS: !Ref MinSubmitMs
-          MAX_BODY_BYTES: "8192"
           # Per-stack constant used only to hash IPs (privacy), not a secret.
           RATE_SALT: !Select [2, !Split ["/", !Ref AWS::StackId]]
+          PLATFORM_BASE_URL: !Ref PlatformBaseUrl
+          PLATFORM_TOKEN_URL: !Ref PlatformTokenUrl
+          PLATFORM_CLIENT_ID: !Ref PlatformClientId
+          PLATFORM_CLIENT_SECRET_ARN: !Ref PlatformClientSecretArn
+          PLATFORM_SCOPE: !Ref PlatformScope
       Policies:
         - DynamoDBCrudPolicy:
             TableName: !Ref InquiriesTable
+        - !If
+          - HasPlatformSecret
+          - Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource: !Ref PlatformClientSecretArn
+          - !Ref AWS::NoValue
       Events:
         Post:
           Type: Api
@@ -110,6 +150,17 @@ Resources:
             Path: /inquiries
             Method: options
 
+  # Route53-validated ACM cert for the custom domain. Must live in the API's
+  # region (regional custom domains require a same-region certificate).
+  ApiCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref ApiDomainName
+      ValidationMethod: DNS
+      DomainValidationOptions:
+        - DomainName: !Ref ApiDomainName
+          HostedZoneId: !Ref HostedZoneId
+
   InquiryApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -118,6 +169,13 @@ Resources:
       EndpointConfiguration:
         Type: REGIONAL
       # CORS is handled in the Lambda (origin allowlist) for precise control.
+      Domain:
+        DomainName: !Ref ApiDomainName
+        CertificateArn: !Ref ApiCertificate
+        EndpointConfiguration: REGIONAL
+        SecurityPolicy: TLS_1_2
+        Route53:
+          HostedZoneId: !Ref HostedZoneId
       MethodSettings:
         - ResourcePath: "/*"
           HttpMethod: "*"
@@ -198,7 +256,10 @@ Resources:
 
 Outputs:
   InquiryEndpoint:
-    Description: Set this as siteConfig.contactEndpoint in the marketing site.
+    Description: Custom-domain endpoint — set as siteConfig.contactEndpoint.
+    Value: !Sub "https://${ApiDomainName}/inquiries"
+  InquiryEndpointDirect:
+    Description: Direct execute-api endpoint (bypasses the custom domain).
     Value: !Sub "https://${InquiryApi}.execute-api.${AWS::Region}.amazonaws.com/${StageName}/inquiries"
   InquiriesTableName:
     Description: DynamoDB table holding inquiries.
