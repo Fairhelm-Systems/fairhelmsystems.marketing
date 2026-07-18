@@ -127,9 +127,8 @@ export default function AboutPage() {
             {siteConfig.incorporationStatus}
           </p>
           <p className="mt-6 border-t border-border pt-5 text-sm leading-6 text-muted-foreground">
-            GSTIN and final statutory particulars will be published after
-            incorporation and applicable registration. Until then, Fairhelm
-            Systems is presented as the operating brand.
+            Registered office: {siteConfig.address.full}. GSTIN and statutory
+            particulars are available on request.
           </p>
         </div>
       </Hero>

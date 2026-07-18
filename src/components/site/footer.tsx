@@ -42,6 +42,12 @@ export function Footer() {
               Governed software systems for institutions that need reliability,
               auditability, and execution discipline.
             </p>
+            <address className="mt-6 text-sm not-italic leading-6 text-muted-foreground">
+              <span className="block text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
+                Registered office
+              </span>
+              <span className="mt-2 block">{siteConfig.address.full}</span>
+            </address>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
             {footerGroups.map((group) => (

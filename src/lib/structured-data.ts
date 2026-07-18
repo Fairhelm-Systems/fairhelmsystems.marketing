@@ -9,6 +9,15 @@ export const organizationSchema = {
   url: siteConfig.url,
   logo: absoluteUrl("/brand/fairhelm-logo.svg"),
   description: siteConfig.description,
+  email: siteConfig.contactEmail,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: siteConfig.address.street,
+    addressLocality: siteConfig.address.locality,
+    addressRegion: siteConfig.address.region,
+    postalCode: siteConfig.address.postalCode,
+    addressCountry: siteConfig.address.country,
+  },
   areaServed: {
     "@type": "Country",
     name: "India",

@@ -32,7 +32,7 @@ export default function TermsPage() {
       <LegalDocument
         current="/terms/"
         statusTitle="Interim terms status"
-        statusDescription={`${siteConfig.legalName} is currently in the incorporation process. These public-site terms are a transparent interim position pending formal legal review and final statutory particulars.`}
+        statusDescription={`${siteConfig.legalName} is incorporated in India as a One Person Company. These public-site terms are a transparent interim position pending formal legal review and final statutory particulars.`}
         sections={termsSections}
         lastUpdated={legalUpdated}
       />

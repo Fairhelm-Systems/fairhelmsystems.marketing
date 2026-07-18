@@ -32,7 +32,7 @@ export default function DataProcessingPage() {
       <LegalDocument
         current="/data-processing/"
         statusTitle="Public overview — not a signed DPA"
-        statusDescription={`${siteConfig.legalName} is currently in the incorporation process. Binding roles, instructions, controls, locations, providers, assistance, and retention must be defined for the specific engagement.`}
+        statusDescription={`${siteConfig.legalName} is incorporated in India as a One Person Company. Binding roles, instructions, controls, locations, providers, assistance, and retention must be defined for the specific engagement.`}
         sections={dataProcessingSections}
         lastUpdated={legalUpdated}
       />

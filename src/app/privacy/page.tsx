@@ -32,7 +32,7 @@ export default function PrivacyPage() {
       <LegalDocument
         current="/privacy/"
         statusTitle="Interim policy status"
-        statusDescription={`${siteConfig.legalName} is currently in the incorporation process. This public notice is a responsible interim position, not a substitute for formal legal review before material personal-data collection or production processing begins.`}
+        statusDescription={`${siteConfig.legalName} is incorporated in India as a One Person Company. This public notice is a responsible interim position, not a substitute for formal legal review before material personal-data collection or production processing begins.`}
         sections={privacySections}
         lastUpdated={legalUpdated}
       />
