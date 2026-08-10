@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { Container } from "@/components/site/container";
 import { Logo } from "@/components/site/logo";
 import { Separator } from "@/components/ui/separator";
@@ -26,10 +27,77 @@ const footerGroups = [
     links: [
       { label: "Legal center", href: "/legal/" },
       { label: "Privacy", href: "/privacy/" },
+      { label: "Terms", href: "/terms/" },
+      { label: "Refunds", href: "/refund-policy/" },
       { label: "AI policy", href: "/ai-policy/" },
     ],
   },
 ] as const;
+
+function DisclosureField({
+  label,
+  children,
+}: {
+  label: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
+        {label}
+      </span>
+      <span className="text-sm leading-6 text-muted-foreground">
+        {children}
+      </span>
+    </div>
+  );
+}
+
+/**
+ * Statutory company disclosure. Section 12(3)(c) of the Companies Act, 2013
+ * requires the company's name, registered-office address, CIN, telephone and
+ * email to be published on its business letters and notices; the site footer
+ * is the surface that carries it on every page. It stays visible rather than
+ * collapsing behind a link.
+ */
+function CompanyDisclosure() {
+  return (
+    <address className="grid gap-6 not-italic sm:grid-cols-2 lg:grid-cols-[1.6fr_1fr_1fr]">
+      <DisclosureField label="Registered office">
+        <span className="block font-medium text-foreground">
+          {siteConfig.legalName}
+        </span>
+        <span className="mt-1 block">{siteConfig.address.full}</span>
+      </DisclosureField>
+      <DisclosureField label="CIN">
+        <span className="font-mono text-[0.8rem] tracking-tight">
+          {siteConfig.cin}
+        </span>
+        <span className="mt-1 block">{siteConfig.incorporationStatus}</span>
+      </DisclosureField>
+      <div className="flex flex-col gap-4">
+        <DisclosureField label="Email">
+          <a
+            href={`mailto:${siteConfig.contactEmail}`}
+            className="transition-colors hover:text-foreground"
+          >
+            {siteConfig.contactEmail}
+          </a>
+        </DisclosureField>
+        {siteConfig.phone ? (
+          <DisclosureField label="Telephone">
+            <a
+              href={`tel:${siteConfig.phone.replace(/[^+\d]/g, "")}`}
+              className="transition-colors hover:text-foreground"
+            >
+              {siteConfig.phone}
+            </a>
+          </DisclosureField>
+        ) : null}
+      </div>
+    </address>
+  );
+}
 
 export function Footer() {
   return (
@@ -42,12 +110,6 @@ export function Footer() {
               Governed software systems for institutions that need reliability,
               auditability, and execution discipline.
             </p>
-            <address className="mt-6 text-sm not-italic leading-6 text-muted-foreground">
-              <span className="block text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
-                Registered office
-              </span>
-              <span className="mt-2 block">{siteConfig.address.full}</span>
-            </address>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
             {footerGroups.map((group) => (
@@ -69,12 +131,15 @@ export function Footer() {
           </div>
         </div>
         <Separator className="my-9" />
-        <div className="flex flex-col gap-3 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+        <CompanyDisclosure />
+        <Separator className="my-9" />
+        <div className="flex flex-col gap-3 text-xs leading-5 text-muted-foreground sm:flex-row sm:items-start sm:justify-between">
           <p>
-            © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.
+            © {new Date().getFullYear()} {siteConfig.legalNameDisplay}. All
+            rights reserved.
           </p>
-          <p>
-            {siteConfig.legalName} · {siteConfig.incorporationStatus}
+          <p className="sm:max-w-sm sm:text-right">
+            {siteConfig.trademarkNotice}
           </p>
         </div>
       </Container>
