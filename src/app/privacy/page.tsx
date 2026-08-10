@@ -9,7 +9,7 @@ import { breadcrumbSchema } from "@/lib/structured-data";
 export const metadata = createPageMetadata({
   title: "Privacy Policy",
   description:
-    "Interim privacy notice for the Fairhelm Systems website, inquiries, customer data, AI training boundaries, retention, and institutional data handling.",
+    "Fairhelm Systems' privacy notice under the DPDP Act, 2023: the Data Fiduciary, categories of personal data including student and children's data, purposes, retention, Data Principal rights, and the grievance contact.",
   path: "/privacy/",
 });
 
@@ -24,15 +24,15 @@ export default function PrivacyPage() {
         ])}
       />
       <Hero
-        eyebrow="Legal · Interim notice"
+        eyebrow="Legal · DPDP Act, 2023"
         title="Privacy policy"
-        description="A plain-language interim notice for the Fairhelm Systems public website. Product and customer engagements require contract-specific privacy and data-processing terms."
+        description="Who the Data Fiduciary is, what personal data is processed — student and children's data included — why, for how long, and the rights you hold over it."
         compact
       />
       <LegalDocument
         current="/privacy/"
-        statusTitle="Interim policy status"
-        statusDescription={`${siteConfig.legalName} is incorporated in India as a One Person Company. This public notice is a responsible interim position, not a substitute for formal legal review before material personal-data collection or production processing begins.`}
+        statusTitle="Data Fiduciary"
+        statusDescription={`${siteConfig.legalNameDisplay} (CIN ${siteConfig.cin}), registered office ${siteConfig.address.full}. This notice is written against the Digital Personal Data Protection Act, 2023 and will be updated as the DPDP Rules are notified.`}
         sections={privacySections}
         lastUpdated={legalUpdated}
       />
