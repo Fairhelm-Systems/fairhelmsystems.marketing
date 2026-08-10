@@ -32,7 +32,7 @@ export const privacySections = [
     id: "children-and-students",
     title: "Children's and student data",
     paragraphs: [
-      "Student records are the most sensitive data Fairhelm touches, and a large share of them concern children. Section 9 of the DPDP Act requires verifiable consent from a parent or lawful guardian before a child's personal data is processed, and prohibits tracking, behavioural monitoring, and targeted advertising directed at children.",
+      "Student records are the most sensitive data Fairhelm touches, and a large share of them concern children — anyone under eighteen. Section 9 of the DPDP Act requires verifiable consent from a parent or lawful guardian before a child's personal data is processed, and prohibits tracking, behavioural monitoring, and targeted advertising directed at children. Rule 10 of the DPDP Rules, 2025 adds that the consent must be genuinely verifiable: due diligence is required to confirm that the person giving it is an identifiable adult entitled to act for the child.",
       "In a school deployment the institution holds the relationship with students and guardians, and is responsible for obtaining and recording verifiable parental consent. Fairhelm's role is to process what the institution instructs and to make that instruction boundary enforceable in the product.",
     ],
     bullets: [
@@ -93,7 +93,7 @@ export const privacySections = [
     title: "Security safeguards",
     paragraphs: [
       "Fairhelm applies reasonable security safeguards to prevent a personal data breach, as section 8(5) of the DPDP Act requires. The product posture is role-based access control, least privilege, tenant separation, encryption in transit, and audit records that make access reviewable after the fact.",
-      "In the event of a personal data breach, Fairhelm will notify each affected Data Principal and the Data Protection Board of India in the form and within the time the DPDP Act and its rules require. Where Fairhelm acts as a Processor, it will notify the customer without undue delay so the customer can meet its own obligations.",
+      "On becoming aware of a personal data breach, Fairhelm intimates each affected Data Principal without delay — describing the nature, extent and timing of the breach, its likely consequences, the mitigation being applied, the steps the person can take, and where to reach us — and reports it to the Data Protection Board of India, followed by a detailed report within 72 hours as Rule 7 of the DPDP Rules, 2025 requires. Where Fairhelm acts as a Processor, it notifies the customer without delay so the customer can meet its own obligation.",
       "No safeguard is absolute. Do not send credentials, government identifiers, payment details, health information, or student records in an initial email; a governed transfer method should be agreed first.",
     ],
   },
@@ -116,8 +116,8 @@ export const privacySections = [
     title: "Grievance contact",
     paragraphs: [
       `Complaints, rights requests, and questions about this notice should be addressed to the ${siteConfig.grievanceContactName}, at ${siteConfig.grievanceEmail}, or by post to the registered office at ${siteConfig.address.full}.`,
-      "Fairhelm may need to verify your identity, and your authority where you are acting for someone else, before acting on a request. Requests are acknowledged and answered within the period prescribed under the DPDP Act and its rules.",
-      "If a grievance is not resolved to your satisfaction, you may complain to the Data Protection Board of India.",
+      "Fairhelm may need to verify your identity, and your authority where you are acting for someone else, before acting on a request. Requests are acknowledged on receipt and answered within ninety days, the period prescribed under the DPDP Rules, 2025. Most are answered well inside it.",
+      "If a grievance is not resolved to your satisfaction, you may complain to the Data Protection Board of India directly — no lawyer and no fee are required.",
       "Where your data is held inside a school or trust deployment, that institution is the Data Fiduciary. Please raise the request with the institution first; Fairhelm will support it as the institution's Processor.",
     ],
   },
@@ -125,7 +125,7 @@ export const privacySections = [
     id: "changes",
     title: "Changes to this notice",
     paragraphs: [
-      "This notice will be updated as the DPDP Rules are notified, as products move into production, and as processing changes. Material updates are reflected on this page with a revised date. Signed customer agreements take precedence over this page for their subject matter.",
+      "The DPDP Rules, 2025 were notified on 14 November 2025 and take effect in phases, with full compliance required by 13 May 2027. Fairhelm is building toward that date rather than waiting for it, and this notice will be revised as products move into production and processing changes. Material updates are reflected here with a revised date. Signed customer agreements take precedence over this page for their subject matter.",
     ],
   },
 ] satisfies readonly LegalSection[];

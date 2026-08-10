@@ -32,7 +32,7 @@ export default function PrivacyPage() {
       <LegalDocument
         current="/privacy/"
         statusTitle="Data Fiduciary"
-        statusDescription={`${siteConfig.legalNameDisplay} (CIN ${siteConfig.cin}), registered office ${siteConfig.address.full}. This notice is written against the Digital Personal Data Protection Act, 2023 and will be updated as the DPDP Rules are notified.`}
+        statusDescription={`${siteConfig.legalNameDisplay} (CIN ${siteConfig.cin}), registered office ${siteConfig.address.full}. This notice is written against the Digital Personal Data Protection Act, 2023 and the DPDP Rules, 2025, which take full effect on 13 May 2027.`}
         sections={privacySections}
         lastUpdated={legalUpdated}
       />
