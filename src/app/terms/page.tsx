@@ -24,15 +24,15 @@ export default function TermsPage() {
         ])}
       />
       <Hero
-        eyebrow="Legal · Interim terms"
+        eyebrow="Legal · Website terms"
         title="Website terms"
-        description="Interim terms for the Fairhelm Systems public website. Contracted products and services are governed only by their signed agreements."
+        description="Terms for the Fairhelm Systems public website. Contracted products and services are governed only by their signed agreements."
         compact
       />
       <LegalDocument
         current="/terms/"
-        statusTitle="Interim terms status"
-        statusDescription={`${siteConfig.legalName} is incorporated in India as a One Person Company. These public-site terms are a transparent interim position pending formal legal review and final statutory particulars.`}
+        statusTitle="Publisher of this website"
+        statusDescription={`${siteConfig.legalNameDisplay} (CIN ${siteConfig.cin}), incorporated in India on ${siteConfig.incorporationDateDisplay} under the Companies Act, 2013, registered office ${siteConfig.address.full}.`}
         sections={termsSections}
         lastUpdated={legalUpdated}
       />

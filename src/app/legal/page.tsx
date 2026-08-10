@@ -4,6 +4,7 @@ import {
   FileCheck2,
   FileLock2,
   FileText,
+  ReceiptText,
   Scale,
   ShieldCheck,
 } from "lucide-react";
@@ -67,6 +68,13 @@ const documents = [
     href: "/data-processing/",
     description:
       "The contractual questions to resolve before processing customer data. A public overview, not a signed DPA.",
+  },
+  {
+    icon: ReceiptText,
+    title: "Cancellation and refunds",
+    href: "/refund-policy/",
+    description:
+      "Cancelling a subscription or engagement, what is refundable, how to request a refund, and how an approved refund is paid.",
   },
   {
     icon: ShieldCheck,
@@ -149,13 +157,15 @@ export default function LegalPage() {
             ))}
           </div>
           <div className="mt-10 rounded-2xl border border-border bg-card/55 p-5 text-sm leading-6 text-muted-foreground sm:p-6">
-            <p className="font-semibold text-foreground">Interim status</p>
+            <p className="font-semibold text-foreground">Publishing entity</p>
             <p className="mt-2">
-              {siteConfig.legalName} is the legal entity operating as Fairhelm
-              Systems, incorporated in India as a One Person Company. These
-              public documents are written to state responsible boundaries now;
-              they require formal legal review before material collection,
-              production processing, or customer contracting.
+              {siteConfig.legalName} (CIN {siteConfig.cin}) is the legal entity
+              operating as Fairhelm Systems, incorporated in India on{" "}
+              {siteConfig.incorporationDateDisplay} under the Companies Act,
+              2013 as a One Person Company, with its registered office at{" "}
+              {siteConfig.address.full}. Every document below is published by
+              that entity; a signed customer agreement takes precedence over
+              these public pages for its own subject matter.
             </p>
           </div>
         </Container>

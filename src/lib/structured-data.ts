@@ -10,8 +10,19 @@ export const organizationSchema = {
   logo: absoluteUrl("/brand/fairhelm-logo.svg"),
   description: siteConfig.description,
   email: siteConfig.contactEmail,
+  foundingDate: siteConfig.incorporationDate,
+  // Telephone is omitted entirely until a statutory line is provisioned —
+  // an empty string would publish a claim we cannot honour.
+  ...(siteConfig.phone ? { telephone: siteConfig.phone } : {}),
+  identifier: {
+    "@type": "PropertyValue",
+    propertyID: "CIN",
+    name: "Corporate Identity Number",
+    value: siteConfig.cin,
+  },
   address: {
     "@type": "PostalAddress",
+    name: "Registered office",
     streetAddress: siteConfig.address.street,
     addressLocality: siteConfig.address.locality,
     addressRegion: siteConfig.address.region,

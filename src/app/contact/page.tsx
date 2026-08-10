@@ -116,14 +116,41 @@ export default function ContactPage() {
       </section>
 
       <section className="border-b border-border bg-card/25 py-8 sm:py-12">
-        <Container className="grid gap-3 text-sm leading-6 text-muted-foreground sm:grid-cols-[1fr_auto] sm:items-center">
-          <p>
-            {siteConfig.legalName} · {siteConfig.incorporationStatus}.
-            Registered office: {siteConfig.address.full}.
-          </p>
-          <p className="font-mono text-xs text-muted-foreground/80">
-            No hidden submission · no data capture
-          </p>
+        <Container className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <address className="text-sm leading-6 not-italic text-muted-foreground">
+            <span className="eyebrow">Registered office</span>
+            <span className="mt-3 block font-medium text-foreground">
+              {siteConfig.legalName}
+            </span>
+            <span className="mt-1 block">{siteConfig.address.full}</span>
+          </address>
+          <div className="text-sm leading-6 text-muted-foreground">
+            <span className="eyebrow">Corporate identity</span>
+            <span className="mt-3 block font-mono text-[0.8rem] tracking-tight text-foreground">
+              {siteConfig.cin}
+            </span>
+            <span className="mt-1 block">{siteConfig.incorporationStatus}</span>
+          </div>
+          <div className="text-sm leading-6 text-muted-foreground">
+            <span className="eyebrow">Reach us</span>
+            <a
+              href={`mailto:${siteConfig.contactEmail}`}
+              className="mt-3 block transition-colors hover:text-foreground"
+            >
+              {siteConfig.contactEmail}
+            </a>
+            {siteConfig.phone ? (
+              <a
+                href={`tel:${siteConfig.phone.replace(/[^+\d]/g, "")}`}
+                className="mt-1 block transition-colors hover:text-foreground"
+              >
+                {siteConfig.phone}
+              </a>
+            ) : null}
+            <span className="mt-2 block font-mono text-xs text-muted-foreground/80">
+              No hidden submission · no data capture
+            </span>
+          </div>
         </Container>
       </section>
     </>
