@@ -23,16 +23,9 @@ const description =
   "Fairhelm Systems builds executive and operational dashboards with governed KPIs, trusted data, drilldowns, alerts, exception tracking, and decision workflows.";
 
 export const metadata = createPageMetadata({
-  title: "Custom Dashboards and Operational Intelligence",
+  title: "Operational Dashboards and Decision Systems",
   description,
   path: "/services/dashboards/",
-  keywords: [
-    "custom dashboards",
-    "operational intelligence dashboards",
-    "executive dashboards",
-    "KPI design",
-    "decision dashboards",
-  ],
 });
 
 const capabilities = [
@@ -136,10 +129,11 @@ export default function DashboardsPage() {
       <JsonLd
         data={[
           serviceSchema({
-            name: "Custom Dashboards and Operational Intelligence",
+            name: "Operational Dashboards and Decision Systems",
             description,
             path: "/services/dashboards/",
-            serviceType: "Executive dashboards and operational intelligence",
+            serviceType:
+              "Operational dashboards, governed analytics, and decision systems",
           }),
           breadcrumbSchema([
             { name: "Home", path: "/" },

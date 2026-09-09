@@ -16,32 +16,40 @@ import { breadcrumbSchema } from "@/lib/structured-data";
 export const metadata = createPageMetadata({
   title: "Contact Fairhelm Systems",
   description:
-    "Discuss SquareCampus, ETL and ELT pipelines, custom dashboards, or governed operational intelligence with Fairhelm Systems.",
+    "Discuss SquareCampus, ETL and ELT pipelines, operational dashboards, or governed analytics with Fairhelm Systems. Registered office and corporate identity.",
   path: "/contact/",
 });
 
 const goodFit = [
-  "A school or trust workflow that needs governed ownership",
+  "A school, university, or trust evaluating SquareCampus — start on squarecampus.com, then talk to us",
   "An operating process held together by spreadsheets and manual reconciliation",
   "A data pipeline or dashboard leadership cannot yet trust",
-  "A product or internal system that must survive scale and scrutiny",
+  "Platform engineering that clearly aligns with Fairhelm's data and product focus",
 ] as const;
 
 function FitList() {
   return (
-    <ul className="flex flex-col mt-3">
-      {goodFit.map((item) => (
-        <li
-          key={item}
-          className="flex gap-4 border-b border-border py-4 text-sm leading-6 text-muted-foreground last:border-b-0 last:pb-0 first:pt-0"
-        >
-          <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full border border-primary/30 bg-primary/10 text-primary">
-            <Check aria-hidden="true" className="size-3" />
-          </span>
-          {item}
-        </li>
-      ))}
-    </ul>
+    <>
+      <ul className="flex flex-col mt-3">
+        {goodFit.map((item) => (
+          <li
+            key={item}
+            className="flex gap-4 border-b border-border py-4 text-sm leading-6 text-muted-foreground last:border-b-0 last:pb-0 first:pt-0"
+          >
+            <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full border border-primary/30 bg-primary/10 text-primary">
+              <Check aria-hidden="true" className="size-3" />
+            </span>
+            {item}
+          </li>
+        ))}
+      </ul>
+      <p className="mt-5 border-t border-border pt-4 text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
+        Outside our scope
+      </p>
+      <p className="mt-2 text-sm leading-6 text-muted-foreground">
+        {siteConfig.services.outOfScope.join(" · ")}.
+      </p>
+    </>
   );
 }
 

@@ -3,8 +3,9 @@ import { Geist_Mono, Manrope } from "next/font/google";
 import { Footer } from "@/components/site/footer";
 import { Header } from "@/components/site/header";
 import { JsonLd } from "@/components/site/json-ld";
+import { ogImage } from "@/lib/seo";
 import { absoluteUrl, siteConfig } from "@/lib/site-config";
-import { organizationSchema, websiteSchema } from "@/lib/structured-data";
+import { siteGraph } from "@/lib/structured-data";
 import "./globals.css";
 
 const manrope = Manrope({
@@ -19,11 +20,13 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
+const defaultTitle = `${siteConfig.name} | ${siteConfig.tagline}`;
+
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   title: {
-    default: "Fairhelm Systems | Governed software systems",
-    template: "%s | Fairhelm Systems",
+    default: defaultTitle,
+    template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
   applicationName: siteConfig.name,
@@ -38,22 +41,15 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: siteConfig.url,
     siteName: siteConfig.name,
-    title: "Fairhelm Systems | Governed software systems",
+    title: defaultTitle,
     description: siteConfig.description,
-    images: [
-      {
-        url: "/brand/fairhelm-og.png",
-        width: 1200,
-        height: 630,
-        alt: "Fairhelm Systems — governed software systems",
-      },
-    ],
+    images: [ogImage],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Fairhelm Systems | Governed software systems",
+    title: defaultTitle,
     description: siteConfig.description,
-    images: ["/brand/fairhelm-og.png"],
+    images: [ogImage.url],
   },
   robots: { index: true, follow: true },
   other: {
@@ -72,8 +68,23 @@ export default function RootLayout({
       className={`${manrope.variable} ${geistMono.variable}`}
       data-scroll-behavior="smooth"
     >
+      <head>
+        {/*
+          Pointer to the machine-readable company summary. `rel="describedby"`
+          is the relation the llms.txt convention uses: /llms.txt describes
+          this site without claiming to be an alternate representation of the
+          page — `rel="alternate"` is reserved for the per-page Markdown,
+          emitted through `alternates.types` in metadata.
+        */}
+        <link rel="describedby" href="/llms.txt" />
+      </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
-        <JsonLd data={[organizationSchema, websiteSchema]} />
+        {/*
+          One entity graph on every page: the company (#org), this site
+          (#website) and the SquareCampus product entity as published on
+          squarecampus.com, with the relationship stated explicitly.
+        */}
+        <JsonLd data={siteGraph} />
         <a
           href="#main-content"
           className="fixed top-3 left-3 z-50 -translate-y-20 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground focus:translate-y-0"
