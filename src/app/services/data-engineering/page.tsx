@@ -17,22 +17,16 @@ import { JsonLd } from "@/components/site/json-ld";
 import { MobileBrief } from "@/components/site/mobile-brief";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createPageMetadata } from "@/lib/seo";
+import { siteConfig } from "@/lib/site-config";
 import { breadcrumbSchema, serviceSchema } from "@/lib/structured-data";
 
 const description =
   "Fairhelm Systems designs and operates ETL and ELT pipelines for organizations that need accurate, reconciled, observable data without undisciplined cloud spend.";
 
 export const metadata = createPageMetadata({
-  title: "ETL/ELT and Data Engineering Services",
+  title: "Data Engineering and ETL/ELT Pipelines",
   description,
   path: "/services/data-engineering/",
-  keywords: [
-    "ETL services India",
-    "ELT pipelines",
-    "data engineering services",
-    "data quality",
-    "warehouse modeling",
-  ],
 });
 
 const capabilities = [
@@ -137,7 +131,7 @@ export default function DataEngineeringPage() {
       <JsonLd
         data={[
           serviceSchema({
-            name: "ETL/ELT and Data Engineering Services",
+            name: "Data Engineering and ETL/ELT Pipelines",
             description,
             path: "/services/data-engineering/",
             serviceType: "Data engineering, ETL, and ELT services",
@@ -297,6 +291,28 @@ export default function DataEngineeringPage() {
       </section>
 
       <section className="hidden border-y border-border bg-card/30 py-20 md:block sm:py-28">
+        <Container className="grid gap-10 lg:grid-cols-2">
+          <SectionHeading
+            eyebrow="How to engage"
+            title="Selective by design. Bounded by scope."
+            description="Fairhelm is a product company that takes on data engineering work where it aligns with its own systems. Bring the concrete operating problem, the source estate, and the decisions the data must support; the first conversation establishes whether the work fits."
+          />
+          <div className="grid gap-6 text-base leading-7 text-muted-foreground sm:grid-cols-2">
+            <p>
+              In scope: production ETL/ELT pipelines, data platforms,
+              reconciliation, data quality, observability, and the operational
+              dashboards and governed analytics that sit on top of them.
+            </p>
+            <ul className="flex list-disc flex-col gap-1 pl-5 text-sm leading-6">
+              {siteConfig.services.outOfScope.map((item) => (
+                <li key={item}>Not offered: {item}</li>
+              ))}
+            </ul>
+          </div>
+        </Container>
+      </section>
+
+      <section className="hidden py-20 md:block sm:py-28">
         <Container className="grid gap-10 lg:grid-cols-2">
           <SectionHeading
             eyebrow="Architecture judgment"

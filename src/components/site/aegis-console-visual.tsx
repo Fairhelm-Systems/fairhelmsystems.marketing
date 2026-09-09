@@ -16,6 +16,10 @@ import { cn } from "@/lib/utils";
  * operational question and AEGIS answers with role-limited, audited cards —
  * read-only, RBAC-aware, and audit-backed, matching the posture described on
  * the page (no autonomous writes). The exchange stages in via `.viz-reveal`.
+ *
+ * Campuses, percentages and counts are sample data. The console is labelled
+ * "Illustrative" in the UI, carries an accessible description saying so, and
+ * is excluded from the Markdown alternates (`data-md-skip`).
  */
 
 const behind = [
@@ -47,7 +51,13 @@ export function AegisConsoleVisual({ className }: { className?: string }) {
   const ref = useReveal(0.25);
 
   return (
-    <div ref={ref} className={cn("viz-reveal", className)}>
+    <div
+      ref={ref}
+      data-md-skip
+      role="img"
+      aria-label="Illustrative example of an AEGIS console exchange with sample campuses and figures. Not customer data."
+      className={cn("viz-reveal", className)}
+    >
       <div className="viz-panel rounded-3xl border border-border bg-card/70 backdrop-blur">
         <div className="viz-cap" />
 
@@ -63,7 +73,7 @@ export function AegisConsoleVisual({ className }: { className?: string }) {
           </div>
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1.5 font-mono text-[0.52rem] tracking-[0.16em] text-muted-foreground uppercase">
             <Fingerprint className="size-3 text-primary" />
-            Trust admin
+            Illustrative · Trust admin
           </span>
         </div>
 

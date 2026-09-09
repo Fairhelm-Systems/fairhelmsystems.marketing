@@ -27,28 +27,21 @@ import { SystemPanel } from "@/components/site/system-panel";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
 import { createPageMetadata } from "@/lib/seo";
+import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
 export const metadata = createPageMetadata({
-  title: "Fairhelm Systems — Governed software systems",
-  description:
-    "Fairhelm Systems builds SquareCampus School OS, trustworthy ETL and ELT pipelines, and operational intelligence dashboards for Indian institutions.",
+  title: `Fairhelm Systems — ${siteConfig.tagline}`,
+  description: siteConfig.description,
   path: "/",
-  keywords: [
-    "School OS India",
-    "ETL services India",
-    "custom dashboards",
-    "operational intelligence dashboards",
-    "governed intelligence platform",
-  ],
 });
 
 const credibility = [
-  "School OS",
+  "School Operating System",
   "ETL / ELT",
   "Dashboards",
   "Governed Intelligence",
-  "Cloud Systems",
+  "Platform Engineering",
   "Auditability",
 ];
 
@@ -91,7 +84,7 @@ const reasons = [
     icon: Building2,
     title: "Indian institutional realities",
     description:
-      "Built with trusts, multi-entity operations, uneven source systems, and real administrative pressure in mind.",
+      "Built for trusts, multi-entity operations, uneven source systems, and real administrative pressure.",
   },
   {
     icon: Sparkles,
@@ -106,16 +99,16 @@ const mobileBriefs = [
     label: "Flagship product",
     title: "SquareCampus",
     description:
-      "A sovereign, cycle-native School OS for Indian schools, groups, and educational trusts.",
+      "Fairhelm's School Operating System for schools, universities, and multi-campus educational institutions. Product detail and pricing live on squarecampus.com.",
     bullets: [
-      "Academic and attendance cycles",
-      "Fees, exams, reporting, and trust governance",
+      "Developed and operated by Fairhelm Systems",
+      "Connected operations, governance, and institutional visibility",
     ],
     href: "/squarecampus/",
     linkLabel: "Explore SquareCampus",
   },
   {
-    label: "Data foundations",
+    label: "Selective engineering work",
     title: "ETL / ELT and data engineering",
     description:
       "Production pipelines that make fragmented operational data accurate, reconciled, observable, and usable.",
@@ -127,7 +120,7 @@ const mobileBriefs = [
     linkLabel: "Explore data engineering",
   },
   {
-    label: "Decision infrastructure",
+    label: "Selective engineering work",
     title: "Operational dashboards",
     description:
       "Command surfaces built around governed KPIs, trusted data, exceptions, owners, and action.",
@@ -154,7 +147,7 @@ const mobileBriefs = [
     label: "Operating standard",
     title: "Why Fairhelm",
     description:
-      "Governance-first systems thinking, privacy-conscious architecture, and cost-aware cloud execution.",
+      "A product-first company: it builds and operates its own products and takes on only technically aligned engineering work.",
     bullets: [
       "Built for Indian institutional realities",
       "AI where it is governed, not theatrical",
@@ -168,9 +161,9 @@ export default function HomePage() {
   return (
     <>
       <Hero
-        eyebrow="Enterprise software · Data systems · Operational intelligence"
+        eyebrow="Software products · Data systems · Operational intelligence"
         title="Governed software systems for institutions where reliability is non-negotiable."
-        description="Fairhelm Systems builds sovereign School OS platforms, production-grade data pipelines, and decision dashboards for organizations that need reliability, governance, and operational clarity."
+        description="Fairhelm Systems builds and operates software products—including SquareCampus, its School Operating System for educational institutions—and selectively takes on production data pipelines and decision dashboards for organizations that need reliability, governance, and operational clarity."
         primary={{ label: "Explore SquareCampus", href: "/squarecampus/" }}
         secondary={{ label: "Discuss Data & Dashboards", href: "/contact/" }}
       >
@@ -179,6 +172,7 @@ export default function HomePage() {
 
       <section
         aria-label="Core capabilities"
+        data-md-skip
         className="border-b border-border bg-card/20"
       >
         <Container className="no-scrollbar flex flex-nowrap justify-start gap-2 overflow-x-auto py-4 max-md:scroll-fade-x max-md:scroll-fade-s-[0px] md:flex-wrap md:justify-center md:py-5 lg:justify-between">
@@ -205,14 +199,14 @@ export default function HomePage() {
         <Container>
           <SectionHeading
             eyebrow="What we build"
-            title="Three lines of work. One operating standard."
-            description="Products and systems that turn fragmented operations into governed, observable, decision-ready infrastructure."
+            title="One flagship product. A bounded engineering practice."
+            description="SquareCampus is the product Fairhelm builds and operates. Data engineering and operational dashboards are the engineering work it selectively takes on alongside it—one operating standard across all three."
           />
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             <FeatureCard
               icon={GraduationCap}
               title="SquareCampus"
-              description="A sovereign, cycle-native School OS for Indian schools, multi-school groups, and educational trusts."
+              description="A School Operating System for schools, universities, and multi-campus educational institutions, developed and operated by Fairhelm Systems."
               href="/squarecampus/"
               meta="Flagship product"
             />
@@ -221,14 +215,14 @@ export default function HomePage() {
               title="Data Engineering"
               description="Production ETL and ELT pipelines with reconciliation, lineage, observability, and cloud cost discipline."
               href="/services/data-engineering/"
-              meta="Data foundations"
+              meta="Selective engineering work"
             />
             <FeatureCard
               icon={BarChart3}
               title="Operational Dashboards"
               description="Executive and operational command surfaces built around trusted KPIs, exceptions, and accountable action."
               href="/services/dashboards/"
-              meta="Decision infrastructure"
+              meta="Selective engineering work"
             />
           </div>
         </Container>
@@ -240,17 +234,28 @@ export default function HomePage() {
             <SectionHeading
               eyebrow="SquareCampus"
               title="Schools do not run linearly. They run in cycles."
-              description="A school ERP alternative should understand recurring operating pressure—not force every institution into a generic workflow model. SquareCampus is built around the cycles schools actually govern."
+              description="A School Operating System should understand recurring operating pressure rather than force every institution into a generic module list. SquareCampus is built around the cycles schools actually govern."
             />
-            <Link
-              href="/squarecampus/"
-              className={cn(
-                buttonVariants({ variant: "outline" }),
-                "mt-7 rounded-full",
-              )}
-            >
-              See how SquareCampus works
-            </Link>
+            <div className="mt-7 flex flex-wrap gap-3">
+              <Link
+                href="/squarecampus/"
+                className={cn(
+                  buttonVariants({ variant: "outline" }),
+                  "rounded-full",
+                )}
+              >
+                See how SquareCampus works
+              </Link>
+              <a
+                href={siteConfig.product.url}
+                className={cn(
+                  buttonVariants({ variant: "ghost" }),
+                  "rounded-full",
+                )}
+              >
+                Visit squarecampus.com
+              </a>
+            </div>
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
             {cycles.map((cycle, index) => (
@@ -381,7 +386,12 @@ export default function HomePage() {
 
       <section className="hidden py-20 md:block sm:py-28">
         <Container className="grid items-center gap-12 lg:grid-cols-[0.88fr_1.12fr]">
-          <div className="rounded-3xl border border-border bg-card p-5 sm:p-7">
+          <div
+            data-md-skip
+            role="img"
+            aria-label="Illustrative example of an operational dashboard. The figures are sample data, not customer results."
+            className="rounded-3xl border border-border bg-card p-5 sm:p-7"
+          >
             <div className="flex items-center justify-between border-b border-border pb-5">
               <div>
                 <p className="text-xs text-muted-foreground">
@@ -391,7 +401,12 @@ export default function HomePage() {
                   Decision state
                 </p>
               </div>
-              <Gauge aria-hidden="true" className="size-5 text-primary" />
+              <span className="flex items-center gap-2">
+                <span className="rounded-full border border-border bg-background/70 px-2.5 py-1 font-mono text-[0.58rem] tracking-[0.16em] text-muted-foreground uppercase">
+                  Illustrative data
+                </span>
+                <Gauge aria-hidden="true" className="size-5 text-primary" />
+              </span>
             </div>
             <div className="mt-5 grid gap-3 sm:grid-cols-3">
               {[

@@ -8,7 +8,12 @@ const signals = [
 
 export function SystemPanel() {
   return (
-    <div className="system-panel relative mx-auto max-w-lg rounded-3xl border border-border bg-card/70 p-3 shadow-2xl backdrop-blur sm:p-4">
+    <div
+      data-md-skip
+      role="img"
+      aria-label="Illustrative control-plane panel showing governance, data quality and operational state signals. Decorative, not a live system."
+      className="system-panel relative mx-auto max-w-lg rounded-3xl border border-border bg-card/70 p-3 shadow-2xl backdrop-blur sm:p-4"
+    >
       <div className="rounded-2xl border border-border bg-background/80 p-5 sm:p-6">
         <div className="flex items-center justify-between gap-4 border-b border-border pb-4">
           <div>

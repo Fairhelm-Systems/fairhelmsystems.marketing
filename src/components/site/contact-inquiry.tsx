@@ -36,13 +36,14 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
+// The lanes mirror the bounded scope in site-config: the flagship product and
+// the engineering work Fairhelm selectively takes on. Nothing here invites a
+// generic "build anything" request.
 const workTypes = [
-  { value: "school-os", label: "School OS" },
-  { value: "data-pipeline", label: "Data pipeline" },
-  { value: "dashboard", label: "Dashboard / BI" },
-  { value: "internal-system", label: "Internal system" },
-  { value: "existing-product", label: "Existing product" },
-  { value: "governed-ai", label: "Governed AI" },
+  { value: "school-os", label: "SquareCampus" },
+  { value: "data-pipeline", label: "Data pipeline / ETL" },
+  { value: "dashboard", label: "Dashboards / analytics" },
+  { value: "platform-engineering", label: "Platform engineering" },
 ] as const;
 
 type WorkType = (typeof workTypes)[number]["value"];
@@ -180,7 +181,10 @@ export function ContactInquiry() {
 
   return (
     <div className="flex min-w-0 flex-col gap-5">
-      <Card className="system-panel overflow-visible border border-border bg-card/90 shadow-2xl shadow-black/20 backdrop-blur-xl">
+      <Card
+        data-md-skip
+        className="system-panel overflow-visible border border-border bg-card/90 shadow-2xl shadow-black/20 backdrop-blur-xl"
+      >
         {status === "success" ? (
           <div className="flex flex-col gap-4 p-6 sm:p-8">
             <span className="flex size-12 items-center justify-center rounded-full bg-primary/12 text-primary">

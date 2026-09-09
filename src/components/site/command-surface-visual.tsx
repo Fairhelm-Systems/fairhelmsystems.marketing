@@ -16,6 +16,11 @@ import { cn } from "@/lib/utils";
  * A leadership "command surface": governed metrics, an exception that carries
  * an owner and a next step, and the controls that back the number. Stages in
  * via the `.viz-reveal` rules; the trend bars grow from the baseline.
+ *
+ * Every figure below is sample data. The panel is labelled "Illustrative" in
+ * the UI, carries an accessible description saying so, and is excluded from
+ * the Markdown alternates (`data-md-skip`) so no number can be read as a
+ * customer result.
  */
 
 const trend = [46, 58, 52, 70, 64, 82, 78] as const;
@@ -43,7 +48,13 @@ export function CommandSurfaceVisual({ className }: { className?: string }) {
   const ref = useReveal(0.25);
 
   return (
-    <div ref={ref} className={cn("viz-reveal", className)}>
+    <div
+      ref={ref}
+      data-md-skip
+      role="img"
+      aria-label="Illustrative example of an operational dashboard with sample figures. Not customer data."
+      className={cn("viz-reveal", className)}
+    >
       <div className="viz-panel rounded-3xl border border-border bg-card/70 backdrop-blur">
         <div className="viz-cap" />
 
@@ -59,7 +70,7 @@ export function CommandSurfaceVisual({ className }: { className?: string }) {
           </div>
           <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background/70 px-3 py-1.5 font-mono text-[0.52rem] tracking-[0.18em] text-muted-foreground uppercase">
             <span className="size-1.5 rounded-full bg-primary shadow-[0_0_10px_var(--primary)]" />
-            Live records
+            Illustrative data
           </span>
         </div>
 
