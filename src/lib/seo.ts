@@ -1,26 +1,53 @@
 import type { Metadata } from "next";
+import {
+  hasMarkdownAlternate,
+  markdownAlternatePath,
+} from "@/content/markdown-alternates";
 import { absoluteUrl, siteConfig } from "@/lib/site-config";
 
 type PageMetadata = {
   title: string;
   description: string;
   path: string;
-  keywords?: string[];
 };
 
+export const ogImage = {
+  url: "/brand/fairhelm-og.png",
+  width: 1200,
+  height: 630,
+  alt: `${siteConfig.name} — ${siteConfig.tagline.toLowerCase()}`,
+};
+
+/**
+ * Canonical plus, where the page ships one, the Markdown alternate. The HTML
+ * URL stays canonical; `types["text/markdown"]` renders as
+ * `<link rel="alternate" type="text/markdown" href="…/index.md">`, the
+ * advertised agent-readable representation of the same page.
+ */
+export function createAlternates(path: string) {
+  return {
+    canonical: absoluteUrl(path),
+    ...(hasMarkdownAlternate(path)
+      ? { types: { "text/markdown": absoluteUrl(markdownAlternatePath(path)) } }
+      : {}),
+  };
+}
+
+/**
+ * Page metadata. No meta keywords: search engines ignore them and lists of
+ * "X services India" phrases invite the keyword stuffing this site avoids.
+ */
 export function createPageMetadata({
   title,
   description,
   path,
-  keywords,
 }: PageMetadata): Metadata {
   const canonical = absoluteUrl(path);
 
   return {
     title,
     description,
-    keywords,
-    alternates: { canonical },
+    alternates: createAlternates(path),
     openGraph: {
       type: "website",
       locale: "en_IN",
@@ -28,20 +55,13 @@ export function createPageMetadata({
       siteName: siteConfig.name,
       title,
       description,
-      images: [
-        {
-          url: "/brand/fairhelm-og.png",
-          width: 1200,
-          height: 630,
-          alt: `${siteConfig.name} — governed software systems`,
-        },
-      ],
+      images: [ogImage],
     },
     twitter: {
       card: "summary_large_image",
       title,
       description,
-      images: ["/brand/fairhelm-og.png"],
+      images: [ogImage.url],
     },
     robots: {
       index: true,
