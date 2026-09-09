@@ -4,10 +4,15 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && bun run build:markdown && bun run check:build",
+    "build:markdown": "bun scripts/markdown-alternates.ts",
+    "check:build": "bun scripts/check-build.ts",
     "start": "next start",
-    "lint": "biome check src/app src/components/site src/lib",
+    "lint": "biome check src/app src/components/site src/content src/lib scripts tests",
     "format": "biome format --write",
+    "typecheck": "tsc --noEmit",
+    "test": "bun tests/run.ts",
+    "indexnow:dry-run": "bun scripts/indexnow.ts --dry-run",
     "preview": "bunx serve out",
     "deploy": "./scripts/deploy-aws-static.sh",
     "deploy:aws-static": "./scripts/deploy-aws-static.sh"
