@@ -1,41 +1,51 @@
 # Fairhelm Systems marketing site
 
-Production marketing website for **Fairhelm Systems**, an enterprise software and
-systems company building governed software for institutions that cannot afford
-operational chaos.
+Production marketing website for **Fairhelm Systems**, a product-first technology
+company that builds and operates software products and governed data systems. Its
+flagship product is SquareCampus, a School Operating System for schools,
+universities and multi-campus educational institutions.
 
 - Canonical site: [fairhelmsystems.com](https://fairhelmsystems.com)
 - India domain: [fairhelmsystems.in](https://fairhelmsystems.in) — permanent redirect
   to the canonical site
 - GitHub: [fairhelmsystems/fairhelmsystems.marketing](https://github.com/fairhelmsystems/fairhelmsystems.marketing)
-- Company status: Fairhelm Systems (OPC) Pvt Ltd, incorporation in progress
-- GSTIN status: pending incorporation and registration
+- Legal entity: Fairhelm Systems (OPC) Private Limited, CIN U62099KA2026OPC225579,
+  incorporated in India on 5 August 2026 (canonical facts in
+  [`src/lib/site-config.ts`](src/lib/site-config.ts))
+- Product site: [squarecampus.com](https://squarecampus.com/) is the canonical
+  source for SquareCampus product, security and commercial information
 
-The public site positions Fairhelm Systems as a product and systems company,
-SquareCampus as its flagship School OS for India, and Fairhelm's data engineering
-and operational-intelligence work as governed decision infrastructure.
+The public site positions Fairhelm Systems as a product-first company that
+develops and operates SquareCampus, and that selectively takes on data
+engineering, operational dashboard and governed analytics work. It does not
+present Fairhelm as a generic software agency, an outsourcing firm, an AI
+consultancy or an ERP vendor, and it publishes no customer metrics, logos,
+testimonials, awards or certifications.
 
 ## Public routes
 
 | Route | Purpose |
 | --- | --- |
 | `/` | Company positioning, capabilities, SquareCampus, AEGIS, and primary calls to action |
-| `/squarecampus/` | Sovereign, cycle-native School OS product direction |
-| `/services/data-engineering/` | ETL/ELT, data platforms, quality, lineage, and observability |
-| `/services/dashboards/` | Executive and operational command surfaces |
-| `/about/` | Company identity, operating principles, and product posture |
+| `/squarecampus/` | Operator context for SquareCampus; hands over to squarecampus.com |
+| `/services/data-engineering/` | ETL/ELT, data platforms, quality, lineage, observability, and how to engage |
+| `/services/dashboards/` | Operational dashboards and decision systems |
+| `/about/` | Company identity, scope (product first, services by exception), operating principles |
 | `/contact/` | Static contact shell and clearly identified email action |
 | `/security/` | Governance, privacy, RBAC, auditability, and deployment posture |
 | `/legal/` | Indexed legal and governance navigation |
 | `/privacy/`, `/terms/`, `/acceptable-use/` | Public policy shells |
 | `/ai-policy/`, `/data-processing/` | AI and data-processing posture |
 | `/ai/` | Human-readable information for AI agents and researchers |
-| `/llms.txt`, `/llms-full.txt` | LLM-friendly company and product information |
+| `/llms.txt` | Concise machine-readable company summary, generated from `site-config.ts` |
+| `/llms-full.txt` | The summary followed by every Markdown alternate, generated after build |
+| `<page>/index.md` | Markdown alternate of each key page, generated from the rendered HTML |
 | `/robots.txt`, `/sitemap.xml` | Search-engine discovery outputs |
 
 All public content is statically rendered and crawlable. Product-direction copy is
 deliberately phrased to avoid claiming features or certifications that have not been
-formally delivered or verified.
+formally delivered or verified. Interface visuals use sample data, are labelled
+"Illustrative" on screen, and are excluded from the Markdown alternates.
 
 ## Stack
 
@@ -70,10 +80,13 @@ Open [localhost:3000](http://localhost:3000).
 Useful commands:
 
 ```bash
-bun run lint       # Biome validation for maintained application code
-bun run build      # TypeScript check and static export
+bun run lint       # Biome validation for application code, scripts and tests
+bun run typecheck  # TypeScript
+bun run test       # canonical-fact, JSON-LD, llms.txt, sitemap and stale-claim tests
+bun run build      # static export, Markdown alternates, llms-full.txt, post-build check
 bun run preview    # serve the generated out/ directory locally
 bun run format     # apply Biome formatting
+bun run indexnow:dry-run   # after a build: what IndexNow would submit
 ```
 
 ## Repository structure
@@ -81,18 +94,23 @@ bun run format     # apply Biome formatting
 ```text
 src/app/                    Routes, metadata outputs, and static pages
 src/components/site/        Shared site shell, motion, legal, and content components
-src/content/                Structured legal content
-src/lib/                    Site configuration, SEO, and structured-data helpers
+src/content/                Structured legal content, llms.txt generator, Markdown-alternate registry
+src/lib/                    Canonical company facts (site-config), SEO, and the JSON-LD entity graph
 public/brand/               Fairhelm vector logo and social assets
-public/llms*.txt            AI-agent discovery documents
 infrastructure/cloudfront/  Viewer-request redirect and clean-route function
-scripts/                    Idempotent AWS deployment entry point
+scripts/                    Deployment, Markdown alternates, post-build check, IndexNow
+tests/                      Regression tests (bun run test) and the stale-claim fixture
 docs/                       Deployment and operations documentation
 ```
 
-The Fairhelm identity and contact configuration live in
-[`src/lib/site-config.ts`](src/lib/site-config.ts). The public contact address remains
-an explicit placeholder until the new corporate mailbox is tested end to end.
+Every company fact — legal name, CIN, incorporation date, registered office,
+contact, positioning, the SquareCampus relationship and canonical URL, the bounded
+services scope — lives in [`src/lib/site-config.ts`](src/lib/site-config.ts).
+Page copy, metadata, JSON-LD, `/llms.txt`, the footer disclosure and the legal
+pages derive from it. `sameAs` and `recognitions` are empty on purpose: add a
+social profile only after verifying it is the company's own account, and add a
+recognition (for example a government startup programme) only after the
+certificate is actually issued.
 
 ## SEO and AI discoverability
 
@@ -101,14 +119,21 @@ The site includes:
 - canonical metadata rooted at `https://fairhelmsystems.com`;
 - page-specific titles and descriptions;
 - Open Graph and Twitter cards;
-- Organization, WebSite, Service, breadcrumb, and software/product JSON-LD;
-- static robots and sitemap outputs;
-- concise and expanded LLM documents; and
-- a human-readable `/ai/` page linking canonical public sources.
+- one JSON-LD entity graph on every page: `Organization` (`#org`), `WebSite`
+  (`#website`) and the SquareCampus `SoftwareApplication` at its canonical id
+  `https://squarecampus.com/#software`, with Fairhelm as creator, publisher and
+  provider; Service and breadcrumb nodes per page;
+- `<link rel="describedby" href="/llms.txt">` on every page and
+  `<link rel="alternate" type="text/markdown">` on pages with a Markdown alternate;
+- static robots and sitemap outputs, with git-derived `lastmod`;
+- a generated `/llms.txt`, generated Markdown alternates and `/llms-full.txt`;
+- a human-readable `/ai/` page linking canonical public sources; and
+- IndexNow submission of new, changed and removed URLs at deploy time.
 
-Changes to company facts, contact information, legal identity, product completion,
-or security claims must be updated consistently across page copy, metadata,
-structured data, and the LLM documents.
+Change company facts in `site-config.ts` only; `bun run test` and the post-build
+check (`scripts/check-build.ts`) fail on stale wording, a missing entity id, a
+`sameAs` without a verified profile, or a sample figure leaking into a
+machine-readable surface.
 
 ## Production deployment
 
@@ -122,13 +147,15 @@ The script at [`scripts/deploy-aws-static.sh`](scripts/deploy-aws-static.sh):
 
 1. validates AWS identity and configuration;
 2. installs dependencies only when needed;
-3. runs Biome and the static build;
+3. runs Biome, the static build, the Markdown alternates and the post-build check;
 4. creates or safely reuses the dedicated S3, ACM, CloudFront, OAC, Function, and
    Route 53 resources;
 5. uploads documents with revalidation headers and fingerprinted assets as
    immutable;
-6. invalidates CloudFront; and
-7. prints the exact resource and verification summary.
+6. uploads Markdown alternates as `text/markdown`;
+7. submits new, changed and removed URLs to IndexNow (skipped without a key file);
+8. invalidates CloudFront; and
+9. prints the exact resource and verification summary.
 
 The S3 origin is private with all public-access blocks enabled. CloudFront handles
 TLS, compression, clean-route rewrites, and permanent host redirects while
@@ -178,7 +205,10 @@ Expected behavior is documented in
 - Customer, student, and parent data is not sold.
 - AI is positioned as governed, RBAC-aware, explainable, and read-only first.
 - Customer data must not be used for AI training unless explicitly contracted.
-- Add CIN, registered-office details, and GSTIN only after formal issuance and
-  verification.
+- CIN and registered-office details are published from `site-config.ts`; GSTIN
+  particulars are available on request and are added only after verification.
+- Government startup-programme recognition has not been granted. Nothing about it
+  may be published until the certificate exists; the `recognitions` slot in
+  `site-config.ts` stays empty until then.
 
 The standard is simple: systems that survive scale, scrutiny, and boardrooms.

@@ -51,7 +51,13 @@ export function DataPipelineVisual({ className }: { className?: string }) {
   const ref = useReveal(0.2);
 
   return (
-    <div ref={ref} className={cn("viz-reveal", className)}>
+    <div
+      ref={ref}
+      data-md-skip
+      role="img"
+      aria-label="Illustrative diagram of a data pipeline: example source systems flowing through ETL/ELT into a governed model. Sample data, not customer integrations."
+      className={cn("viz-reveal", className)}
+    >
       <div className="viz-panel rounded-3xl border border-border bg-card/70 p-4 backdrop-blur sm:p-6">
         <div className="viz-cap" />
 

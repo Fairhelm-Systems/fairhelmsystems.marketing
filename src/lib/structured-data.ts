@@ -1,19 +1,42 @@
 import { absoluteUrl, siteConfig } from "@/lib/site-config";
 
+/**
+ * Stable entity ids. `#org` and `#website` live on this origin; the product
+ * entity is the one squarecampus.com publishes, so both sites describe a
+ * single SquareCampus node rather than two partial copies.
+ *
+ * Known normalisation item, deliberately deferred: squarecampus.com names its
+ * own Organization node `https://squarecampus.com/#org` for the same legal
+ * entity as `#org` here. No cross-site `sameAs` is emitted yet; a later
+ * decision will settle whether this URI becomes the canonical legal-entity id
+ * across both sites.
+ */
+export const SCHEMA_IDS = {
+  org: `${siteConfig.url}/#org`,
+  website: `${siteConfig.url}/#website`,
+  product: siteConfig.product.schemaId,
+} as const;
+
+/**
+ * The company. Facts only: legal name, CIN, registered office, contact and
+ * what it knows about. No ratings, reviews, offers, employee counts or
+ * unverified profiles — `sameAs` is emitted only when a verified profile
+ * exists in site-config.
+ */
 export const organizationSchema = {
-  "@context": "https://schema.org",
   "@type": "Organization",
-  "@id": `${siteConfig.url}/#organization`,
+  "@id": SCHEMA_IDS.org,
   name: siteConfig.name,
   legalName: siteConfig.legalName,
-  url: siteConfig.url,
+  url: `${siteConfig.url}/`,
   logo: absoluteUrl("/brand/fairhelm-logo.svg"),
-  description: siteConfig.description,
+  description: siteConfig.descriptionLong,
   email: siteConfig.contactEmail,
   foundingDate: siteConfig.incorporationDate,
   // Telephone is omitted entirely until a statutory line is provisioned —
   // an empty string would publish a claim we cannot honour.
   ...(siteConfig.phone ? { telephone: siteConfig.phone } : {}),
+  ...(siteConfig.sameAs.length > 0 ? { sameAs: [...siteConfig.sameAs] } : {}),
   identifier: {
     "@type": "PropertyValue",
     propertyID: "CIN",
@@ -33,44 +56,63 @@ export const organizationSchema = {
     "@type": "Country",
     name: "India",
   },
+  // The product brand the company owns and operates.
+  brand: {
+    "@type": "Brand",
+    name: siteConfig.product.name,
+    url: siteConfig.product.url,
+  },
   knowsAbout: [
     "School operating systems",
+    "Data engineering",
     "ETL and ELT pipelines",
-    "Operational intelligence",
-    "Custom dashboards",
+    "Operational dashboards",
+    "Governed analytics and decision systems",
     "Data governance",
   ],
 };
 
 export const websiteSchema = {
-  "@context": "https://schema.org",
   "@type": "WebSite",
-  "@id": `${siteConfig.url}/#website`,
-  url: siteConfig.url,
+  "@id": SCHEMA_IDS.website,
+  url: `${siteConfig.url}/`,
   name: siteConfig.name,
   description: siteConfig.description,
-  publisher: { "@id": `${siteConfig.url}/#organization` },
+  publisher: { "@id": SCHEMA_IDS.org },
   inLanguage: "en-IN",
 };
 
+/**
+ * SquareCampus, referenced as the entity squarecampus.com publishes. This
+ * node states the relationship — Fairhelm is its creator, publisher and
+ * operating provider — and points at the canonical product site. Feature
+ * lists, plans and pricing are deliberately absent: squarecampus.com is the
+ * source for those.
+ */
 export const squareCampusSchema = {
-  "@context": "https://schema.org",
   "@type": "SoftwareApplication",
-  name: "SquareCampus",
+  "@id": SCHEMA_IDS.product,
+  name: siteConfig.product.name,
   applicationCategory: "BusinessApplication",
-  applicationSubCategory: "School operating system",
+  applicationSubCategory: siteConfig.product.category,
   operatingSystem: "Web",
-  url: absoluteUrl("/squarecampus/"),
-  description:
-    "SquareCampus is Fairhelm Systems' sovereign, cycle-native School OS for Indian schools, multi-school groups, and educational trusts.",
-  creator: { "@id": `${siteConfig.url}/#organization` },
-  featureList: [
-    "Cycle-native school operations",
-    "Role-aware workflows",
-    "Trust governance",
-    "Auditability",
-    "AEGIS governed intelligence",
-  ],
+  url: siteConfig.product.url,
+  description: siteConfig.product.description,
+  creator: { "@id": SCHEMA_IDS.org },
+  publisher: { "@id": SCHEMA_IDS.org },
+  provider: { "@id": SCHEMA_IDS.org },
+  mainEntityOfPage: siteConfig.product.url,
+  // No `areaServed` here: schema.org defines it for Organization, Service and
+  // Offer, not for a CreativeWork such as SoftwareApplication
+  // (validator.schema.org flags it as an unknown field). Geography is stated
+  // on the Organization.
+  inLanguage: "en-IN",
+};
+
+/** The site-wide entity graph rendered once, in the root layout. */
+export const siteGraph = {
+  "@context": "https://schema.org",
+  "@graph": [organizationSchema, websiteSchema, squareCampusSchema],
 };
 
 export function serviceSchema({
@@ -87,11 +129,12 @@ export function serviceSchema({
   return {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": `${absoluteUrl(path)}#service`,
     name,
     description,
     serviceType,
     url: absoluteUrl(path),
-    provider: { "@id": `${siteConfig.url}/#organization` },
+    provider: { "@id": SCHEMA_IDS.org },
     areaServed: { "@type": "Country", name: "India" },
   };
 }
