@@ -1,4 +1,5 @@
 import {
+  ArrowUpRight,
   BellRing,
   BookOpenCheck,
   Building2,
@@ -24,20 +25,48 @@ import { MobileBrief } from "@/components/site/mobile-brief";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Badge } from "@/components/ui/badge";
 import { createPageMetadata } from "@/lib/seo";
-import { breadcrumbSchema, squareCampusSchema } from "@/lib/structured-data";
+import { siteConfig } from "@/lib/site-config";
+import { breadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "SquareCampus — Sovereign School OS for India",
+  title: "SquareCampus — School Operating System by Fairhelm Systems",
   description:
-    "Explore SquareCampus, Fairhelm Systems' cycle-native School OS for Indian schools, multi-school groups, and educational trusts.",
+    "SquareCampus is the School Operating System developed and operated by Fairhelm Systems for schools, universities, and multi-campus educational institutions. Product detail, security documentation, and pricing live on squarecampus.com.",
   path: "/squarecampus/",
-  keywords: [
-    "School OS India",
-    "school management software India",
-    "school ERP alternative",
-    "educational trust management software",
-  ],
 });
+
+/**
+ * Where an evaluator should go next. The canonical product site holds the
+ * product definition, platform, security, pricing model and rollout; this
+ * page establishes operator context and hands over.
+ */
+const canonicalProductPages = [
+  [
+    "What is SquareCampus",
+    "what-is-squarecampus/",
+    "The canonical definition, the layers it is built from, and the direct answer to whether it is an ERP.",
+  ],
+  [
+    "Platform",
+    "platform/",
+    "How the School Operating System is structured and the operating cycles it carries.",
+  ],
+  [
+    "Security and identity",
+    "security/",
+    "Design posture for encryption, role-based access, auditability, and India-first hosting.",
+  ],
+  [
+    "Pricing model",
+    "pricing/",
+    "How the licence is structured and what a written proposal follows. No figures are published on fairhelmsystems.com.",
+  ],
+  [
+    "Rollout",
+    "rollout/",
+    "Guided implementation sequenced around the academic calendar, and the deployment paths available.",
+  ],
+] as const;
 
 const operatingCycles = [
   {
@@ -113,6 +142,17 @@ const posture = [
 
 const mobileBriefs = [
   {
+    label: "Canonical product site",
+    title: "Evaluate on squarecampus.com",
+    description: siteConfig.product.relationship,
+    bullets: [
+      "Product definition, platform, and security documentation",
+      "Pricing model, rollout, and commercial programmes",
+    ],
+    href: siteConfig.product.url,
+    linkLabel: "Visit squarecampus.com",
+  },
+  {
     label: "Operating model",
     title: "Why cycle-native?",
     description:
@@ -173,21 +213,23 @@ const mobileBriefs = [
 export default function SquareCampusPage() {
   return (
     <>
+      {/* The SquareCampus product entity itself is in the site-wide graph
+          (see layout.tsx), so this page adds only its breadcrumb. */}
       <JsonLd
-        data={[
-          squareCampusSchema,
-          breadcrumbSchema([
-            { name: "Home", path: "/" },
-            { name: "SquareCampus", path: "/squarecampus/" },
-          ]),
-        ]}
+        data={breadcrumbSchema([
+          { name: "Home", path: "/" },
+          { name: "SquareCampus", path: "/squarecampus/" },
+        ])}
       />
       <Hero
         eyebrow="SquareCampus · Fairhelm Systems flagship product"
-        title="A sovereign School OS for Indian institutions."
-        description="SquareCampus is Fairhelm Systems' sovereign School OS for schools, multi-school groups, educational trusts, and private institutions that need cycle-native operations, trust-aware governance, and decision-ready intelligence."
-        primary={{ label: "Discuss a pilot", href: "/contact/" }}
-        secondary={{ label: "Review security posture", href: "/security/" }}
+        title="The School Operating System built and operated by Fairhelm Systems."
+        description={siteConfig.product.description}
+        primary={{
+          label: "Visit squarecampus.com",
+          href: siteConfig.product.url,
+        }}
+        secondary={{ label: "Discuss a pilot", href: "/contact/" }}
       >
         <div className="rounded-3xl border border-border bg-card/75 p-6 shadow-2xl backdrop-blur sm:p-8">
           <AegisConsoleVisual className="mb-6" />
@@ -202,7 +244,7 @@ export default function SquareCampusPage() {
             </div>
             <Network aria-hidden="true" className="size-6 text-primary" />
           </div>
-          <div className="mt-6 flex flex-wrap gap-2">
+          <div data-md-skip className="mt-6 flex flex-wrap gap-2">
             {[
               "Academic",
               "Attendance",
@@ -217,8 +259,9 @@ export default function SquareCampusPage() {
             ))}
           </div>
           <p className="mt-6 text-sm leading-6 text-muted-foreground">
-            Not another bloated ERP. A governed operating system shaped around
-            how Indian institutions actually plan, execute, review, and repeat.
+            It carries the record and workflow capabilities expected of
+            institutional ERP software, positioned as a School Operating System
+            shaped around how institutions plan, execute, review, and repeat.
           </p>
         </div>
       </Hero>
@@ -229,6 +272,36 @@ export default function SquareCampusPage() {
         description="SquareCampus, compressed for a phone. Open a topic for the operating detail."
         items={mobileBriefs}
       />
+
+      <section className="hidden border-b border-border py-20 md:block sm:py-28">
+        <Container className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <SectionHeading
+            eyebrow="Evaluating SquareCampus"
+            title="The product lives on squarecampus.com. This page is the operator context."
+            description={`${siteConfig.product.relationship} Institutions should evaluate the product there; this site records who builds and operates it and how to reach the company.`}
+          />
+          <div className="grid gap-3">
+            {canonicalProductPages.map(([title, path, description]) => (
+              <a
+                key={path}
+                href={`${siteConfig.product.url}${path}`}
+                className="group flex items-start justify-between gap-5 rounded-2xl border border-border bg-card p-5 transition-colors hover:bg-accent"
+              >
+                <div>
+                  <h3 className="font-semibold text-foreground">{title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {description}
+                  </p>
+                </div>
+                <ArrowUpRight
+                  aria-hidden="true"
+                  className="mt-1 size-4 shrink-0 text-primary"
+                />
+              </a>
+            ))}
+          </div>
+        </Container>
+      </section>
 
       <section className="hidden py-20 md:block sm:py-28">
         <Container className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
@@ -408,7 +481,7 @@ export default function SquareCampusPage() {
           <SectionHeading
             eyebrow="Privacy and auditability"
             title="Institutional data deserves institutional-grade boundaries."
-            description="SquareCampus is built with explicit ownership, privacy-conscious handling, and clear records of material action. This is a product posture, not a claim of certification."
+            description="SquareCampus is designed around explicit ownership, privacy-conscious handling, and clear records of material action. This is a product posture, not a claim of certification."
           />
           <div className="mt-10 grid gap-4 md:grid-cols-3">
             {posture.map((item) => (

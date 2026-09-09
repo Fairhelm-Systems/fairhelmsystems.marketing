@@ -45,7 +45,13 @@ export function AccessControlVisual({ className }: { className?: string }) {
   const ref = useReveal(0.25);
 
   return (
-    <div ref={ref} className={cn("viz-reveal", className)}>
+    <div
+      ref={ref}
+      data-md-skip
+      role="img"
+      aria-label="Illustrative example of an access decision evaluated against explicit authority. Sample roles and scopes, not customer data."
+      className={cn("viz-reveal", className)}
+    >
       <div className="viz-panel rounded-3xl border border-border bg-card/70 backdrop-blur">
         <div className="viz-cap" />
 

@@ -8,6 +8,7 @@ import {
   Waypoints,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { Container } from "@/components/site/container";
 import { CtaBand } from "@/components/site/cta-band";
 import { FeatureCard } from "@/components/site/feature-card";
@@ -22,16 +23,17 @@ import { breadcrumbSchema } from "@/lib/structured-data";
 export const metadata = createPageMetadata({
   title: "About Fairhelm Systems",
   description:
-    "Fairhelm Systems is an Indian product and systems company building SquareCampus, governed software, data engineering, and operational intelligence solutions.",
+    "Fairhelm Systems is a product-first technology company in India. It builds and operates SquareCampus, its School Operating System, and selectively takes on data engineering and operational dashboard work.",
   path: "/about/",
 });
 
 const capabilities = [
   {
     icon: GraduationCap,
-    title: "Product engineering",
+    title: "SquareCampus",
     description:
-      "SquareCampus is our flagship product: a sovereign, cycle-native School OS for India.",
+      "The flagship product: a School Operating System for schools, universities, and multi-campus educational institutions, developed and operated by Fairhelm.",
+    href: siteConfig.product.page,
   },
   {
     icon: DatabaseZap,
@@ -47,9 +49,9 @@ const capabilities = [
   },
   {
     icon: CloudCog,
-    title: "Cloud software systems",
+    title: "Platform engineering",
     description:
-      "Secure, cost-aware cloud architecture designed for reliability, privacy, and disciplined scale.",
+      "Product and platform engineering, taken on only where it clearly aligns with Fairhelm's data and product focus.",
   },
 ];
 
@@ -63,13 +65,23 @@ const mobileBriefs = [
   },
   {
     label: "Capability",
-    title: "Product, data, and cloud depth",
+    title: "Product, data, and platform depth",
     description:
-      "SquareCampus product engineering, ETL/ELT systems, operational intelligence, and cost-aware cloud architecture.",
+      "SquareCampus product engineering, ETL/ELT systems, operational dashboards, and aligned platform engineering.",
     bullets: [
       "One operating standard across the stack",
       "Privacy and reliability by design",
     ],
+  },
+  {
+    label: "Scope",
+    title: "Product first. Services by exception.",
+    description: siteConfig.services.summary,
+    bullets: siteConfig.services.outOfScope.map(
+      (item) => `Not offered: ${item}`,
+    ),
+    href: siteConfig.product.url,
+    linkLabel: "Evaluate SquareCampus on squarecampus.com",
   },
   {
     label: "Execution",
@@ -96,8 +108,8 @@ export default function AboutPage() {
       />
       <Hero
         eyebrow="About Fairhelm Systems"
-        title="A product and systems company for serious operations."
-        description="Fairhelm Systems builds governed software, data foundations, and operational intelligence for institutions where reliability, privacy, and execution discipline are not negotiable."
+        title="A product-first technology company for serious operations."
+        description="Fairhelm Systems builds and operates software products and governed data systems. Its flagship product is SquareCampus, a School Operating System for educational institutions. Alongside it, Fairhelm selectively takes on data engineering and dashboard work where reliability, privacy, and execution discipline are not negotiable."
         primary={{ label: "Work with Fairhelm", href: "/contact/" }}
         secondary={{ label: "Explore SquareCampus", href: "/squarecampus/" }}
       >
@@ -209,6 +221,74 @@ export default function AboutPage() {
       </section>
 
       <section className="hidden py-20 md:block sm:py-28">
+        <Container className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+          <SectionHeading
+            eyebrow="Scope"
+            title="Product first. Services by exception."
+            description={siteConfig.services.summary}
+          />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <h3 className="font-semibold text-foreground">
+                Is Fairhelm a product company or a services company?
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {siteConfig.positioning.is} It is not{" "}
+                {siteConfig.positioning.isNot.join(", ")}.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <h3 className="font-semibold text-foreground">
+                Who operates SquareCampus?
+              </h3>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                {siteConfig.product.relationship} Institutions should evaluate
+                it at{" "}
+                <a
+                  href={siteConfig.product.url}
+                  className="font-medium text-foreground underline-offset-4 hover:underline"
+                >
+                  squarecampus.com
+                </a>
+                .
+              </p>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <h3 className="font-semibold text-foreground">
+                What engineering work does Fairhelm take on?
+              </h3>
+              <ul className="mt-2 flex list-disc flex-col gap-1 pl-5 text-sm leading-6 text-muted-foreground">
+                {siteConfig.services.lanes.map((lane) => (
+                  <li key={lane.href}>
+                    <Link
+                      href={lane.href}
+                      className="font-medium text-foreground underline-offset-4 hover:underline"
+                    >
+                      {lane.name}
+                    </Link>
+                  </li>
+                ))}
+                <li>
+                  Product or platform engineering where it clearly aligns with
+                  that focus
+                </li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-5">
+              <h3 className="font-semibold text-foreground">
+                What is outside Fairhelm's scope?
+              </h3>
+              <ul className="mt-2 flex list-disc flex-col gap-1 pl-5 text-sm leading-6 text-muted-foreground">
+                {siteConfig.services.outOfScope.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <section className="hidden border-y border-border bg-card/30 py-20 md:block sm:py-28">
         <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <SectionHeading
             eyebrow="How we operate"

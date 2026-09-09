@@ -5,21 +5,31 @@ import { Logo } from "@/components/site/logo";
 import { Separator } from "@/components/ui/separator";
 import { siteConfig } from "@/lib/site-config";
 
+// Product and engineering are separate groups on purpose: SquareCampus is the
+// company's flagship product, not one capability among services.
 const footerGroups = [
+  {
+    label: "Product",
+    links: [
+      { label: "SquareCampus", href: siteConfig.product.page },
+      { label: "squarecampus.com", href: siteConfig.product.url },
+    ],
+  },
+  {
+    label: "Engineering",
+    links: [
+      { label: "Data Engineering", href: "/services/data-engineering/" },
+      { label: "Dashboards", href: "/services/dashboards/" },
+    ],
+  },
   {
     label: "Company",
     links: [
       { label: "About", href: "/about/" },
       { label: "Security", href: "/security/" },
       { label: "Contact", href: "/contact/" },
-    ],
-  },
-  {
-    label: "Capabilities",
-    links: [
-      { label: "SquareCampus", href: "/squarecampus/" },
-      { label: "Data Engineering", href: "/services/data-engineering/" },
-      { label: "Dashboards", href: "/services/dashboards/" },
+      { label: "For AI agents", href: "/ai/" },
+      { label: "llms.txt", href: "/llms.txt" },
     ],
   },
   {
@@ -107,11 +117,10 @@ export function Footer() {
           <div className="max-w-md">
             <Logo />
             <p className="mt-5 text-sm leading-6 text-muted-foreground">
-              Governed software systems for institutions that need reliability,
-              auditability, and execution discipline.
+              {siteConfig.description}
             </p>
           </div>
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
             {footerGroups.map((group) => (
               <div key={group.label} className="flex flex-col gap-3">
                 <p className="text-xs font-semibold tracking-[0.16em] text-foreground uppercase">

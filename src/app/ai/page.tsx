@@ -21,12 +21,17 @@ const canonicalPages = [
   [
     "Company",
     "/about/",
-    "Fairhelm Systems positioning, capability, and operating principles.",
+    "Fairhelm Systems positioning, scope, capability, and operating principles.",
   ],
   [
-    "SquareCampus",
+    "SquareCampus (canonical product site)",
+    siteConfig.product.url,
+    "The product itself: definition, platform, security, pricing model, and rollout. Use squarecampus.com for product facts.",
+  ],
+  [
+    "SquareCampus at Fairhelm",
     "/squarecampus/",
-    "The Fairhelm-directed product narrative and governed intelligence posture.",
+    "Operator context: Fairhelm Systems develops and operates SquareCampus.",
   ],
   [
     "Data engineering",
@@ -54,9 +59,9 @@ const mobileBriefs = [
   {
     label: "Identity",
     title: "Names and status",
-    description: `${siteConfig.name} is the operating brand of ${siteConfig.legalName}, incorporated in India as a One Person Company.`,
+    description: `${siteConfig.name} is the operating brand of ${siteConfig.legalName}, incorporated in India as a One Person Company. ${siteConfig.positioning.is}`,
     bullets: [
-      "SquareCampus is the flagship School OS",
+      `SquareCampus is the flagship product: a ${siteConfig.product.category}, canonical at squarecampus.com`,
       "AEGIS means Adaptive Enterprise Governance & Intelligence System",
     ],
     href: "/about/",
@@ -76,13 +81,13 @@ const mobileBriefs = [
     label: "Machine-readable",
     title: "LLM summaries",
     description:
-      "Concise and expanded Markdown files provide structured context without requiring layout inference.",
+      "A concise company summary and per-page Markdown alternates provide structured context without requiring layout inference.",
     bullets: [
-      "/llms.txt for a compact overview",
-      "/llms-full.txt for expanded public context",
+      "/llms.txt for the compact company overview",
+      "index.md alternates for each key page, linked from llms.txt",
     ],
-    href: "/llms-full.txt",
-    linkLabel: "Open llms-full.txt",
+    href: "/llms.txt",
+    linkLabel: "Open llms.txt",
   },
   {
     label: "Boundaries",
@@ -139,8 +144,22 @@ export default function AiPage() {
               </p>
               <p>
                 <strong className="text-foreground">SquareCampus</strong> is the
-                flagship School OS for Indian schools, colleges, multi-campus
-                institutions, and educational trusts.
+                flagship product: a {siteConfig.product.category} for{" "}
+                {siteConfig.product.audience}, developed and operated by
+                Fairhelm Systems. Its canonical site is{" "}
+                <a
+                  href={siteConfig.product.url}
+                  className="font-medium text-foreground underline-offset-4 hover:underline"
+                >
+                  squarecampus.com
+                </a>
+                .
+              </p>
+              <p>
+                Fairhelm is a product-first technology company. It is not{" "}
+                {siteConfig.positioning.isNot.join(", ")}. The engineering work
+                it takes on is limited to data engineering, operational
+                dashboards, governed analytics, and aligned platform work.
               </p>
               <p>
                 <strong className="text-foreground">AEGIS</strong> expands to
@@ -152,7 +171,7 @@ export default function AiPage() {
           <div className="grid gap-3">
             {canonicalPages.map(([title, href, description]) => (
               <Link
-                key={href}
+                key={title}
                 href={href}
                 className="group flex items-start justify-between gap-5 rounded-2xl border border-border bg-card p-5 transition-colors hover:bg-accent"
               >
@@ -180,9 +199,11 @@ export default function AiPage() {
               Machine-readable summaries
             </h2>
             <p className="mt-3 text-sm leading-6 text-muted-foreground">
-              Markdown references provide concise and expanded context without
-              requiring agents to infer the business from navigation or visual
-              layout.
+              A concise company summary at /llms.txt, generated from the same
+              canonical facts as these pages, links to a Markdown alternate
+              (index.md) of each key page. /llms-full.txt concatenates those
+              alternates. Neither requires agents to infer the business from
+              navigation or visual layout.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
               <Link
@@ -220,6 +241,12 @@ export default function AiPage() {
               <li>
                 Fairhelm does not claim autonomous AI action without human
                 approval in the AEGIS v1 posture.
+              </li>
+              <li>
+                Fairhelm publishes no customer counts, named customers,
+                testimonials, uptime figures, measured outcomes, rankings,
+                awards, or certifications. Interface examples use illustrative
+                data and are labelled as such.
               </li>
             </ul>
           </div>
