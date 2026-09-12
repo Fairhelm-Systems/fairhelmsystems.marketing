@@ -16,6 +16,7 @@ import { CtaBand } from "@/components/site/cta-band";
 import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
+import { PageNav } from "@/components/site/page-nav";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createPageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -309,6 +310,25 @@ export default function AboutPage() {
           </div>
         </Container>
       </section>
+
+      <PageNav
+        items={[
+          {
+            eyebrow: "Flagship product",
+            title: "SquareCampus",
+            description:
+              "How Fairhelm builds and operates its School Operating System.",
+            href: "/squarecampus/",
+          },
+          {
+            eyebrow: "Trust",
+            title: "Security and governance posture",
+            description:
+              "RBAC, auditability, least privilege and tenant separation, stated as design posture.",
+            href: "/security/",
+          },
+        ]}
+      />
 
       <CtaBand
         title="Bring the operating problem, not a pre-selected buzzword."

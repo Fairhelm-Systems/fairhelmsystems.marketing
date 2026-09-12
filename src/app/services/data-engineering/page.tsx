@@ -14,6 +14,7 @@ import { DataPipelineVisual } from "@/components/site/data-pipeline-visual";
 import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
+import { PageNav } from "@/components/site/page-nav";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createPageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -252,6 +253,25 @@ export default function DataEngineeringPage() {
           </div>
         </Container>
       </section>
+
+      <PageNav
+        items={[
+          {
+            eyebrow: "Lane 02",
+            title: "Operational dashboards",
+            description:
+              "Command surfaces built on the governed data these pipelines produce.",
+            href: "/services/dashboards/",
+          },
+          {
+            eyebrow: "Flagship product",
+            title: "SquareCampus",
+            description:
+              "The School Operating System Fairhelm builds and operates.",
+            href: "/squarecampus/",
+          },
+        ]}
+      />
 
       <CtaBand
         title="Make your operational data answerable."

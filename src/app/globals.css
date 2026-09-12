@@ -112,6 +112,9 @@
   --sidebar-border: #e4e1da;
   --sidebar-ring: #5698d2;
 
+  /* Height of the floating header (bar + top offset); heroes bleed under it. */
+  --header-h: 4.25rem;
+
   --shadow-1: 0 12px 32px rgb(8 15 30 / 5%);
   --shadow-2: 0 24px 60px rgb(8 15 30 / 6%);
   --shadow-3: 0 34px 88px rgb(8 15 30 / 10%);
@@ -180,6 +183,12 @@
   --grid-line: rgb(214 222 238 / 5%);
   --field-ink: rgb(214 222 238 / 70%);
   --panel-highlight: rgb(255 255 255 / 4%);
+}
+
+@media (min-width: 640px) {
+  :root {
+    --header-h: 4.75rem;
+  }
 }
 
 @layer base {
@@ -331,6 +340,13 @@
       inset 0 1px 0 rgb(255 255 255 / 22%);
   }
 
+  /* Pull a page opener up under the floating header so its background
+     texture starts at the very top of the viewport. */
+  .hero-bleed {
+    margin-top: calc(-1 * var(--header-h));
+    padding-top: var(--header-h);
+  }
+
   .hero-grid {
     background-image:
       linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
@@ -369,6 +385,35 @@
 
   .data-field-row::before {
     content: attr(data-row) " " attr(data-row);
+  }
+
+  /* Inline text link: quiet underline that warms on hover. */
+  .link {
+    @apply font-medium text-foreground underline decoration-border-strong decoration-1 underline-offset-4 transition-colors hover:decoration-primary;
+  }
+
+  /* Symptom quote inside a problem card. */
+  .symptom {
+    @apply border-l-2 border-amber/70 pl-4 text-sm leading-6 text-foreground;
+  }
+
+  /* Horizontal process flow (Ingest → Transform → …). */
+  .flow {
+    @apply grid gap-2 sm:grid-cols-5;
+  }
+
+  .flow-step {
+    @apply relative rounded-2xl border border-border bg-card/70 p-4;
+  }
+
+  .flow-step + .flow-step::before {
+    position: absolute;
+    top: 50%;
+    left: -0.5rem;
+    width: 0.5rem;
+    height: 1px;
+    background: var(--border-strong);
+    content: "";
   }
 
   .cta-panel {
@@ -596,6 +641,49 @@
     transform: none;
   }
 
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 260ms ease,
+      border-color 260ms ease;
+  }
+
+  .reveal-stagger.is-live > * {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-stagger > :nth-child(2) {
+    transition-delay: 70ms;
+  }
+
+  .reveal-stagger > :nth-child(3) {
+    transition-delay: 140ms;
+  }
+
+  .reveal-stagger > :nth-child(4) {
+    transition-delay: 210ms;
+  }
+
+  .reveal-stagger > :nth-child(5) {
+    transition-delay: 280ms;
+  }
+
+  .reveal-stagger > :nth-child(6) {
+    transition-delay: 350ms;
+  }
+
+  .reveal-stagger > :nth-child(7) {
+    transition-delay: 420ms;
+  }
+
+  .reveal-stagger > :nth-child(n + 8) {
+    transition-delay: 490ms;
+  }
+
   @keyframes field-drift {
     from {
       transform: translateX(0);
@@ -727,6 +815,11 @@
   [data-packet] {
     display: none;
   }
+}
+
+[data-slot="card"]:has(a:focus-visible) {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
 }
 
 @media (hover: hover) and (pointer: fine) {

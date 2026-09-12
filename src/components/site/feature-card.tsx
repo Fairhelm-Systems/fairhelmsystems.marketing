@@ -1,12 +1,14 @@
 import type { LucideIcon } from "lucide-react";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * The family's standard card: an optional mono index or label, an icon in a
- * soft tile, a Sora title and a short description. When `href` is given the
- * whole card is the link.
+ * The family's standard card. Header row: icon tile on the left (or the mono
+ * index when there is no icon); index and link arrow on the right. When
+ * `href` is given the title is a stretched link, so the whole card is
+ * clickable while the Markdown alternate keeps its heading structure.
  */
 export function FeatureCard({
   icon: Icon,
@@ -15,6 +17,7 @@ export function FeatureCard({
   href,
   meta,
   index,
+  children,
   className,
 }: {
   icon?: LucideIcon;
@@ -23,6 +26,7 @@ export function FeatureCard({
   href?: string;
   meta?: string;
   index?: string;
+  children?: ReactNode;
   className?: string;
 }) {
   const external = href ? /^https?:/.test(href) : false;
@@ -33,7 +37,7 @@ export function FeatureCard({
     <div
       data-slot="card"
       className={cn(
-        "group/card relative flex h-full flex-col rounded-3xl border border-border bg-card p-5 sm:p-6",
+        "group/card relative flex h-full flex-col rounded-3xl border border-border bg-card p-5 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-ring/50 sm:p-6",
         className,
       )}
     >
@@ -42,20 +46,20 @@ export function FeatureCard({
           <span className="flex size-10 items-center justify-center rounded-xl border border-border bg-secondary text-primary">
             <Icon aria-hidden="true" className="size-4" />
           </span>
-        ) : index ? (
-          <span className="index">{index}</span>
         ) : (
-          <span />
+          <span className="index pt-1">{index}</span>
         )}
-        {href ? (
-          <ArrowUpRight
-            aria-hidden="true"
-            className="size-4 text-muted-foreground transition-colors group-hover/card:text-primary"
-          />
-        ) : null}
+        <span className="flex items-center gap-3 pt-1">
+          {Icon && index ? <span className="index">{index}</span> : null}
+          {href ? (
+            <ArrowUpRight
+              aria-hidden="true"
+              className="size-4 text-muted-foreground transition-colors group-hover/card:text-primary"
+            />
+          ) : null}
+        </span>
       </div>
-      {Icon && index ? <span className="index mt-5 block">{index}</span> : null}
-      <h3 className={cn("display-3", Icon && !index ? "mt-5" : "mt-3")}>
+      <h3 className={cn("display-3", Icon ? "mt-5" : "mt-4")}>
         {href ? (
           external ? (
             <a href={href} className={linkClass}>
@@ -73,8 +77,9 @@ export function FeatureCard({
       <p className="mt-2.5 text-sm leading-6 text-muted-foreground">
         {description}
       </p>
+      {children}
       {meta ? (
-        <p className="mt-5 font-mono text-[0.62rem] tracking-[0.2em] text-muted-foreground uppercase">
+        <p className="mt-auto pt-5 font-mono text-[0.62rem] tracking-[0.2em] text-muted-foreground uppercase">
           {meta}
         </p>
       ) : null}

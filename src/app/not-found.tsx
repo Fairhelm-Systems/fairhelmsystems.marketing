@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 export default function NotFound() {
   return (
-    <section className="relative isolate overflow-hidden py-24 sm:py-36">
+    <section className="hero-bleed relative isolate overflow-hidden py-24 sm:py-36">
       <div
         aria-hidden="true"
         className="hero-grid absolute inset-0 -z-10 opacity-60"
