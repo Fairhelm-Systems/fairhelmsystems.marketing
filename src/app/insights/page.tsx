@@ -17,12 +17,28 @@ import { createPageMetadata } from "@/lib/seo";
 import { absoluteUrl, siteConfig } from "@/lib/site-config";
 import { blogSchema, breadcrumbSchema } from "@/lib/structured-data";
 
-export const metadata = createPageMetadata({
+const baseMetadata = createPageMetadata({
   title: "Insights on Data Engineering, Dashboards and Governance",
   description:
     "Practice notes from Fairhelm Systems: reconciliation in ETL/ELT pipelines, KPI contracts and exception ownership for dashboards, audit trails and governance, and how a product-first company works.",
   path: INSIGHTS_PATH,
 });
+
+// The series cover (public/insights/cover.webp) is the social image for the
+// index when it exists; otherwise the site-wide OG image stands.
+const seriesCover = existsSync(
+  join(process.cwd(), "public", "insights", "cover.webp"),
+)
+  ? { url: "/insights/cover.webp", width: 1600, height: 900, alt: "Insights" }
+  : null;
+
+export const metadata = seriesCover
+  ? {
+      ...baseMetadata,
+      openGraph: { ...baseMetadata.openGraph, images: [seriesCover] },
+      twitter: { ...baseMetadata.twitter, images: [seriesCover.url] },
+    }
+  : baseMetadata;
 
 function hasCover(slug: string) {
   return existsSync(join(process.cwd(), "public", "insights", `${slug}.webp`));

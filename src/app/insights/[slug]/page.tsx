@@ -49,6 +49,18 @@ export async function generateMetadata({
     description: post.description,
     path: post.path,
   });
+  // The note's own cover, when one has been generated, becomes its social
+  // image; otherwise the site-wide OG image from createPageMetadata stands.
+  const cover = hasCover(slug)
+    ? [
+        {
+          url: insightCover(slug),
+          width: 1600,
+          height: 900,
+          alt: post.title,
+        },
+      ]
+    : undefined;
   return {
     ...base,
     openGraph: {
@@ -57,6 +69,11 @@ export async function generateMetadata({
       publishedTime: `${post.date}T00:00:00Z`,
       authors: [siteConfig.founder.name],
       section: post.category,
+      ...(cover ? { images: cover } : {}),
+    },
+    twitter: {
+      ...base.twitter,
+      ...(cover ? { images: [cover[0].url] } : {}),
     },
   };
 }
