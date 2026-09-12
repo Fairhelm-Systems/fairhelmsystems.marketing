@@ -1,5 +1,4 @@
 import {
-  ArrowUpRight,
   Bot,
   FileCheck2,
   FileLock2,
@@ -8,20 +7,13 @@ import {
   Scale,
   ShieldCheck,
 } from "lucide-react";
-import Link from "next/link";
 import { Container } from "@/components/site/container";
+import { FeatureCard } from "@/components/site/feature-card";
 import { GovernanceVisual } from "@/components/site/governance-visual";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
 import { LegalNavBand } from "@/components/site/legal-document";
 import { SectionHeading } from "@/components/site/section-heading";
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { createPageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 import { breadcrumbSchema } from "@/lib/structured-data";
@@ -100,8 +92,9 @@ export default function LegalPage() {
         description="One indexed center for Fairhelm's public legal documents, security posture, data boundaries, and governed-intelligence commitments."
         primary={{ label: "Read privacy policy", href: "/privacy/" }}
         secondary={{ label: "Review security posture", href: "/security/" }}
+        visualLabel={null}
       >
-        <div className="rounded-3xl border border-border bg-card/75 p-5 shadow-2xl backdrop-blur sm:p-7">
+        <div className="panel p-2.5 sm:p-3">
           <GovernanceVisual
             nodes={[
               [170, 110, "PRIVACY"],
@@ -111,53 +104,34 @@ export default function LegalPage() {
             ]}
             chips={["Indexed", "Public posture", "Versioned"]}
           />
-          <div className="mt-5 flex items-center justify-between gap-4">
+          <div className="flex items-center justify-between gap-4 px-3 pt-4 pb-2 sm:px-4">
             <div>
-              <p className="eyebrow">Public posture</p>
-              <p className="mt-2 text-lg font-semibold text-foreground">
+              <p className="eyebrow text-[0.6rem]">Public posture</p>
+              <p className="mt-2 font-heading text-lg text-foreground">
                 Authority should remain visible.
               </p>
             </div>
-            <span className="rounded-full border border-border bg-background/70 px-3 py-1 font-mono text-[0.65rem] text-primary uppercase">
-              Indexed
-            </span>
+            <span className="chip">Indexed</span>
           </div>
         </div>
       </Hero>
 
       <LegalNavBand current="/legal/" />
 
-      <section className="py-14 sm:py-20 lg:py-28">
+      <section className="section">
         <Container>
           <SectionHeading
             eyebrow="Legal center"
             title="Choose the document. Keep the context."
-            description="Every document stays one tab away, with a desktop section index and compact mobile disclosure for fast scanning."
+            description="Every document stays one tab away, with a section index for fast scanning on any screen."
           />
           <div className="mt-9 grid gap-4 sm:grid-cols-2 lg:mt-12 lg:grid-cols-3">
-            {documents.map(({ icon: Icon, ...document }) => (
-              <Card key={document.href} className="h-full">
-                <CardHeader>
-                  <div className="mb-4 flex size-10 items-center justify-center rounded-lg border border-border bg-secondary text-primary">
-                    <Icon aria-hidden="true" className="size-4" />
-                  </div>
-                  <CardTitle>{document.title}</CardTitle>
-                  <CardDescription>{document.description}</CardDescription>
-                  <CardAction>
-                    <Link
-                      href={document.href}
-                      aria-label={`Open ${document.title}`}
-                      className="text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      <ArrowUpRight aria-hidden="true" className="size-4" />
-                    </Link>
-                  </CardAction>
-                </CardHeader>
-              </Card>
+            {documents.map((document) => (
+              <FeatureCard key={document.href} {...document} />
             ))}
           </div>
-          <div className="mt-10 rounded-2xl border border-border bg-card/55 p-5 text-sm leading-6 text-muted-foreground sm:p-6">
-            <p className="font-semibold text-foreground">Publishing entity</p>
+          <div className="mt-10 rounded-3xl border border-border bg-card p-5 text-sm leading-6 text-muted-foreground sm:p-6">
+            <p className="eyebrow">Publishing entity</p>
             <p className="mt-2">
               {siteConfig.legalName} (CIN {siteConfig.cin}) is the legal entity
               operating as Fairhelm Systems, incorporated in India on{" "}

@@ -1,55 +1,51 @@
-import { Check, ShieldCheck } from "lucide-react";
+import { Check, Mail, MapPin } from "lucide-react";
 import { ContactInquiry } from "@/components/site/contact-inquiry";
 import { Container } from "@/components/site/container";
+import { DataField } from "@/components/site/data-field";
 import { JsonLd } from "@/components/site/json-ld";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { createPageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 import { breadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "Contact Fairhelm Systems",
+  title: "Contact Fairhelm Systems, Bangalore",
   description:
-    "Discuss SquareCampus, ETL and ELT pipelines, operational dashboards, or governed analytics with Fairhelm Systems. Registered office and corporate identity.",
+    "Discuss SquareCampus, ETL and ELT pipelines, operational dashboards or governed analytics with Fairhelm Systems in Bangalore, India. Registered office and corporate identity.",
   path: "/contact/",
 });
 
 const goodFit = [
-  "A school, university, or trust evaluating SquareCampus — start on squarecampus.com, then talk to us",
+  "A school, university or trust evaluating SquareCampus — start on squarecampus.com, then talk to us",
   "An operating process held together by spreadsheets and manual reconciliation",
   "A data pipeline or dashboard leadership cannot yet trust",
   "Platform engineering that clearly aligns with Fairhelm's data and product focus",
 ] as const;
 
-function FitList() {
+function FitCard() {
   return (
-    <>
-      <ul className="flex flex-col mt-3">
+    <div className="rounded-3xl border border-border bg-card p-5 sm:p-6">
+      <p className="eyebrow">Good fit</p>
+      <h2 className="display-3 mt-3">Problems worth bringing to the table</h2>
+      <ul className="mt-4 flex flex-col">
         {goodFit.map((item) => (
           <li
             key={item}
-            className="flex gap-4 border-b border-border py-4 text-sm leading-6 text-muted-foreground last:border-b-0 last:pb-0 first:pt-0"
+            className="flex gap-3.5 border-b border-border py-3.5 text-sm leading-6 text-muted-foreground first:pt-0 last:border-b-0 last:pb-0"
           >
-            <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full border border-primary/30 bg-primary/10 text-primary">
+            <span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full border border-teal/30 bg-teal/10 text-teal">
               <Check aria-hidden="true" className="size-3" />
             </span>
             {item}
           </li>
         ))}
       </ul>
-      <p className="mt-5 border-t border-border pt-4 text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
+      <p className="eyebrow mt-5 border-t border-border pt-4 text-[0.6rem]">
         Outside our scope
       </p>
       <p className="mt-2 text-sm leading-6 text-muted-foreground">
         {siteConfig.services.outOfScope.join(" · ")}.
       </p>
-    </>
+    </div>
   );
 }
 
@@ -63,67 +59,60 @@ export default function ContactPage() {
         ])}
       />
 
-      <section className="relative overflow-hidden border-b border-border py-10 sm:py-16 lg:py-24">
+      <section className="relative isolate overflow-hidden border-b border-border">
         <div
           aria-hidden="true"
-          className="hero-grid absolute inset-0 opacity-45"
+          className="hero-grid absolute inset-0 -z-10 opacity-60"
         />
         <div
           aria-hidden="true"
-          className="absolute -top-48 right-0 size-[34rem] rounded-full bg-primary/8 blur-3xl"
+          className="hero-glow absolute inset-x-0 top-0 -z-10 h-[32rem]"
         />
+        <DataField className="-z-10" />
 
-        <Container className="relative grid items-start gap-8 lg:grid-cols-[0.82fr_1.18fr] lg:gap-x-12 xl:gap-x-16">
-          <div className="lg:col-start-1 lg:row-start-1">
-            <p className="eyebrow">Contact</p>
-            <h1 className="mt-5 max-w-2xl text-4xl font-semibold tracking-[-0.045em] text-balance sm:text-5xl lg:text-6xl xl:text-7xl">
-              Start with the concrete version of the problem.
+        <Container className="relative grid items-start gap-10 pt-10 pb-12 sm:pt-16 sm:pb-16 lg:grid-cols-[0.85fr_1.15fr] lg:gap-x-14 lg:pt-20 lg:pb-24">
+          <div className="hero-enter flex flex-col gap-5 lg:col-start-1 lg:row-start-1">
+            <p className="eyebrow">Contact · Bangalore, India</p>
+            <h1 className="display-1">
+              Start with the{" "}
+              <span className="text-gradient">concrete version</span> of the
+              problem.
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground sm:text-lg sm:leading-8">
-              Tell us what needs to work better, what is breaking down, and
-              where the current system is creating drag. The useful conversation
+            <p className="lead max-w-xl text-pretty">
+              Tell us what needs to work better, what is breaking down and where
+              the current system is creating drag. The useful conversation
               starts there.
             </p>
-
-            <div className="mt-7 lg:hidden">
-              <Accordion>
-                <AccordionItem value="good-fit">
-                  <AccordionTrigger aria-label="Is this a good fit for Fairhelm?">
-                    <span className="flex items-center gap-3">
-                      <ShieldCheck
-                        aria-hidden="true"
-                        className="size-4 text-primary"
-                      />
-                      Is this a good fit for Fairhelm?
-                    </span>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <FitList />
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+            <div className="flex flex-col gap-2 text-sm text-muted-foreground">
+              <a
+                href={`mailto:${siteConfig.contactEmail}`}
+                className="inline-flex items-center gap-2 text-foreground transition-colors hover:text-primary"
+              >
+                <Mail aria-hidden="true" className="size-4 text-primary" />
+                {siteConfig.contactEmail}
+              </a>
+              <span className="inline-flex items-start gap-2">
+                <MapPin
+                  aria-hidden="true"
+                  className="mt-1 size-4 shrink-0 text-primary"
+                />
+                {siteConfig.address.locality}, {siteConfig.address.region},
+                India
+              </span>
             </div>
           </div>
 
-          <div className="lg:col-start-2 lg:row-span-2 lg:row-start-1">
+          <div className="hero-visual lg:col-start-2 lg:row-span-2 lg:row-start-1">
             <ContactInquiry />
           </div>
 
-          <Card className="mt-2 hidden border border-border bg-card/60 lg:col-start-1 lg:row-start-2 lg:block">
-            <CardHeader>
-              <p className="eyebrow">Good fit</p>
-              <CardTitle className="mt-2 text-xl">
-                Problems worth bringing to the table
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <FitList />
-            </CardContent>
-          </Card>
+          <div className="lg:col-start-1 lg:row-start-2">
+            <FitCard />
+          </div>
         </Container>
       </section>
 
-      <section className="border-b border-border bg-card/25 py-8 sm:py-12">
+      <section className="section-alt py-10 sm:py-14">
         <Container className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <address className="text-sm leading-6 not-italic text-muted-foreground">
             <span className="eyebrow">Registered office</span>
@@ -143,7 +132,7 @@ export default function ContactPage() {
             <span className="eyebrow">Reach us</span>
             <a
               href={`mailto:${siteConfig.contactEmail}`}
-              className="mt-3 block transition-colors hover:text-foreground"
+              className="mt-3 block text-foreground transition-colors hover:text-primary"
             >
               {siteConfig.contactEmail}
             </a>

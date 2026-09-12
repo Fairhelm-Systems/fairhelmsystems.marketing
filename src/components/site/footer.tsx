@@ -1,8 +1,8 @@
+import { ArrowUpRight, Mail, MapPin } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Container } from "@/components/site/container";
 import { Logo } from "@/components/site/logo";
-import { Separator } from "@/components/ui/separator";
 import { siteConfig } from "@/lib/site-config";
 
 // Product and engineering are separate groups on purpose: SquareCampus is the
@@ -18,8 +18,8 @@ const footerGroups = [
   {
     label: "Engineering",
     links: [
-      { label: "Data Engineering", href: "/services/data-engineering/" },
-      { label: "Dashboards", href: "/services/dashboards/" },
+      { label: "Data engineering", href: "/services/data-engineering/" },
+      { label: "Operational dashboards", href: "/services/dashboards/" },
     ],
   },
   {
@@ -38,8 +38,10 @@ const footerGroups = [
       { label: "Legal center", href: "/legal/" },
       { label: "Privacy", href: "/privacy/" },
       { label: "Terms", href: "/terms/" },
+      { label: "Acceptable use", href: "/acceptable-use/" },
       { label: "Refunds", href: "/refund-policy/" },
       { label: "AI policy", href: "/ai-policy/" },
+      { label: "Data processing", href: "/data-processing/" },
     ],
   },
 ] as const;
@@ -52,10 +54,8 @@ function DisclosureField({
   children: ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
-        {label}
-      </span>
+    <div className="flex flex-col gap-1.5">
+      <span className="eyebrow text-[0.6rem]">{label}</span>
       <span className="text-sm leading-6 text-muted-foreground">
         {children}
       </span>
@@ -77,10 +77,16 @@ function CompanyDisclosure() {
         <span className="block font-medium text-foreground">
           {siteConfig.legalName}
         </span>
-        <span className="mt-1 block">{siteConfig.address.full}</span>
+        <span className="mt-1 flex items-start gap-2">
+          <MapPin
+            aria-hidden="true"
+            className="mt-1.5 size-3.5 shrink-0 text-primary"
+          />
+          {siteConfig.address.full}
+        </span>
       </DisclosureField>
       <DisclosureField label="CIN">
-        <span className="font-mono text-[0.8rem] tracking-tight">
+        <span className="font-mono text-[0.8rem] tracking-tight text-foreground">
           {siteConfig.cin}
         </span>
         <span className="mt-1 block">{siteConfig.incorporationStatus}</span>
@@ -89,8 +95,9 @@ function CompanyDisclosure() {
         <DisclosureField label="Email">
           <a
             href={`mailto:${siteConfig.contactEmail}`}
-            className="transition-colors hover:text-foreground"
+            className="inline-flex items-center gap-2 text-foreground transition-colors hover:text-primary"
           >
+            <Mail aria-hidden="true" className="size-3.5 text-primary" />
             {siteConfig.contactEmail}
           </a>
         </DisclosureField>
@@ -111,37 +118,50 @@ function CompanyDisclosure() {
 
 export function Footer() {
   return (
-    <footer className="border-t border-border bg-card/30">
+    <footer className="border-t border-border">
       <Container className="py-12 sm:py-16">
-        <div className="grid gap-10 lg:grid-cols-[1.5fr_2fr]">
-          <div className="max-w-md">
+        <div className="grid gap-10 lg:grid-cols-[1.2fr_2fr] lg:gap-16">
+          <div className="max-w-sm">
             <Logo />
             <p className="mt-5 text-sm leading-6 text-muted-foreground">
               {siteConfig.description}
+            </p>
+            <p className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+              <MapPin aria-hidden="true" className="size-3.5 text-primary" />
+              Bangalore, Karnataka, India
             </p>
           </div>
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
             {footerGroups.map((group) => (
               <div key={group.label} className="flex flex-col gap-3">
-                <p className="text-xs font-semibold tracking-[0.16em] text-foreground uppercase">
-                  {group.label}
-                </p>
-                {group.links.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                <p className="eyebrow text-[0.6rem]">{group.label}</p>
+                {group.links.map((link) =>
+                  /^https?:/.test(link.href) ? (
+                    <a
+                      key={link.href}
+                      href={link.href}
+                      className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {link.label}
+                      <ArrowUpRight aria-hidden="true" className="size-3" />
+                    </a>
+                  ) : (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                    >
+                      {link.label}
+                    </Link>
+                  ),
+                )}
               </div>
             ))}
           </div>
         </div>
-        <Separator className="my-9" />
+        <div className="my-9 h-px bg-border" />
         <CompanyDisclosure />
-        <Separator className="my-9" />
+        <div className="my-9 h-px bg-border" />
         <div className="flex flex-col gap-3 text-xs leading-5 text-muted-foreground sm:flex-row sm:items-start sm:justify-between">
           <p>
             © {new Date().getFullYear()} {siteConfig.legalNameDisplay}. All

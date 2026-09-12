@@ -45,7 +45,9 @@ export function createPageMetadata({
   const canonical = absoluteUrl(path);
 
   return {
-    title,
+    // The layout template appends "| Fairhelm Systems"; a title that already
+    // names the company is used as-is so the brand is not repeated.
+    title: title.includes(siteConfig.name) ? { absolute: title } : title,
     description,
     alternates: createAlternates(path),
     openGraph: {
