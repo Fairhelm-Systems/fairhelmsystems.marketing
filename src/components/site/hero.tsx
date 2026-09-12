@@ -52,7 +52,7 @@ export function Hero({
   };
 
   return (
-    <section className="relative isolate overflow-hidden">
+    <section className="hero-bleed relative isolate overflow-hidden">
       <div
         aria-hidden="true"
         className="hero-grid absolute inset-0 -z-10 opacity-70"
