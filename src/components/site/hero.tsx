@@ -1,81 +1,157 @@
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { Container } from "@/components/site/container";
-import { MotionField } from "@/components/site/motion-field";
+import { DataField } from "@/components/site/data-field";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+type Cta = { label: string; href: string };
+
+/**
+ * Page opener. Text on the left, a product visual on the right; on phones
+ * the visual follows the copy. `highlight` picks the phrase in `title` that
+ * takes the brand gradient. `bullets` are the short proof points under the
+ * calls to action. `visualLabel` is the caption under the visual — every
+ * visual on this site is illustrative and says so.
+ */
 export function Hero({
   eyebrow,
   title,
+  highlight,
   description,
   primary,
   secondary,
+  bullets,
   children,
+  visualLabel = "Illustrative preview using sample data",
   compact = false,
 }: {
   eyebrow: string;
   title: string;
+  highlight?: string;
   description: string;
-  primary?: { label: string; href: string };
-  secondary?: { label: string; href: string };
+  primary?: Cta;
+  secondary?: Cta;
+  bullets?: readonly string[];
   children?: ReactNode;
+  visualLabel?: string | null;
   compact?: boolean;
 }) {
+  const isExternal = (href: string) => /^https?:/.test(href);
+  const renderTitle = () => {
+    if (!highlight || !title.includes(highlight)) return title;
+    const [before, after] = title.split(highlight);
+    return (
+      <>
+        {before}
+        <span className="text-gradient">{highlight}</span>
+        {after}
+      </>
+    );
+  };
+
   return (
-    <section className="relative overflow-hidden border-b border-border">
+    <section className="relative isolate overflow-hidden">
       <div
         aria-hidden="true"
-        className="hero-grid absolute inset-0 opacity-60"
+        className="hero-grid absolute inset-0 -z-10 opacity-70"
       />
       <div
         aria-hidden="true"
-        className="hero-glow absolute inset-x-0 top-0 h-[32rem]"
+        className="hero-glow absolute inset-x-0 top-0 -z-10 h-[36rem]"
       />
-      <MotionField />
+      <DataField className="-z-10" />
       <Container
         className={cn(
-          "relative grid items-center gap-8 py-12 sm:gap-12 sm:py-24 lg:grid-cols-[1.12fr_0.88fr] lg:py-32",
-          compact && "lg:grid-cols-1 lg:py-24",
+          "relative grid items-center gap-10 pt-10 pb-12 sm:gap-12 sm:pt-16 sm:pb-16 lg:gap-14 lg:pt-20 lg:pb-24",
+          children && !compact ? "lg:grid-cols-[1.08fr_0.92fr]" : "max-w-4xl",
         )}
       >
-        <div className="flex max-w-4xl flex-col gap-5 sm:gap-6">
+        <div className="hero-enter flex flex-col gap-5 sm:gap-6">
           <p className="eyebrow">{eyebrow}</p>
-          <h1 className="text-balance text-4xl font-semibold tracking-[-0.055em] text-foreground sm:text-5xl lg:text-7xl lg:leading-[1.02]">
-            {title}
-          </h1>
-          <p className="max-w-3xl text-pretty text-[0.95rem] leading-6 text-muted-foreground sm:text-lg sm:leading-8 lg:text-xl">
-            {description}
-          </p>
+          <h1 className="display-1">{renderTitle()}</h1>
+          <p className="lead max-w-2xl text-pretty">{description}</p>
           {primary || secondary ? (
-            <div className="flex flex-col gap-3 pt-2 sm:flex-row">
+            <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap">
               {primary ? (
-                <Link
-                  href={primary.href}
-                  className={cn(buttonVariants({ size: "lg" }), "rounded-full")}
-                >
-                  {primary.label}
-                  <ArrowRight data-icon="inline-end" />
-                </Link>
+                isExternal(primary.href) ? (
+                  <a
+                    href={primary.href}
+                    className={cn(buttonVariants({ size: "lg" }))}
+                  >
+                    {primary.label}
+                    <ArrowRight data-icon="inline-end" />
+                  </a>
+                ) : (
+                  <Link
+                    href={primary.href}
+                    className={cn(buttonVariants({ size: "lg" }))}
+                  >
+                    {primary.label}
+                    <ArrowRight data-icon="inline-end" />
+                  </Link>
+                )
               ) : null}
               {secondary ? (
-                <Link
-                  href={secondary.href}
-                  className={cn(
-                    buttonVariants({ size: "lg", variant: "outline" }),
-                    "rounded-full",
-                  )}
-                >
-                  {secondary.label}
-                </Link>
+                isExternal(secondary.href) ? (
+                  <a
+                    href={secondary.href}
+                    className={cn(
+                      buttonVariants({ size: "lg", variant: "outline" }),
+                    )}
+                  >
+                    {secondary.label}
+                    <ArrowRight data-icon="inline-end" />
+                  </a>
+                ) : (
+                  <Link
+                    href={secondary.href}
+                    className={cn(
+                      buttonVariants({ size: "lg", variant: "outline" }),
+                    )}
+                  >
+                    {secondary.label}
+                    <ArrowRight data-icon="inline-end" />
+                  </Link>
+                )
               ) : null}
             </div>
           ) : null}
+          {bullets?.length ? (
+            <ul className="mt-1 grid gap-x-8 gap-y-3 sm:grid-cols-2">
+              {bullets.map((bullet) => (
+                <li
+                  key={bullet}
+                  className="flex items-start gap-2.5 text-sm leading-6 text-muted-foreground"
+                >
+                  <Check
+                    aria-hidden="true"
+                    className="mt-1.5 size-3.5 shrink-0 text-teal"
+                  />
+                  {bullet}
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </div>
-        {children ? (
-          <div className={cn("hidden md:block", compact && "md:hidden")}>
+        {children && !compact ? (
+          <div className="hero-visual relative w-full min-w-0 lg:justify-self-end">
             {children}
+            {visualLabel ? (
+              <p
+                data-md-skip
+                className="mt-4 flex justify-center lg:justify-start"
+              >
+                <span className="chip">
+                  <span
+                    aria-hidden="true"
+                    className="size-1.5 rounded-full bg-teal"
+                  />
+                  {visualLabel}
+                </span>
+              </p>
+            ) : null}
           </div>
         ) : null}
       </Container>

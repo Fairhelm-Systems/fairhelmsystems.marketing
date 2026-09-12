@@ -1,22 +1,35 @@
 import type { Metadata } from "next";
-import { Geist_Mono, Manrope } from "next/font/google";
+import { IBM_Plex_Mono, IBM_Plex_Sans, Sora } from "next/font/google";
 import { Footer } from "@/components/site/footer";
 import { Header } from "@/components/site/header";
 import { JsonLd } from "@/components/site/json-ld";
+import { ThemeProvider } from "@/components/site/theme-provider";
+import { ThemeToggle } from "@/components/site/theme-toggle";
 import { ogImage } from "@/lib/seo";
 import { absoluteUrl, siteConfig } from "@/lib/site-config";
 import { siteGraph } from "@/lib/structured-data";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+// The family type system, shared with squarecampus.com: Sora for headings,
+// IBM Plex Sans for body copy, IBM Plex Mono for eyebrows and labels.
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
+  weight: ["400", "500"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const plexSans = IBM_Plex_Sans({
+  variable: "--font-plex-sans",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -54,6 +67,8 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
   other: {
     "ai-content-declaration": absoluteUrl("/ai/"),
+    "geo.region": "IN-KA",
+    "geo.placename": siteConfig.address.locality,
   },
 };
 
@@ -65,8 +80,9 @@ export default function RootLayout({
   return (
     <html
       lang="en-IN"
-      className={`${manrope.variable} ${geistMono.variable}`}
+      className={`${sora.variable} ${plexSans.variable} ${plexMono.variable}`}
       data-scroll-behavior="smooth"
+      suppressHydrationWarning
     >
       <head>
         {/*
@@ -79,25 +95,28 @@ export default function RootLayout({
         <link rel="describedby" href="/llms.txt" />
       </head>
       <body className="min-h-screen bg-background font-sans text-foreground antialiased">
-        {/*
-          One entity graph on every page: the company (#org), this site
-          (#website) and the SquareCampus product entity as published on
-          squarecampus.com, with the relationship stated explicitly.
-        */}
-        <JsonLd data={siteGraph} />
-        <a
-          href="#main-content"
-          className="fixed top-3 left-3 z-50 -translate-y-20 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground focus:translate-y-0"
-        >
-          Skip to content
-        </a>
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <main id="main-content" className="flex-1">
-            {children}
-          </main>
-          <Footer />
-        </div>
+        <ThemeProvider>
+          {/*
+            One entity graph on every page: the company (#org), this site
+            (#website) and the SquareCampus product entity as published on
+            squarecampus.com, with the relationship stated explicitly.
+          */}
+          <JsonLd data={siteGraph} />
+          <a
+            href="#main-content"
+            className="fixed top-3 left-3 z-50 -translate-y-20 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground focus:translate-y-0"
+          >
+            Skip to content
+          </a>
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main id="main-content" className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </div>
+          <ThemeToggle />
+        </ThemeProvider>
       </body>
     </html>
   );
