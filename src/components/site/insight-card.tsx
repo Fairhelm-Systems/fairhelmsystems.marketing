@@ -53,7 +53,7 @@ export function InsightCard({
             alt=""
             fill
             sizes={featured ? "(min-width: 1024px) 50vw, 100vw" : "33vw"}
-            className="object-cover"
+            className={cn("object-cover", featured && "lg:object-right")}
           />
         </div>
       ) : (
