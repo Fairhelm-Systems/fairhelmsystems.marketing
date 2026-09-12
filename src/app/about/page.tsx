@@ -1,9 +1,11 @@
 import {
   BarChart3,
   Boxes,
+  Building2,
   CloudCog,
   DatabaseZap,
   GraduationCap,
+  MapPin,
   ShieldCheck,
   Waypoints,
 } from "lucide-react";
@@ -14,16 +16,15 @@ import { CtaBand } from "@/components/site/cta-band";
 import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
-import { MobileBrief } from "@/components/site/mobile-brief";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createPageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
 import { breadcrumbSchema } from "@/lib/structured-data";
 
 export const metadata = createPageMetadata({
-  title: "About Fairhelm Systems",
+  title: "About Fairhelm Systems — Technology Company in Bangalore, India",
   description:
-    "Fairhelm Systems is a product-first technology company in India. It builds and operates SquareCampus, its School Operating System, and selectively takes on data engineering and operational dashboard work.",
+    "Fairhelm Systems is a product-first technology company in Bangalore, India. It builds and operates SquareCampus, its School Operating System, and selectively takes on data engineering and operational dashboard work.",
   path: "/about/",
 });
 
@@ -32,20 +33,22 @@ const capabilities = [
     icon: GraduationCap,
     title: "SquareCampus",
     description:
-      "The flagship product: a School Operating System for schools, universities, and multi-campus educational institutions, developed and operated by Fairhelm.",
+      "The flagship product: a School Operating System for schools, universities and multi-campus educational institutions, developed and operated by Fairhelm.",
     href: siteConfig.product.page,
   },
   {
     icon: DatabaseZap,
     title: "Data engineering",
     description:
-      "ETL and ELT systems built around accuracy, reconciliation, observability, and accountable production refresh.",
+      "ETL and ELT systems built around accuracy, reconciliation, observability and accountable production refresh.",
+    href: "/services/data-engineering/",
   },
   {
     icon: BarChart3,
     title: "Operational intelligence",
     description:
-      "Decision infrastructure that connects trusted metrics to drilldowns, exceptions, ownership, and action.",
+      "Decision infrastructure that connects trusted metrics to drilldowns, exceptions, ownership and action.",
+    href: "/services/dashboards/",
   },
   {
     icon: CloudCog,
@@ -55,46 +58,27 @@ const capabilities = [
   },
 ];
 
-const mobileBriefs = [
-  {
-    label: "Company",
-    title: "Systems that survive scrutiny",
-    description:
-      "Fairhelm starts with the operating reality, establishes authority, makes data defensible, and engineers predictable behavior under pressure.",
-    bullets: ["Systems before screens", "Governance before automation"],
-  },
-  {
-    label: "Capability",
-    title: "Product, data, and platform depth",
-    description:
-      "SquareCampus product engineering, ETL/ELT systems, operational dashboards, and aligned platform engineering.",
-    bullets: [
-      "One operating standard across the stack",
-      "Privacy and reliability by design",
-    ],
-  },
-  {
-    label: "Scope",
-    title: "Product first. Services by exception.",
-    description: siteConfig.services.summary,
-    bullets: siteConfig.services.outOfScope.map(
-      (item) => `Not offered: ${item}`,
-    ),
-    href: siteConfig.product.url,
-    linkLabel: "Evaluate SquareCampus on squarecampus.com",
-  },
-  {
-    label: "Execution",
-    title: "Sharp diagnosis, explicit tradeoffs",
-    description:
-      "The objective is not maximum software. It is the minimum governed system that reliably advances operating maturity.",
-    bullets: [
-      "No premature automation",
-      "No architecture more expensive than the problem",
-    ],
-    href: "/contact/",
-    linkLabel: "Bring us the operating problem",
-  },
+const standard = [
+  [
+    Waypoints,
+    "Systems before screens",
+    "A polished interface cannot rescue weak process, ambiguous ownership or unreliable data.",
+  ],
+  [
+    ShieldCheck,
+    "Governance before automation",
+    "Automation should operate inside explicit authority, audit and privacy boundaries.",
+  ],
+  [
+    Boxes,
+    "Products with operating context",
+    "SquareCampus begins with the cycles and constraints of Indian educational institutions.",
+  ],
+  [
+    CloudCog,
+    "Engineering with economic judgment",
+    "Architecture, service levels and cloud cost should align to the value and risk of the workload.",
+  ],
 ] as const;
 
 export default function AboutPage() {
@@ -108,111 +92,104 @@ export default function AboutPage() {
       />
       <Hero
         eyebrow="About Fairhelm Systems"
-        title="A product-first technology company for serious operations."
-        description="Fairhelm Systems builds and operates software products and governed data systems. Its flagship product is SquareCampus, a School Operating System for educational institutions. Alongside it, Fairhelm selectively takes on data engineering and dashboard work where reliability, privacy, and execution discipline are not negotiable."
+        title="A product-first technology company in Bangalore, built for serious operations."
+        highlight="product-first technology company"
+        description="Fairhelm Systems builds and operates software products and governed data systems. Its flagship product is SquareCampus, a School Operating System for educational institutions. Alongside it, Fairhelm selectively takes on data engineering and dashboard work where reliability, privacy and execution discipline are not negotiable."
         primary={{ label: "Work with Fairhelm", href: "/contact/" }}
         secondary={{ label: "Explore SquareCampus", href: "/squarecampus/" }}
+        bullets={[
+          "Incorporated in India under the Companies Act, 2013",
+          "Registered office in Bangalore, Karnataka",
+          "Product first, engineering services by exception",
+          "No customer logos, metrics or awards published",
+        ]}
+        visualLabel={null}
       >
-        <div className="rounded-3xl border border-border bg-card/75 p-6 shadow-2xl backdrop-blur sm:p-8">
-          <div className="flex items-center gap-5">
-            <div className="flex h-24 w-16 shrink-0 items-center justify-center rounded-2xl border border-border bg-foreground p-3 shadow-lg shadow-primary/5">
-              <Image
-                src="/brand/fairhelm-logo.svg"
-                alt="Fairhelm Systems logo mark"
-                width={562}
-                height={892}
-                className="h-full w-auto"
-                priority
-              />
+        <div className="panel p-2.5 sm:p-3">
+          <div className="panel-inner p-5 sm:p-7">
+            <div className="flex items-center gap-5">
+              <div className="flex size-16 shrink-0 items-center justify-center rounded-2xl border border-border bg-[#f4f6fa] p-3 shadow-sm">
+                <Image
+                  src="/brand/fairhelm-logo.svg"
+                  alt="Fairhelm Systems logo mark"
+                  width={562}
+                  height={892}
+                  className="h-full w-auto"
+                  priority
+                />
+              </div>
+              <div>
+                <p className="eyebrow text-[0.6rem]">Operating brand</p>
+                <p className="mt-2 font-heading text-xl tracking-[-0.02em] text-foreground">
+                  Fairhelm Systems
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="eyebrow">Built for governed execution</p>
-              <p className="mt-2 text-lg font-semibold tracking-[-0.02em] text-foreground">
-                Fairhelm Systems
-              </p>
-            </div>
+            <dl className="mt-7 grid gap-5 border-t border-border pt-6 sm:grid-cols-2">
+              <div>
+                <dt className="eyebrow text-[0.6rem]">Legal entity</dt>
+                <dd className="mt-2 text-sm font-medium text-foreground">
+                  {siteConfig.legalNameDisplay}
+                </dd>
+              </div>
+              <div>
+                <dt className="eyebrow text-[0.6rem]">CIN</dt>
+                <dd className="mt-2 font-mono text-[0.8rem] tracking-tight text-foreground">
+                  {siteConfig.cin}
+                </dd>
+              </div>
+              <div>
+                <dt className="eyebrow text-[0.6rem]">Incorporated</dt>
+                <dd className="mt-2 text-sm text-foreground">
+                  {siteConfig.incorporationDateDisplay} · One Person Company
+                </dd>
+              </div>
+              <div>
+                <dt className="eyebrow text-[0.6rem]">Registered office</dt>
+                <dd className="mt-2 flex items-start gap-2 text-sm leading-6 text-muted-foreground">
+                  <MapPin
+                    aria-hidden="true"
+                    className="mt-1.5 size-3.5 shrink-0 text-primary"
+                  />
+                  {siteConfig.address.full}
+                </dd>
+              </div>
+            </dl>
+            <p className="mt-6 border-t border-border pt-5 text-xs leading-5 text-muted-foreground">
+              GSTIN and statutory particulars are available on request.
+            </p>
           </div>
-          <p className="mt-7 text-xl font-semibold text-foreground">
-            {siteConfig.legalName}
-          </p>
-          <p className="mt-2 text-sm text-primary">
-            {siteConfig.incorporationStatus}
-          </p>
-          <p className="mt-6 border-t border-border pt-5 text-sm leading-6 text-muted-foreground">
-            Registered office: {siteConfig.address.full}. GSTIN and statutory
-            particulars are available on request.
-          </p>
         </div>
       </Hero>
 
-      <MobileBrief
-        eyebrow="Fairhelm in brief"
-        title="The company, without the biography."
-        description="Open the part you need: company standard, capability, or execution model."
-        items={mobileBriefs}
-      />
-
-      <section className="hidden py-20 md:block sm:py-28">
-        <Container className="grid gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+      <section className="section">
+        <Container className="grid gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
           <SectionHeading
             eyebrow="The company"
-            title="We build systems that survive scale, scrutiny, and boardrooms."
-            description="The Fairhelm standard is simple: understand the operating reality, establish clear authority, make the data defensible, and engineer the system to behave predictably under pressure."
+            title="We build systems that survive scale, scrutiny and boardrooms."
+            description="The Fairhelm standard is simple: understand the operating reality, establish clear authority, make the data defensible and engineer the system to behave predictably under pressure."
           />
           <div className="grid gap-4 sm:grid-cols-2">
-            {[
-              [
-                Waypoints,
-                "Systems before screens",
-                "A polished interface cannot rescue weak process, ambiguous ownership, or unreliable data.",
-              ],
-              [
-                ShieldCheck,
-                "Governance before automation",
-                "Automation should operate inside explicit authority, audit, and privacy boundaries.",
-              ],
-              [
-                Boxes,
-                "Products with operating context",
-                "SquareCampus begins with the cycles and constraints of Indian educational institutions.",
-              ],
-              [
-                CloudCog,
-                "Engineering with economic judgment",
-                "Architecture, service levels, and cloud cost should align to the value and risk of the workload.",
-              ],
-            ].map(([Icon, title, description]) => {
-              const TypedIcon = Icon as typeof Waypoints;
-              return (
-                <div
-                  key={String(title)}
-                  className="rounded-2xl border border-border bg-card p-5"
-                >
-                  <TypedIcon
-                    aria-hidden="true"
-                    className="size-5 text-primary"
-                  />
-                  <h3 className="mt-6 font-semibold text-foreground">
-                    {String(title)}
-                  </h3>
-                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                    {String(description)}
-                  </p>
-                </div>
-              );
-            })}
+            {standard.map(([Icon, title, description]) => (
+              <FeatureCard
+                key={title}
+                icon={Icon}
+                title={title}
+                description={description}
+              />
+            ))}
           </div>
         </Container>
       </section>
 
-      <section className="hidden border-y border-border bg-card/30 py-20 md:block sm:py-28">
+      <section className="section border-y border-border section-alt">
         <Container>
           <SectionHeading
             eyebrow="Capability"
-            title="Product thinking, data depth, and operating discipline in one room."
+            title="Product thinking, data depth and operating discipline in one room."
             description="Fairhelm works across the layers that determine whether an institutional system creates clarity or simply relocates chaos."
           />
-          <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {capabilities.map((capability) => (
               <FeatureCard key={capability.title} {...capability} />
             ))}
@@ -220,28 +197,28 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <section className="hidden py-20 md:block sm:py-28">
-        <Container className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
+      <section className="section">
+        <Container className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
           <SectionHeading
             eyebrow="Scope"
             title="Product first. Services by exception."
             description={siteConfig.services.summary}
           />
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-border bg-card p-5">
-              <h3 className="font-semibold text-foreground">
+            <div className="rounded-3xl border border-border bg-card p-5 sm:p-6">
+              <span className="index">01</span>
+              <h3 className="display-3 mt-3">
                 Is Fairhelm a product company or a services company?
               </h3>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
                 {siteConfig.positioning.is} It is not{" "}
                 {siteConfig.positioning.isNot.join(", ")}.
               </p>
             </div>
-            <div className="rounded-2xl border border-border bg-card p-5">
-              <h3 className="font-semibold text-foreground">
-                Who operates SquareCampus?
-              </h3>
-              <p className="mt-2 text-sm leading-6 text-muted-foreground">
+            <div className="rounded-3xl border border-border bg-card p-5 sm:p-6">
+              <span className="index">02</span>
+              <h3 className="display-3 mt-3">Who operates SquareCampus?</h3>
+              <p className="mt-3 text-sm leading-6 text-muted-foreground">
                 {siteConfig.product.relationship} Institutions should evaluate
                 it at{" "}
                 <a
@@ -253,11 +230,12 @@ export default function AboutPage() {
                 .
               </p>
             </div>
-            <div className="rounded-2xl border border-border bg-card p-5">
-              <h3 className="font-semibold text-foreground">
+            <div className="rounded-3xl border border-border bg-card p-5 sm:p-6">
+              <span className="index">03</span>
+              <h3 className="display-3 mt-3">
                 What engineering work does Fairhelm take on?
               </h3>
-              <ul className="mt-2 flex list-disc flex-col gap-1 pl-5 text-sm leading-6 text-muted-foreground">
+              <ul className="mt-3 flex list-disc flex-col gap-1 pl-5 text-sm leading-6 text-muted-foreground">
                 {siteConfig.services.lanes.map((lane) => (
                   <li key={lane.href}>
                     <Link
@@ -274,11 +252,12 @@ export default function AboutPage() {
                 </li>
               </ul>
             </div>
-            <div className="rounded-2xl border border-border bg-card p-5">
-              <h3 className="font-semibold text-foreground">
+            <div className="rounded-3xl border border-border bg-card p-5 sm:p-6">
+              <span className="index">04</span>
+              <h3 className="display-3 mt-3">
                 What is outside Fairhelm's scope?
               </h3>
-              <ul className="mt-2 flex list-disc flex-col gap-1 pl-5 text-sm leading-6 text-muted-foreground">
+              <ul className="mt-3 flex list-disc flex-col gap-1 pl-5 text-sm leading-6 text-muted-foreground">
                 {siteConfig.services.outOfScope.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -288,8 +267,8 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <section className="hidden border-y border-border bg-card/30 py-20 md:block sm:py-28">
-        <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
+      <section className="section border-y border-border section-alt">
+        <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
           <SectionHeading
             eyebrow="How we operate"
             title="Sharp diagnosis. Explicit tradeoffs. Disciplined execution."
@@ -309,9 +288,31 @@ export default function AboutPage() {
         </Container>
       </section>
 
+      <section className="section">
+        <Container className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-14">
+          <SectionHeading
+            eyebrow="Where we work from"
+            title="Bangalore, India. Built for Indian institutional realities."
+            description="Fairhelm is incorporated in India and works with schools, trusts and organisations across the country, designing for multi-entity operations, uneven source systems and real administrative pressure."
+          />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <FeatureCard
+              icon={Building2}
+              title="Registered in Karnataka"
+              description={`${siteConfig.legalNameDisplay}, ${siteConfig.incorporationStatus.toLowerCase()}.`}
+            />
+            <FeatureCard
+              icon={MapPin}
+              title="Registered office"
+              description={siteConfig.address.full}
+            />
+          </div>
+        </Container>
+      </section>
+
       <CtaBand
-        title="Bring the operating problem—not a pre-selected buzzword."
-        description="We will help frame the system, the controls, the data, and the execution sequence that the outcome actually requires."
+        title="Bring the operating problem, not a pre-selected buzzword."
+        description="We will help frame the system, the controls, the data and the execution sequence that the outcome actually requires."
       />
     </>
   );

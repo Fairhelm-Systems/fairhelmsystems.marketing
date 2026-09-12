@@ -28,11 +28,26 @@ export const organizationSchema = {
   "@id": SCHEMA_IDS.org,
   name: siteConfig.name,
   legalName: siteConfig.legalName,
+  alternateName: [siteConfig.shortName, siteConfig.legalNameDisplay],
   url: `${siteConfig.url}/`,
   logo: absoluteUrl("/brand/fairhelm-logo.svg"),
+  image: absoluteUrl("/brand/fairhelm-og.png"),
   description: siteConfig.descriptionLong,
+  slogan: siteConfig.tagline,
   email: siteConfig.contactEmail,
   foundingDate: siteConfig.incorporationDate,
+  foundingLocation: {
+    "@type": "Place",
+    name: `${siteConfig.address.locality}, ${siteConfig.address.region}, India`,
+  },
+  contactPoint: {
+    "@type": "ContactPoint",
+    contactType: "sales",
+    email: siteConfig.contactEmail,
+    url: absoluteUrl("/contact/"),
+    areaServed: "IN",
+    availableLanguage: ["en"],
+  },
   // Telephone is omitted entirely until a statutory line is provisioned —
   // an empty string would publish a claim we cannot honour.
   ...(siteConfig.phone ? { telephone: siteConfig.phone } : {}),
@@ -64,11 +79,13 @@ export const organizationSchema = {
   },
   knowsAbout: [
     "School operating systems",
+    "Software product engineering",
     "Data engineering",
     "ETL and ELT pipelines",
     "Operational dashboards",
     "Governed analytics and decision systems",
     "Data governance",
+    "Role-based access control and auditability",
   ],
 };
 
@@ -148,6 +165,26 @@ export function breadcrumbSchema(items: Array<{ name: string; path: string }>) {
       position: index + 1,
       name: item.name,
       item: absoluteUrl(item.path),
+    })),
+  };
+}
+
+/**
+ * FAQPage for a page's visible question-and-answer section. The answers must
+ * be rendered on the page as well — this only mirrors what a reader sees.
+ */
+export function faqSchema(
+  path: string,
+  items: ReadonlyArray<{ question: string; answer: string }>,
+) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": `${absoluteUrl(path)}#faq`,
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
     })),
   };
 }

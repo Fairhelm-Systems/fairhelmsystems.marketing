@@ -53,13 +53,27 @@ formally delivered or verified. Interface visuals use sample data, are labelled
 - React 19
 - Tailwind CSS 4
 - shadcn/ui and Base UI
-- Anime.js for restrained interface motion
+- next-themes for the dark (default) and light themes
+- CSS-only motion: staged reveals, orbiting SVG controls and the mono "data field" hero texture
 - Biome for formatting and linting
 - Bun for package management and scripts
 - Static export to private Amazon S3 behind CloudFront
 
 The site uses `output: "export"`, trailing-slash routes, and unoptimized Next images
 so the generated `out/` directory can be hosted without a Node.js runtime.
+
+## Design system
+
+The site shares the SquareCampus design system so both Fairhelm properties read
+as one family: Sora for headings (weight 400, tight tracking), IBM Plex Sans for
+body copy, IBM Plex Mono for eyebrows and operational labels; a deep-navy dark
+theme by default with a light theme behind the floating toggle; gradient pill
+calls to action; and glass "panel" frames around every product visual. Tokens
+live in [`src/app/globals.css`](src/app/globals.css) (`:root` is light, `.dark`
+overrides). Every section renders on desktop, tablet and phone — there is no
+hidden desktop-only copy — and every product visual is labelled illustrative,
+carries an accessible description saying so, and is excluded from the Markdown
+alternates with `data-md-skip`.
 
 ## Local development
 

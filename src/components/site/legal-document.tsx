@@ -1,6 +1,5 @@
 import { Container } from "@/components/site/container";
 import { LegalTabs } from "@/components/site/legal-tabs";
-import { MobileBrief } from "@/components/site/mobile-brief";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 export type LegalSection = {
@@ -12,7 +11,7 @@ export type LegalSection = {
 
 export function LegalNavBand({ current }: { current: string }) {
   return (
-    <section className="border-b border-border bg-card/25">
+    <section className="border-y border-border section-alt">
       <Container className="no-scrollbar overflow-x-auto py-2">
         <LegalTabs current={current} />
       </Container>
@@ -33,36 +32,24 @@ export function LegalDocument({
   sections: readonly LegalSection[];
   lastUpdated?: string;
 }) {
-  const mobileSections = sections.map((section) => ({
-    title: section.title,
-    description: section.paragraphs.join(" "),
-    bullets: section.bullets,
-  }));
-
   return (
     <>
       <LegalNavBand current={current} />
-      <MobileBrief
-        eyebrow="On this page"
-        title="Open the section you need."
-        description={statusDescription}
-        items={mobileSections}
-      />
-      <section className="hidden py-16 md:block sm:py-24">
-        <Container className="grid max-w-6xl gap-12 lg:grid-cols-[14rem_1fr]">
+      <section className="section">
+        <Container className="grid max-w-6xl gap-10 lg:grid-cols-[14rem_1fr] lg:gap-14">
           <aside className="self-start lg:sticky lg:top-28">
             <p className="eyebrow">On this page</p>
             <nav
               aria-label="Document sections"
-              className="mt-5 flex flex-col gap-1"
+              className="no-scrollbar mt-4 flex gap-1 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible"
             >
               {sections.map((section, index) => (
                 <a
                   key={section.id}
                   href={`#${section.id}`}
-                  className="rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
+                  className="shrink-0 rounded-full border border-border px-3 py-1.5 text-xs whitespace-nowrap text-muted-foreground transition-colors hover:border-border-strong hover:text-foreground lg:rounded-lg lg:border-transparent lg:px-3 lg:py-2 lg:text-sm lg:whitespace-normal lg:hover:bg-accent"
                 >
-                  <span className="mr-2 font-mono text-[0.65rem] text-primary">
+                  <span className="mr-2 font-mono text-[0.62rem] text-primary">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   {section.title}
@@ -83,13 +70,11 @@ export function LegalDocument({
                   id={section.id}
                   className="scroll-mt-28 border-b border-border pb-10 last:border-0"
                 >
-                  <p className="font-mono text-xs text-primary">
-                    {String(index + 1).padStart(2, "0")}
-                  </p>
-                  <h2 className="mt-3 text-2xl font-semibold tracking-[-0.025em] text-foreground">
+                  <p className="index">{String(index + 1).padStart(2, "0")}</p>
+                  <h2 className="display-3 mt-3 sm:text-[1.6rem]">
                     {section.title}
                   </h2>
-                  <div className="mt-4 flex flex-col gap-4 text-base leading-7 text-muted-foreground">
+                  <div className="mt-4 flex flex-col gap-4 text-[0.95rem] leading-7 text-muted-foreground">
                     {section.paragraphs.map((paragraph) => (
                       <p key={paragraph}>{paragraph}</p>
                     ))}
