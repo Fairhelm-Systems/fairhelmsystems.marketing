@@ -17,6 +17,7 @@ import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
 import { PageNav } from "@/components/site/page-nav";
+import { RelatedInsights } from "@/components/site/related-insights";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createPageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -33,6 +34,7 @@ const capabilities = [
   {
     icon: GraduationCap,
     title: "SquareCampus",
+    motif: "orbit" as const,
     description:
       "The flagship product: a School Operating System for schools, universities and multi-campus educational institutions, developed and operated by Fairhelm.",
     href: siteConfig.product.page,
@@ -40,6 +42,7 @@ const capabilities = [
   {
     icon: DatabaseZap,
     title: "Data engineering",
+    motif: "flow" as const,
     description:
       "ETL and ELT systems built around accuracy, reconciliation, observability and accountable production refresh.",
     href: "/services/data-engineering/",
@@ -47,6 +50,7 @@ const capabilities = [
   {
     icon: BarChart3,
     title: "Operational intelligence",
+    motif: "bars" as const,
     description:
       "Decision infrastructure that connects trusted metrics to drilldowns, exceptions, ownership and action.",
     href: "/services/dashboards/",
@@ -54,6 +58,7 @@ const capabilities = [
   {
     icon: CloudCog,
     title: "Platform engineering",
+    motif: "mesh" as const,
     description:
       "Product and platform engineering, taken on only where it clearly aligns with Fairhelm's data and product focus.",
   },
@@ -310,6 +315,8 @@ export default function AboutPage() {
           </div>
         </Container>
       </section>
+
+      <RelatedInsights lane="/about/" />
 
       <PageNav
         items={[

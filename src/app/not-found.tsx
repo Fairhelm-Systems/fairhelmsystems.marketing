@@ -10,7 +10,7 @@ export default function NotFound() {
     <section className="hero-bleed relative isolate overflow-hidden py-24 sm:py-36">
       <div
         aria-hidden="true"
-        className="hero-grid absolute inset-0 -z-10 opacity-60"
+        className="hero-grid absolute inset-0 -z-10 opacity-45"
       />
       <DataField className="-z-10" />
       <Container className="relative max-w-3xl text-center">

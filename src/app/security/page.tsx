@@ -15,6 +15,7 @@ import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
 import { LegalNavBand } from "@/components/site/legal-document";
 import { PageNav } from "@/components/site/page-nav";
+import { RelatedInsights } from "@/components/site/related-insights";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { createPageMetadata } from "@/lib/seo";
@@ -31,36 +32,42 @@ const principles = [
   {
     icon: KeyRound,
     title: "Role-based access control",
+    motif: "key" as const,
     description:
       "Access should follow explicit roles, scopes and responsibilities rather than convenience or broad defaults.",
   },
   {
     icon: FileClock,
     title: "Auditability",
+    motif: "ledger" as const,
     description:
       "Material actions and sensitive interactions should produce intelligible, reviewable records.",
   },
   {
     icon: LockKeyhole,
     title: "Least privilege",
+    motif: "partition" as const,
     description:
       "People, services and automation receive only the access necessary for the approved operating purpose.",
   },
   {
     icon: BetweenHorizontalStart,
     title: "Tenant separation",
+    motif: "mesh" as const,
     description:
       "Customer and institutional boundaries are treated as architectural concerns, not naming conventions.",
   },
   {
     icon: ShieldCheck,
     title: "Secure cloud deployment",
+    motif: "shield" as const,
     description:
       "Encryption, controlled network paths, managed secrets, monitored services and recoverable operations guide deployments.",
   },
   {
     icon: ScanEye,
     title: "Privacy-first handling",
+    motif: "rings" as const,
     description:
       "Collection, use, retention, sharing and deletion should remain proportionate, explicit and governed.",
   },
@@ -175,6 +182,8 @@ export default function SecurityPage() {
           </Alert>
         </Container>
       </section>
+
+      <RelatedInsights lane="/security/" />
 
       <PageNav
         items={[

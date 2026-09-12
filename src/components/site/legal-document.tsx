@@ -37,7 +37,7 @@ export function LegalDocument({
       <LegalNavBand current={current} />
       <section className="section">
         <Container className="grid max-w-6xl gap-10 lg:grid-cols-[14rem_1fr] lg:gap-14">
-          <aside className="self-start lg:sticky lg:top-28">
+          <aside className="min-w-0 self-start lg:sticky lg:top-28">
             <p className="eyebrow">On this page</p>
             <nav
               aria-label="Document sections"

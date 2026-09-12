@@ -15,6 +15,7 @@ import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
 import { PageNav } from "@/components/site/page-nav";
+import { RelatedInsights } from "@/components/site/related-insights";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createPageMetadata } from "@/lib/seo";
 import { breadcrumbSchema, serviceSchema } from "@/lib/structured-data";
@@ -32,48 +33,56 @@ const capabilities = [
   {
     icon: CircleGauge,
     title: "KPI design",
+    motif: "ticks" as const,
     description:
       "Define the decision, metric contract, grain, owner, target and guardrail before designing the chart.",
   },
   {
     icon: ChartNoAxesCombined,
     title: "Executive reporting",
+    motif: "bars" as const,
     description:
       "Boardroom-ready views that explain state, direction, variance, risk and the operating implication.",
   },
   {
     icon: GitBranch,
     title: "Drilldowns",
+    motif: "funnel" as const,
     description:
       "Move from portfolio signal to segment, institution, team, transaction or exception without losing context.",
   },
   {
     icon: Siren,
     title: "Exception tracking",
+    motif: "pulse" as const,
     description:
       "Surface what is outside tolerance, why it matters, who owns it and whether resolution is moving.",
   },
   {
     icon: BellRing,
     title: "Alerts",
+    motif: "rings" as const,
     description:
       "Notify on material conditions with thresholds and escalation designed to reduce noise, not generate it.",
   },
   {
     icon: ListFilter,
     title: "Semantic models",
+    motif: "nodes" as const,
     description:
       "Keep metric logic consistent across views with governed dimensions, measures and calculation rules.",
   },
   {
     icon: SearchCheck,
     title: "Data trust",
+    motif: "shield" as const,
     description:
       "Expose freshness, reconciliation, definitions and caveats so users know what the dashboard can support.",
   },
   {
     icon: ShieldCheck,
     title: "Decision workflows",
+    motif: "steps" as const,
     description:
       "Connect insight to review, ownership, follow-up and evidence without bypassing operating controls.",
   },
@@ -230,6 +239,8 @@ export default function DashboardsPage() {
           </div>
         </Container>
       </section>
+
+      <RelatedInsights lane="/services/dashboards/" />
 
       <PageNav
         items={[

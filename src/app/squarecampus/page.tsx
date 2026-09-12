@@ -71,48 +71,56 @@ const operatingCycles = [
   {
     icon: UserRoundPlus,
     title: "Admissions and enrolment",
+    motif: "funnel" as const,
     description:
       "Connect inquiry, application, documents, offers, enrolment and the handoff into live academic and fee records.",
   },
   {
     icon: CalendarRange,
     title: "Academic year control",
+    motif: "orbit" as const,
     description:
       "Structure setup, rollover, promotion and reporting around explicit academic windows and governed transitions.",
   },
   {
     icon: ClipboardCheck,
     title: "Attendance cycles",
+    motif: "ticks" as const,
     description:
       "Capture, exceptions, corrections, approvals and communication designed as a recurring operating discipline.",
   },
   {
     icon: IndianRupee,
     title: "Fee cycles",
+    motif: "ledger" as const,
     description:
       "Model schedules, collections, concessions, reconciliation and outstanding action without losing institutional context.",
   },
   {
     icon: BookOpenCheck,
     title: "Exams and reporting",
+    motif: "bars" as const,
     description:
       "Plan assessments, govern marks workflows, compile outcomes and produce reporting with clear accountability.",
   },
   {
     icon: MessageSquareText,
     title: "Parent and staff workflows",
+    motif: "waves" as const,
     description:
       "Role-aware communication and administrative action that respects school policy and operational boundaries.",
   },
   {
     icon: Building2,
     title: "Trust governance",
+    motif: "partition" as const,
     description:
       "A portfolio view for educational trusts and multi-school groups without flattening each institution's authority.",
   },
   {
     icon: Languages,
     title: "Multilingual communication",
+    motif: "grid" as const,
     description:
       "Adapt parent-facing communication to language needs while keeping one structured institutional record underneath.",
   },
@@ -122,18 +130,21 @@ const posture = [
   {
     icon: ShieldCheck,
     title: "Role-aware by design",
+    motif: "key" as const,
     description:
       "Every surface should respect institutional role, scope and delegated authority.",
   },
   {
     icon: LockKeyhole,
     title: "Privacy and separation",
+    motif: "mesh" as const,
     description:
       "Customer data boundaries, tenant separation and least privilege shape the architecture.",
   },
   {
     icon: Eye,
     title: "Auditable operations",
+    motif: "ledger" as const,
     description:
       "Important actions should leave an intelligible record that authorised teams can review.",
   },

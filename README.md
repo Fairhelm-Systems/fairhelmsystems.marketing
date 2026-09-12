@@ -36,6 +36,8 @@ testimonials, awards or certifications.
 | `/legal/` | Indexed legal and governance navigation |
 | `/privacy/`, `/terms/`, `/acceptable-use/` | Public policy shells |
 | `/ai-policy/`, `/data-processing/` | AI and data-processing posture |
+| `/insights/` | Insights index: practice notes on data engineering, decision systems, governance and the company |
+| `/insights/<slug>/` | One article per Markdown file in `src/content/insights/`; BlogPosting JSON-LD, Markdown alternate, RSS at `/insights/feed.xml` |
 | `/ai/` | Human-readable information for AI agents and researchers |
 | `/llms.txt` | Concise machine-readable company summary, generated from `site-config.ts` |
 | `/llms-full.txt` | The summary followed by every Markdown alternate, generated after build |
@@ -109,6 +111,7 @@ bun run indexnow:dry-run   # after a build: what IndexNow would submit
 src/app/                    Routes, metadata outputs, and static pages
 src/components/site/        Shared site shell, motion, legal, and content components
 src/content/                Structured legal content, llms.txt generator, Markdown-alternate registry
+src/content/insights/       Insights articles as Markdown with front matter (see "Writing an Insight")
 src/lib/                    Canonical company facts (site-config), SEO, and the JSON-LD entity graph
 public/brand/               Fairhelm vector logo and social assets
 infrastructure/cloudfront/  Viewer-request redirect and clean-route function
@@ -125,6 +128,32 @@ pages derive from it. `sameAs` and `recognitions` are empty on purpose: add a
 social profile only after verifying it is the company's own account, and add a
 recognition (for example a government startup programme) only after the
 certificate is actually issued.
+
+## Writing an Insight
+
+Add a Markdown file to `src/content/insights/` named after the URL slug
+(`the-kpi-contract.md` → `/insights/the-kpi-contract/`). Front matter:
+
+```yaml
+---
+title: "The KPI contract: definition, grain, owner, target, guardrail"
+description: "One or two sentences; this is the meta description and the card dek."
+date: "2026-09-10"
+category: "Decision systems"          # Data engineering · Decision systems · Governance · Company
+lane: "/services/dashboards/"          # the site page the note belongs to
+laneLabel: "Operational dashboards"
+---
+```
+
+The body supports `##`/`###` headings, paragraphs, bullet and numbered lists,
+`>` blockquotes (rendered as a pull-quote panel), pipe tables, horizontal rules
+and inline bold, emphasis, code and links. Do not add an H1; the page renders
+the title. Word count and reading time are computed; `##` headings become the
+"On this page" index. Cover images are optional: drop
+`public/insights/<slug>.webp` (1600 × 900) and the card and article pick it up.
+Prompts for generating covers live in `ai-images.txt`. The stale-claim tests
+run over every article, so the same rules apply as to page copy: no customer
+evidence, no certifications, hypothetical worked examples labelled as such.
 
 ## SEO and AI discoverability
 
