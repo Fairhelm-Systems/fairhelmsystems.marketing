@@ -1,5 +1,6 @@
 import { execSync } from "node:child_process";
 import type { MetadataRoute } from "next";
+import { getInsights, INSIGHTS_PATH } from "@/content/insights";
 import { absoluteUrl, siteConfig } from "@/lib/site-config";
 
 export const dynamic = "force-static";
@@ -38,6 +39,8 @@ function gitLastmod(sources: string[]): Date {
 function pageSources(path: string): string[] {
   const dir = path === "/" ? "src/app" : `src/app${path.replace(/\/$/, "")}`;
   const sources = [`${dir}/page.tsx`, ...SHARED];
+  if (path === INSIGHTS_PATH || path === "/")
+    sources.push("src/content/insights");
   if (
     [
       "/privacy/",
@@ -56,6 +59,7 @@ function pageSources(path: string): string[] {
 function priorityFor(path: string): number {
   if (path === "/") return 1;
   if (path === "/squarecampus/") return 0.9;
+  if (path === INSIGHTS_PATH) return 0.7;
   if (path.startsWith("/services/") || path === "/about/") return 0.8;
   if (["/contact/", "/security/", "/ai/"].includes(path)) return 0.6;
   return 0.3;
@@ -71,6 +75,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
         : "yearly",
     priority: priorityFor(path),
   }));
+
+  // Insights articles: lastmod is the commit time of the article's own file.
+  for (const post of getInsights()) {
+    pages.push({
+      url: absoluteUrl(post.path),
+      lastModified: gitLastmod([
+        `src/content/insights/${post.slug}.md`,
+        "src/app/insights/[slug]/page.tsx",
+      ]),
+      changeFrequency: "yearly",
+      priority: 0.6,
+    });
+  }
 
   pages.push({
     url: absoluteUrl("/llms.txt"),

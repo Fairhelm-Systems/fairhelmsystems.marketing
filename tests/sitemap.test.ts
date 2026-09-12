@@ -37,12 +37,9 @@ test("every entry has a lastmod date so IndexNow can diff materially changed URL
   }
 });
 
-test("every Markdown alternate belongs to a listed page", () => {
+test("every Markdown alternate belongs to a page the sitemap lists", () => {
   for (const path of markdownAlternatePaths) {
-    assert.ok(
-      (siteConfig.publicPages as readonly string[]).includes(path),
-      path,
-    );
+    assert.ok(urls.includes(`https://fairhelmsystems.com${path}`), path);
   }
 });
 

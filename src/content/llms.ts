@@ -100,6 +100,17 @@ export const llmsSections: readonly LlmsSection[] = [
     ],
   },
   {
+    heading: "Insights",
+    links: [
+      {
+        path: "/insights/",
+        title: "Insights: practice notes",
+        description:
+          "Long-form notes on reconciliation in ETL/ELT, KPI contracts and exception ownership for dashboards, readable audit trails, and why Fairhelm is product-first. Each note has its own Markdown alternate linked from the index.",
+      },
+    ],
+  },
+  {
     heading: "Trust and security",
     links: [
       {

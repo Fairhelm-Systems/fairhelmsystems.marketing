@@ -15,6 +15,7 @@ import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
 import { PageNav } from "@/components/site/page-nav";
+import { RelatedInsights } from "@/components/site/related-insights";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createPageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -33,48 +34,56 @@ const capabilities = [
   {
     icon: Braces,
     title: "Source ingestion",
+    motif: "flow" as const,
     description:
       "Bring operational databases, APIs, spreadsheets, file drops and legacy systems into a controlled ingestion model.",
   },
   {
     icon: Boxes,
     title: "Data modelling",
+    motif: "mesh" as const,
     description:
       "Design warehouse or lakehouse layers around durable business entities, measures, history and consumption needs.",
   },
   {
     icon: GitCompareArrows,
     title: "Reconciliation",
+    motif: "ledger" as const,
     description:
       "Prove movement with control totals, record-level exceptions, source-to-target comparisons and accountable resolution.",
   },
   {
     icon: RefreshCw,
     title: "Pipeline orchestration",
+    motif: "orbit" as const,
     description:
       "Schedule and coordinate batch or event-driven flows with retries, dependencies, idempotency and predictable recovery.",
   },
   {
     icon: ListChecks,
     title: "Data quality",
+    motif: "ticks" as const,
     description:
       "Encode freshness, validity, completeness, uniqueness and referential checks where failure becomes visible early.",
   },
   {
     icon: Activity,
     title: "Observability",
+    motif: "pulse" as const,
     description:
       "Monitor lineage, runtime, volume shifts, schema drift, failure and service-level expectations in production.",
   },
   {
     icon: CircleDollarSign,
     title: "Cloud cost discipline",
+    motif: "steps" as const,
     description:
       "Choose storage, compute, cadence and retention deliberately so pipeline economics stay proportional to value.",
   },
   {
     icon: Route,
     title: "Production refresh",
+    motif: "waves" as const,
     description:
       "Move from one-off migration to an owned, documented, repeatable refresh process with clear operating responsibility.",
   },
@@ -253,6 +262,8 @@ export default function DataEngineeringPage() {
           </div>
         </Container>
       </section>
+
+      <RelatedInsights lane="/services/data-engineering/" />
 
       <PageNav
         items={[

@@ -14,7 +14,9 @@
  * Keep this list to the pages a buyer or an agent evaluates from. Decorative
  * or low-value routes are not listed to inflate the count.
  */
-export const markdownAlternatePaths = [
+import { insightPaths } from "@/content/insights";
+
+const staticMarkdownAlternatePaths = [
   "/",
   "/about/",
   "/squarecampus/",
@@ -26,9 +28,14 @@ export const markdownAlternatePaths = [
   "/privacy/",
   "/terms/",
   "/ai/",
+  "/insights/",
 ] as const;
 
-export type MarkdownAlternatePath = (typeof markdownAlternatePaths)[number];
+/** Static pages plus every Insights article (one Markdown file per note). */
+export const markdownAlternatePaths: readonly string[] = [
+  ...staticMarkdownAlternatePaths,
+  ...insightPaths(),
+];
 
 /** Normalise a route to the trailing-slash form the site serves. */
 function normalise(path: string) {
@@ -37,9 +44,7 @@ function normalise(path: string) {
 }
 
 export function hasMarkdownAlternate(path: string): boolean {
-  return (markdownAlternatePaths as readonly string[]).includes(
-    normalise(path),
-  );
+  return markdownAlternatePaths.includes(normalise(path));
 }
 
 /** Site-relative Markdown URL for a route: `/about/` → `/about/index.md`. */

@@ -26,6 +26,7 @@ const footerGroups = [
     label: "Company",
     links: [
       { label: "About", href: "/about/" },
+      { label: "Insights", href: "/insights/" },
       { label: "Security", href: "/security/" },
       { label: "Contact", href: "/contact/" },
       { label: "For AI agents", href: "/ai/" },

@@ -55,6 +55,17 @@ export const siteConfig = {
     ],
   },
 
+  /**
+   * Author of record for Insights. The founder is already named publicly on
+   * squarecampus.com; the title here is the minimal, verifiable one.
+   */
+  founder: {
+    name: "Mohit Gupta",
+    initials: "MG",
+    title: "Founder",
+    bio: "Writes the practice notes on data engineering, decision systems and governance that Fairhelm applies to SquareCampus and to its engineering work.",
+  },
+
   contactEmail: "hello@fairhelmsystems.com",
   contactEmailIsPlaceholder: false,
   // Statutory contact telephone. Left empty until a line is provisioned; every
@@ -163,6 +174,7 @@ export const siteConfig = {
     { label: "Data Engineering", href: "/services/data-engineering/" },
     { label: "Dashboards", href: "/services/dashboards/" },
     { label: "Security", href: "/security/" },
+    { label: "Insights", href: "/insights/" },
     { label: "About", href: "/about/" },
   ],
   legalNavigation: [
@@ -190,6 +202,7 @@ export const siteConfig = {
     "/data-processing/",
     "/refund-policy/",
     "/security/",
+    "/insights/",
     "/ai/",
   ],
 } as const;

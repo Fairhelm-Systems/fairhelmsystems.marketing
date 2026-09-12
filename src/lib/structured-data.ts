@@ -1,3 +1,4 @@
+import type { Insight } from "@/content/insights";
 import { absoluteUrl, siteConfig } from "@/lib/site-config";
 
 /**
@@ -185,6 +186,57 @@ export function faqSchema(
       "@type": "Question",
       name: item.question,
       acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  };
+}
+
+/** The author of record for Insights, as a Person node owned by the company. */
+export const founderSchema = {
+  "@type": "Person",
+  "@id": `${siteConfig.url}/#founder`,
+  name: siteConfig.founder.name,
+  jobTitle: siteConfig.founder.title,
+  worksFor: { "@id": SCHEMA_IDS.org },
+};
+
+export function blogPostingSchema(post: Insight) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "@id": `${absoluteUrl(post.path)}#article`,
+    headline: post.title,
+    description: post.description,
+    articleSection: post.category,
+    datePublished: `${post.date}T00:00:00Z`,
+    dateModified: `${post.date}T00:00:00Z`,
+    wordCount: post.words,
+    inLanguage: "en-IN",
+    isAccessibleForFree: true,
+    url: absoluteUrl(post.path),
+    mainEntityOfPage: absoluteUrl(post.path),
+    author: founderSchema,
+    publisher: { "@id": SCHEMA_IDS.org },
+    isPartOf: { "@id": `${absoluteUrl("/insights/")}#blog` },
+  };
+}
+
+export function blogSchema(posts: readonly Insight[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "@id": `${absoluteUrl("/insights/")}#blog`,
+    name: `${siteConfig.name} Insights`,
+    url: absoluteUrl("/insights/"),
+    description:
+      "Practice notes on data engineering, decision systems and governance.",
+    publisher: { "@id": SCHEMA_IDS.org },
+    inLanguage: "en-IN",
+    blogPost: posts.map((post) => ({
+      "@type": "BlogPosting",
+      "@id": `${absoluteUrl(post.path)}#article`,
+      headline: post.title,
+      url: absoluteUrl(post.path),
+      datePublished: `${post.date}T00:00:00Z`,
     })),
   };
 }

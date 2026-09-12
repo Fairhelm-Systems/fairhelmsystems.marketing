@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { CardMotif, type Motif } from "@/components/site/card-motif";
 import { cn } from "@/lib/utils";
 
 /**
@@ -17,6 +18,7 @@ export function FeatureCard({
   href,
   meta,
   index,
+  motif,
   children,
   className,
 }: {
@@ -26,6 +28,7 @@ export function FeatureCard({
   href?: string;
   meta?: string;
   index?: string;
+  motif?: Motif;
   children?: ReactNode;
   className?: string;
 }) {
@@ -37,11 +40,12 @@ export function FeatureCard({
     <div
       data-slot="card"
       className={cn(
-        "group/card relative flex h-full flex-col rounded-3xl border border-border bg-card p-5 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-ring/50 sm:p-6",
+        "group/card relative flex h-full flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 has-[a:focus-visible]:ring-2 has-[a:focus-visible]:ring-ring/50 sm:p-6",
         className,
       )}
     >
-      <div className="flex items-start justify-between gap-4">
+      {motif ? <CardMotif motif={motif} /> : null}
+      <div className="relative flex items-start justify-between gap-4">
         {Icon ? (
           <span className="flex size-10 items-center justify-center rounded-xl border border-border bg-secondary text-primary">
             <Icon aria-hidden="true" className="size-4" />
@@ -59,7 +63,7 @@ export function FeatureCard({
           ) : null}
         </span>
       </div>
-      <h3 className={cn("display-3", Icon ? "mt-5" : "mt-4")}>
+      <h3 className={cn("relative display-3", Icon ? "mt-5" : "mt-4")}>
         {href ? (
           external ? (
             <a href={href} className={linkClass}>
@@ -74,7 +78,7 @@ export function FeatureCard({
           title
         )}
       </h3>
-      <p className="mt-2.5 text-sm leading-6 text-muted-foreground">
+      <p className="relative mt-2.5 text-sm leading-6 text-muted-foreground">
         {description}
       </p>
       {children}
