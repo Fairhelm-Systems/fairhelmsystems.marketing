@@ -20,6 +20,8 @@ import { CtaBand } from "@/components/site/cta-band";
 import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
+import { PageNav } from "@/components/site/page-nav";
+import { Reveal } from "@/components/site/reveal";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createPageMetadata } from "@/lib/seo";
 import { siteConfig } from "@/lib/site-config";
@@ -190,38 +192,39 @@ export default function SquareCampusPage() {
             title="The product lives on squarecampus.com. This page is the operator context."
             description={`${siteConfig.product.relationship} Institutions should evaluate the product there; this site records who builds and operates it and how to reach the company.`}
           />
-          <div className="grid gap-3">
-            {canonicalProductPages.map(([title, path, description], index) => (
-              <div
-                key={path}
-                data-slot="card"
-                className="group/card relative flex items-start justify-between gap-5 rounded-3xl border border-border bg-card p-5 sm:p-6"
-              >
-                <div className="flex gap-4">
-                  <span className="index mt-1.5">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <div>
-                    <h3 className="display-3">
-                      <a
-                        href={`${siteConfig.product.url}${path}`}
-                        className="after:absolute after:inset-0 after:rounded-3xl focus-visible:outline-none"
-                      >
-                        {title}
-                      </a>
-                    </h3>
-                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                      {description}
-                    </p>
-                  </div>
-                </div>
-                <ArrowUpRight
-                  aria-hidden="true"
-                  className="mt-1 size-4 shrink-0 text-muted-foreground transition-colors group-hover/card:text-primary"
-                />
-              </div>
-            ))}
-          </div>
+          <Reveal className="panel p-2.5 sm:p-3">
+            <ol className="panel-inner divide-y divide-border">
+              {canonicalProductPages.map(
+                ([title, path, description], index) => (
+                  <li
+                    key={path}
+                    className="group/row relative grid gap-3 p-5 transition-colors hover:bg-accent/40 first:rounded-t-[calc(var(--radius-panel)-0.5rem)] last:rounded-b-[calc(var(--radius-panel)-0.5rem)] sm:grid-cols-[3rem_1fr_auto] sm:items-start sm:gap-5 sm:p-6"
+                  >
+                    <span className="index pt-1.5">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <div>
+                      <h3 className="display-3">
+                        <a
+                          href={`${siteConfig.product.url}${path}`}
+                          className="after:absolute after:inset-0 focus-visible:outline-none"
+                        >
+                          {title}
+                        </a>
+                      </h3>
+                      <p className="mt-1.5 text-sm leading-6 text-muted-foreground">
+                        {description}
+                      </p>
+                    </div>
+                    <ArrowUpRight
+                      aria-hidden="true"
+                      className="hidden size-4 shrink-0 text-muted-foreground transition-colors group-hover/row:text-primary sm:mt-1.5 sm:block"
+                    />
+                  </li>
+                ),
+              )}
+            </ol>
+          </Reveal>
         </Container>
       </section>
 
@@ -386,6 +389,25 @@ export default function SquareCampusPage() {
           </div>
         </Container>
       </section>
+
+      <PageNav
+        items={[
+          {
+            eyebrow: "Canonical product site",
+            title: "Evaluate on squarecampus.com",
+            description:
+              "Platform, security, pricing model, rollout and commercial programmes.",
+            href: siteConfig.product.url,
+          },
+          {
+            eyebrow: "Company",
+            title: "About Fairhelm Systems",
+            description:
+              "Who builds and operates SquareCampus, and the bounded engineering work alongside it.",
+            href: "/about/",
+          },
+        ]}
+      />
 
       <CtaBand
         title="Build the School OS around the institution, not the other way around."

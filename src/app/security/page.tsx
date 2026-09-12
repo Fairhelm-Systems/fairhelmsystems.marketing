@@ -14,6 +14,7 @@ import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
 import { LegalNavBand } from "@/components/site/legal-document";
+import { PageNav } from "@/components/site/page-nav";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { createPageMetadata } from "@/lib/seo";
@@ -174,6 +175,25 @@ export default function SecurityPage() {
           </Alert>
         </Container>
       </section>
+
+      <PageNav
+        items={[
+          {
+            eyebrow: "Legal",
+            title: "Privacy policy",
+            description:
+              "The Data Fiduciary, categories of personal data, retention and Data Principal rights.",
+            href: "/privacy/",
+          },
+          {
+            eyebrow: "Legal",
+            title: "Legal and governance center",
+            description:
+              "Every public policy, indexed, with the publishing entity named.",
+            href: "/legal/",
+          },
+        ]}
+      />
 
       <CtaBand
         title="Bring security into the system conversation early."

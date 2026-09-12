@@ -14,6 +14,7 @@ import { CtaBand } from "@/components/site/cta-band";
 import { FeatureCard } from "@/components/site/feature-card";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
+import { PageNav } from "@/components/site/page-nav";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createPageMetadata } from "@/lib/seo";
 import { breadcrumbSchema, serviceSchema } from "@/lib/structured-data";
@@ -229,6 +230,25 @@ export default function DashboardsPage() {
           </div>
         </Container>
       </section>
+
+      <PageNav
+        items={[
+          {
+            eyebrow: "Lane 01",
+            title: "Data engineering",
+            description:
+              "Fix the data foundation before the dashboard: ETL/ELT, reconciliation, observability.",
+            href: "/services/data-engineering/",
+          },
+          {
+            eyebrow: "Next step",
+            title: "Start a conversation",
+            description:
+              "Bring the recurring deck or the metric dispute. Scope is agreed in writing.",
+            href: "/contact/",
+          },
+        ]}
+      />
 
       <CtaBand
         title="Turn reporting into an operating advantage."
