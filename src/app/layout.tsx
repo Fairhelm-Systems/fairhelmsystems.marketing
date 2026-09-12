@@ -47,7 +47,12 @@ export const metadata: Metadata = {
   referrer: "origin-when-cross-origin",
   alternates: { canonical: siteConfig.url },
   icons: {
-    icon: [{ url: "/brand/fairhelm-logo.svg", type: "image/svg+xml" }],
+    icon: [
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/brand/fairhelm-logo.svg", type: "image/svg+xml" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
   },
   openGraph: {
     type: "website",
