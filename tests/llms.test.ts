@@ -25,6 +25,7 @@ test("has the agreed sections in order", () => {
     "## Products",
     "## Capabilities",
     "## Company",
+    "## Insights",
     "## Trust and security",
   ]);
 });

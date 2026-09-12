@@ -1,0 +1,64 @@
+Fairhelm Systems · Insights cover images
+=========================================
+
+Submit each prompt below to the image generator. Save the result as a WebP at
+the exact path given (1600 × 900 px, under 250 KB) and commit it; the site
+picks a cover up automatically when the file exists, and falls back to a
+line-art motif when it does not. Keep the house style identical across all
+images so the index page reads as one series.
+
+HOUSE STYLE (prepend to every prompt)
+-------------------------------------
+Minimal abstract editorial illustration for an enterprise technology company.
+Deep navy background (#070b14) with very subtle darker-navy gradient. Thin,
+precise line art in pale steel blue (#6aa6dc) and a single muted teal accent
+(#54bcab). Isometric or flat geometry, generous negative space, no people, no
+faces, no logos, no text, no letters, no numbers, no UI screenshots, no glow
+or neon, no gradients on lines, no 3D render look. Matte, calm, architectural.
+Composition weighted to the right third so the left side can hold a title.
+Aspect ratio 16:9.
+
+1. public/insights/reconciliation-is-the-deliverable.webp
+   Two ledgers drawn as stacked horizontal rules on the left and right, joined
+   in the middle by thin lines that meet at small circular nodes; most nodes
+   are closed circles (matched), two are open with a short teal tick beside
+   them (exceptions). A faint balance-scale silhouette underneath, perfectly
+   level.
+
+2. public/insights/batch-or-events.webp
+   Two paths across the frame: an upper path made of evenly spaced rectangular
+   blocks moving as a train (batch), a lower path made of small dots spaced
+   irregularly along a smooth curve (events). Both arrive at one calm
+   rectangular destination on the right. One teal dot mid-path, slightly
+   displaced, with a thin loop-back arrow (replay).
+
+3. public/insights/the-kpi-contract.webp
+   A single tall document outline on the right with five ruled fields drawn as
+   thin horizontal lines of different lengths; beside it a small gauge arc
+   with a single needle and a bracket marking the guardrail range. A wax-seal
+   circle rendered as a thin double ring in teal at the foot of the document.
+
+4. public/insights/exception-ownership.webp
+   A queue of thin rounded rectangles descending like cards in a stack; each
+   carries a small circle at its left edge (the owner). One card is pulled
+   slightly out of line with a teal circle and a short timeline of tick marks
+   beneath it (age). No text inside the cards.
+
+5. public/insights/audit-trails-people-can-read.webp
+   A vertical timeline with regular tick marks; at three ticks, small
+   rectangular entries branch to the right, each drawn as two short lines (a
+   before and an after value). One entry has a thin shield outline beside it in
+   teal (an approved override). A faint magnifier ring over the lower entry.
+
+6. public/insights/product-first-services-by-exception.webp
+   One large solid-outline cube on the right (the product) with two smaller
+   cubes on the left connected to it by thin straight lines (the engineering
+   lanes). A thin dashed boundary line encloses all three; outside it, two very
+   faint dotted shapes fade toward the left edge (work outside scope). Teal
+   used only on the edge of the large cube.
+
+INDEX / SOCIAL (optional)
+-------------------------
+7. public/insights/cover.webp
+   Same style: a grid of nine thin-line tiles, each tile containing one of the
+   motifs above at very small scale, evenly spaced, with the centre tile empty.

@@ -55,7 +55,7 @@ export function Hero({
     <section className="hero-bleed relative isolate overflow-hidden">
       <div
         aria-hidden="true"
-        className="hero-grid absolute inset-0 -z-10 opacity-70"
+        className="hero-grid absolute inset-0 -z-10 opacity-45"
       />
       <div
         aria-hidden="true"

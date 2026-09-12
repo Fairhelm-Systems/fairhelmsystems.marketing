@@ -20,6 +20,7 @@ import { DataPipelineVisual } from "@/components/site/data-pipeline-visual";
 import { FaqList } from "@/components/site/faq-list";
 import { Hero } from "@/components/site/hero";
 import { JsonLd } from "@/components/site/json-ld";
+import { RelatedInsights } from "@/components/site/related-insights";
 import { Reveal } from "@/components/site/reveal";
 import { SectionHeading } from "@/components/site/section-heading";
 import { SystemPanel } from "@/components/site/system-panel";
@@ -642,11 +643,19 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* 07 · FAQ */}
-      <section className="section">
+      {/* 07 · Latest insights */}
+      <RelatedInsights
+        number="07"
+        eyebrow="Insights"
+        title="Practice notes, written before the case studies exist."
+        className="border-t-0"
+      />
+
+      {/* 08 · FAQ */}
+      <section className="section border-t border-border">
         <Container>
           <SectionHeading
-            number="07"
+            number="08"
             eyebrow="Frequently asked"
             title="Straight answers about the company."
             description="What Fairhelm Systems is, where it operates from, what it builds and where its engineering work stops."

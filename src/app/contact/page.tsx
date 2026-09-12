@@ -62,7 +62,7 @@ export default function ContactPage() {
       <section className="hero-bleed relative isolate overflow-hidden border-b border-border">
         <div
           aria-hidden="true"
-          className="hero-grid absolute inset-0 -z-10 opacity-60"
+          className="hero-grid absolute inset-0 -z-10 opacity-45"
         />
         <div
           aria-hidden="true"
