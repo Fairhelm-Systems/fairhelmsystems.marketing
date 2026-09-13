@@ -29,6 +29,10 @@ const footerGroups = [
       { label: "Insights", href: "/insights/" },
       { label: "Security", href: "/security/" },
       { label: "Contact", href: "/contact/" },
+      {
+        label: "GitHub",
+        href: "https://github.com/Fairhelm-Systems/fairhelmsystems.marketing",
+      },
       { label: "For AI agents", href: "/ai/" },
       { label: "llms.txt", href: "/llms.txt" },
     ],
