@@ -31,7 +31,7 @@ const footerGroups = [
       { label: "Contact", href: "/contact/" },
       {
         label: "GitHub",
-        href: "https://github.com/Fairhelm-Systems/fairhelmsystems.marketing",
+        href: "https://github.com/Fairhelm-Systems",
       },
       { label: "For AI agents", href: "/ai/" },
       { label: "llms.txt", href: "/llms.txt" },
