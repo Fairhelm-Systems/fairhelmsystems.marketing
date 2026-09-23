@@ -19,6 +19,11 @@ export const STALE_CLAIMS: ReadonlyArray<{ pattern: RegExp; reason: string }> =
       reason: "the company is incorporated (CIN allotted 5 August 2026)",
     },
     {
+      pattern:
+        /GSTIN[^.]{0,60}(available )?on request|statutory registration particulars/i,
+      reason: "the GSTIN is allotted (22 September 2026) and published",
+    },
+    {
       pattern: /Pvt\.? Ltd/i,
       reason: "use the registered form 'Private Limited'",
     },

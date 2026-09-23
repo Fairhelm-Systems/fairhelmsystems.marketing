@@ -145,12 +145,18 @@ export default function AboutPage() {
                 </dd>
               </div>
               <div>
+                <dt className="eyebrow text-[0.6rem]">GSTIN</dt>
+                <dd className="mt-2 font-mono text-[0.8rem] tracking-tight text-foreground">
+                  {siteConfig.gstin}
+                </dd>
+              </div>
+              <div>
                 <dt className="eyebrow text-[0.6rem]">Incorporated</dt>
                 <dd className="mt-2 text-sm text-foreground">
                   {siteConfig.incorporationDateDisplay} · One Person Company
                 </dd>
               </div>
-              <div>
+              <div className="sm:col-span-2">
                 <dt className="eyebrow text-[0.6rem]">Registered office</dt>
                 <dd className="mt-2 flex items-start gap-2 text-sm leading-6 text-muted-foreground">
                   <MapPin
@@ -161,9 +167,6 @@ export default function AboutPage() {
                 </dd>
               </div>
             </dl>
-            <p className="mt-6 border-t border-border pt-5 text-xs leading-5 text-muted-foreground">
-              GSTIN and statutory particulars are available on request.
-            </p>
           </div>
         </div>
       </Hero>

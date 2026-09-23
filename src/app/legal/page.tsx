@@ -133,8 +133,9 @@ export default function LegalPage() {
           <div className="mt-10 rounded-3xl border border-border bg-card p-5 text-sm leading-6 text-muted-foreground sm:p-6">
             <p className="eyebrow">Publishing entity</p>
             <p className="mt-2">
-              {siteConfig.legalName} (CIN {siteConfig.cin}) is the legal entity
-              operating as Fairhelm Systems, incorporated in India on{" "}
+              {siteConfig.legalName} (CIN {siteConfig.cin}, GSTIN{" "}
+              {siteConfig.gstin}) is the legal entity operating as Fairhelm
+              Systems, incorporated in India on{" "}
               {siteConfig.incorporationDateDisplay} under the Companies Act,
               2013 as a One Person Company, with its registered office at{" "}
               {siteConfig.address.full}. Every document below is published by

@@ -32,7 +32,7 @@ export default function RefundPolicyPage() {
       <LegalDocument
         current="/refund-policy/"
         statusTitle="Default position"
-        statusDescription={`${siteConfig.legalNameDisplay} (CIN ${siteConfig.cin}), registered office ${siteConfig.address.full}. Fairhelm sells to institutions under signed agreements; where an order form or statement of work sets different terms, the signed document controls.`}
+        statusDescription={`${siteConfig.legalNameDisplay} (CIN ${siteConfig.cin}, GSTIN ${siteConfig.gstin}), registered office ${siteConfig.address.full}. Fairhelm sells to institutions under signed agreements; where an order form or statement of work sets different terms, the signed document controls.`}
         sections={refundSections}
         lastUpdated={legalUpdated}
       />

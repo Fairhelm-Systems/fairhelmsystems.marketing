@@ -127,6 +127,12 @@ export default function ContactPage() {
               {siteConfig.cin}
             </span>
             <span className="mt-1 block">{siteConfig.incorporationStatus}</span>
+            <span className="mt-3 block">
+              GSTIN{" "}
+              <span className="font-mono text-[0.8rem] tracking-tight text-foreground">
+                {siteConfig.gstin}
+              </span>
+            </span>
           </div>
           <div className="text-sm leading-6 text-muted-foreground">
             <span className="eyebrow">Reach us</span>

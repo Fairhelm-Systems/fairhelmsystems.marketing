@@ -208,7 +208,7 @@ export const refundSections = [
     id: "entity-and-scope",
     title: "Who this policy is from, and what it covers",
     paragraphs: [
-      `This cancellation and refund policy is published by ${siteConfig.legalName} (CIN ${siteConfig.cin}), incorporated in India on ${siteConfig.incorporationDateDisplay} under the Companies Act, 2013, with its registered office at ${siteConfig.address.full}.`,
+      `This cancellation and refund policy is published by ${siteConfig.legalName} (CIN ${siteConfig.cin}, GSTIN ${siteConfig.gstin}), incorporated in India on ${siteConfig.incorporationDateDisplay} under the Companies Act, 2013, with its registered office at ${siteConfig.address.full}.`,
       "Fairhelm sells to institutions under signed agreements: SquareCampus subscriptions, data engineering and dashboard engagements, and implementation or support work. It does not currently operate a self-service checkout, and no purchase can be completed on this website.",
       "This page states the default position. Where a signed order form, subscription agreement, or statement of work sets different cancellation, refund, or termination terms, that signed document controls for its subject matter.",
     ],

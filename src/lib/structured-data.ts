@@ -19,7 +19,7 @@ export const SCHEMA_IDS = {
 } as const;
 
 /**
- * The company. Facts only: legal name, CIN, registered office, contact and
+ * The company. Facts only: legal name, CIN, GSTIN, registered office, contact and
  * what it knows about. No ratings, reviews, offers, employee counts or
  * unverified profiles — `sameAs` is emitted only when a verified profile
  * exists in site-config.
@@ -53,12 +53,21 @@ export const organizationSchema = {
   // an empty string would publish a claim we cannot honour.
   ...(siteConfig.phone ? { telephone: siteConfig.phone } : {}),
   ...(siteConfig.sameAs.length > 0 ? { sameAs: [...siteConfig.sameAs] } : {}),
-  identifier: {
-    "@type": "PropertyValue",
-    propertyID: "CIN",
-    name: "Corporate Identity Number",
-    value: siteConfig.cin,
-  },
+  taxID: siteConfig.gstin,
+  identifier: [
+    {
+      "@type": "PropertyValue",
+      propertyID: "CIN",
+      name: "Corporate Identity Number",
+      value: siteConfig.cin,
+    },
+    {
+      "@type": "PropertyValue",
+      propertyID: "GSTIN",
+      name: "Goods and Services Tax Identification Number",
+      value: siteConfig.gstin,
+    },
+  ],
   address: {
     "@type": "PostalAddress",
     name: "Registered office",

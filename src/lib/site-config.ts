@@ -26,7 +26,12 @@ export const siteConfig = {
   incorporationDateDisplay: "5 August 2026",
   incorporationStatus:
     "Incorporated in India on 5 August 2026 under the Companies Act, 2013 · One Person Company",
-  gstinStatus: "Statutory registration particulars available on request",
+  // Goods and Services Tax Identification Number, Karnataka (state code 29),
+  // from Form GST REG-06. Required on tax invoices; published so buyers can
+  // verify it on the GST portal before raising a purchase order.
+  gstin: "29AAHCF1819L1ZA",
+  gstinRegistrationDate: "2026-09-22",
+  gstinRegistrationDateDisplay: "22 September 2026",
   trademarkNotice:
     "SquareCampus™ is a trademark (registration pending) of Fairhelm Systems (OPC) Private Limited.",
   shortName: "Fairhelm",

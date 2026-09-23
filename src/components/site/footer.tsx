@@ -90,12 +90,19 @@ function CompanyDisclosure() {
           {siteConfig.address.full}
         </span>
       </DisclosureField>
-      <DisclosureField label="CIN">
-        <span className="font-mono text-[0.8rem] tracking-tight text-foreground">
-          {siteConfig.cin}
-        </span>
-        <span className="mt-1 block">{siteConfig.incorporationStatus}</span>
-      </DisclosureField>
+      <div className="flex flex-col gap-4">
+        <DisclosureField label="CIN">
+          <span className="font-mono text-[0.8rem] tracking-tight text-foreground">
+            {siteConfig.cin}
+          </span>
+          <span className="mt-1 block">{siteConfig.incorporationStatus}</span>
+        </DisclosureField>
+        <DisclosureField label="GSTIN">
+          <span className="font-mono text-[0.8rem] tracking-tight text-foreground">
+            {siteConfig.gstin}
+          </span>
+        </DisclosureField>
+      </div>
       <div className="flex flex-col gap-4">
         <DisclosureField label="Email">
           <a
