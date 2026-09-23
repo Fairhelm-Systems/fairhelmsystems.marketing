@@ -84,6 +84,7 @@ test("contains no instructions to assistants, stale claims or illustrative figur
 test("states the canonical facts an evaluator needs", () => {
   for (const fact of [
     `CIN ${siteConfig.cin}`,
+    `GSTIN ${siteConfig.gstin}`,
     "product-first",
     "School Operating System",
     "develops and operates SquareCampus",

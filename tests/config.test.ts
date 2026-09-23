@@ -11,6 +11,24 @@ test("legal identity is the registered form", () => {
   assert.ok(siteConfig.address.full.includes("Karnataka"));
 });
 
+test("GSTIN is well-formed, Karnataka-registered and passes its check digit", () => {
+  const gstin = siteConfig.gstin;
+  assert.match(gstin, /^\d{2}[A-Z]{5}\d{4}[A-Z][1-9A-Z]Z[0-9A-Z]$/);
+  // State code 29 is Karnataka, where the registered office is.
+  assert.equal(gstin.slice(0, 2), "29");
+  assert.equal(siteConfig.address.region, "Karnataka");
+  // The embedded PAN belongs to a company ("C" in the fourth position).
+  assert.equal(gstin[5], "C");
+  // Check digit: GSTN's base-36 weighted checksum over the first 14 chars.
+  const chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let sum = 0;
+  for (let i = 0; i < 14; i++) {
+    const product = chars.indexOf(gstin[i]) * (i % 2 === 0 ? 1 : 2);
+    sum += Math.floor(product / 36) + (product % 36);
+  }
+  assert.equal(gstin[14], chars[(36 - (sum % 36)) % 36]);
+});
+
 test("positioning is product-first and names the flagship product", () => {
   assert.match(siteConfig.description, /SquareCampus/);
   assert.match(siteConfig.descriptionLong, /product-first technology company/);

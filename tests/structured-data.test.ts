@@ -24,7 +24,14 @@ test("exactly one Organization node, and it carries the statutory facts", () => 
   const orgs = siteGraph["@graph"].filter((n) => n["@type"] === "Organization");
   assert.equal(orgs.length, 1);
   assert.equal(organizationSchema.legalName, siteConfig.legalName);
-  assert.equal(organizationSchema.identifier.value, siteConfig.cin);
+  assert.deepEqual(
+    organizationSchema.identifier.map((id) => [id.propertyID, id.value]),
+    [
+      ["CIN", siteConfig.cin],
+      ["GSTIN", siteConfig.gstin],
+    ],
+  );
+  assert.equal(organizationSchema.taxID, siteConfig.gstin);
   assert.equal(organizationSchema.foundingDate, siteConfig.incorporationDate);
   assert.equal(
     organizationSchema.address.postalCode,

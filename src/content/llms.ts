@@ -146,7 +146,7 @@ export function renderLlmsTxt(): string {
     "",
     `> ${c.descriptionLong}`,
     "",
-    `- Company: ${c.legalNameDisplay} (CIN ${c.cin}), ${c.companyType.toLowerCase()} incorporated in India on ${c.incorporationDateDisplay}. Registered office: ${c.address.full}.`,
+    `- Company: ${c.legalNameDisplay} (CIN ${c.cin}), ${c.companyType.toLowerCase()} incorporated in India on ${c.incorporationDateDisplay}. GSTIN ${c.gstin}. Registered office: ${c.address.full}.`,
     `- Positioning: ${c.positioning.is} It is not ${c.positioning.isNot.join(", ")}.`,
     `- Flagship product: ${c.product.name}, a ${c.product.category} for ${c.product.audience}. ${c.product.relationship}`,
     `- Engineering work: ${c.services.summary}`,
